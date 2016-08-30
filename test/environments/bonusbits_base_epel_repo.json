@@ -1,0 +1,21 @@
+{
+  "name": "bonusbits_base_epel_repo",
+  "description": "BonusBits Base with EPEL Repo",
+  "cookbook_versions": {},
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+  },
+  "override_attributes": {
+    "bonusbits_base": {
+      "linux": {
+        "repos": {
+          "setup_epel": true
+        },
+        "packages": {
+          "install_epel_list": true
+        }
+      }
+    }
+  }
+}

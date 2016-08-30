@@ -1,0 +1,16 @@
+{
+  "name": "bonusbits_base_proxy",
+  "description": "BonusBits Base with Network Proxy Setup Environment",
+  "cookbook_versions": {},
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+  },
+  "override_attributes": {
+    "bonusbits_base": {
+      "network_proxy": {
+        "configure": true
+      }
+    }
+  }
+}

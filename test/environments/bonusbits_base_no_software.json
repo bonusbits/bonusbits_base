@@ -1,0 +1,19 @@
+{
+  "name": "bonusbits_base_no_software",
+  "description": "BonusBits Base without Firewall Configuration or Admin Software Installations",
+  "cookbook_versions": {},
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+  },
+  "override_attributes": {
+    "bonusbits_base": {
+      "firewall": {
+        "configure": false
+      },
+      "software": {
+        "install": false
+      }
+    }
+  }
+}

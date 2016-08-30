@@ -1,0 +1,152 @@
+---
+
+driver:
+  name: ec2
+  associate_public_ip: false
+  shared_credentials_profile: <%= ENV['AWS_PROFILE'] %>
+  aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+  security_group_ids:
+    - <%= ENV['AWS_SECURITY_GROUP_1'] %>
+    - <%= ENV['AWS_SECURITY_GROUP_2'] %>
+  subnet_id: <%= ENV['AWS_SUBNET'] %>
+  vpc_id: <%= ENV['AWS_VPC_ID'] %>
+  iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE'] %>
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: 12.13.37
+  driver_config:
+    ssl_verify_mode: ":verify_none"
+  data_bags_path: "test/data_bags"
+  encrypted_data_bag_secret_key_path: "test/data_bags/encrypted_data_bag_secret"
+  roles_path: "test/roles"
+  environments_path: "test/environments"
+
+platforms:
+  - name: amazon-2016
+    image_id: ami-7172b611
+    driver:
+      instance_type: t2.micro
+      tags:
+        Name: kitchen-bonusbits-base-amazon-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        ApplicationName: BonusBits - Base
+        EnvironmentName: Dev
+        OWNER: <%= ENV['USER'] %>
+    transport:
+      username: ec2-user
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+  - name: rhel-6
+    driver:
+      instance_type: t2.micro
+      tags:
+        Name: kitchen-bonusbits-base-rhel6-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        ApplicationName: BonusBits - Base
+        EnvironmentName: Dev
+        OWNER: <%= ENV['USER'] %>
+    transport:
+      username: ec2-user
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+  - name: rhel-7
+    driver:
+      instance_type: t2.micro
+      tags:
+        Name: kitchen-bonusbits-base-rhel7-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        ApplicationName: BonusBits - Base
+        EnvironmentName: Dev
+        OWNER: <%= ENV['USER'] %>
+    transport:
+      username: ec2-user
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+  - name: ubuntu-14.04
+    driver:
+      instance_type: t2.micro
+      tags:
+        Name: kitchen-bonusbits-base-ubuntu14-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        ApplicationName: BonusBits - Base
+        EnvironmentName: Dev
+        OWNER: <%= ENV['USER'] %>
+    transport:
+      username: ubuntu
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+  - name: ubuntu-15
+    driver:
+      instance_type: t2.micro
+      tags:
+        Name: kitchen-bonusbits-base-ubuntu15-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        ApplicationName: BonusBits - Base
+        EnvironmentName: Dev
+        OWNER: <%= ENV['USER'] %>
+    transport:
+      username: ubuntu
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+  - name: ubuntu-16.04
+    driver:
+      instance_type: t2.micro
+      tags:
+        Name: kitchen-bonusbits-base-ubuntu16-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        ApplicationName: BonusBits - Base
+        EnvironmentName: Dev
+        OWNER: <%= ENV['USER'] %>
+    transport:
+      username: ubuntu
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+  - name: windows-2008r2
+    driver:
+      instance_type: m3.medium
+      tags:
+        Name: kitchen-bonusbits-base-windows-2008r2-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        ApplicationName: BonusBits - Base
+        EnvironmentName: Dev
+        OWNER: <%= ENV['USER'] %>
+    transport:
+      username: administrator
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+  - name: windows-2012r2
+    driver:
+      instance_type: m3.medium
+      tags:
+        Name: kitchen-bonusbits-base-windows-2012r2-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        ApplicationName: BonusBits - Base
+        EnvironmentName: Dev
+        OWNER: <%= ENV['USER'] %>
+    transport:
+      username: administrator
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
+suites:
+  - name: base
+    run_list:
+      - role[base]
+    includes: ["amazon-2016", "rhel-6", "rhel-7", "ubuntu-14.04", "ubuntu-16.04", "windows-2012r2"]
+    provisioner:
+      client_rb:
+        environment: "bonusbits_base"
+  - name: base_epel_repo
+    run_list:
+      - role[base]
+    includes: ["rhel-6", "rhel-7"]
+    provisioner:
+      client_rb:
+        environment: "bonusbits_base_epel_repo"
+  - name: base_no_firewall
+    run_list:
+      - role[base]
+    includes: ["rhel-6", "rhel-7", "ubuntu-14.04", "ubuntu-16.04", "windows-2012r2"]
+    provisioner:
+      client_rb:
+        environment: "bonusbits_base_no_firewall"
+  - name: base_no_software
+    run_list:
+      - role[base]
+    includes: ["rhel-6", "rhel-7", "ubuntu-14.04", "ubuntu-16.04", "windows-2012r2"]
+    provisioner:
+      client_rb:
+        environment: "bonusbits_base_no_software"

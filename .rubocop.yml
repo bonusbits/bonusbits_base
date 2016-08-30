@@ -1,0 +1,37 @@
+AllCops:
+  Exclude:
+    - 'berks-cookbooks/**/*'
+    - '.idea/**/*'
+    - '.git/**/*'
+    - '.kitchen/**/*'
+    - '*.lock'
+    - 'vendor/**/*'
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 60
+  CountComments: false
+  Enabled: true
+
+Style/Encoding:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/EmptyLiteral:
+  Enabled: false
+
+CyclomaticComplexity:
+  Enabled: false
+
+AlignParameters:
+  Enabled: false
+
+Encoding:
+  Enabled: false
+
+Documentation:
+  Enabled: false

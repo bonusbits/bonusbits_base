@@ -1,0 +1,14 @@
+{
+  "name": "base",
+  "description": "Default Role",
+  "json_class": "Chef::Role",
+  "default_attributes": {},
+  "override_attributes": {
+  },
+  "chef_type": "role",
+  "run_list": [
+    "recipe[bonusbits_base]"
+  ],
+  "env_run_lists": {
+  }
+}
