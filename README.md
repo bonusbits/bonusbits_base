@@ -1,4 +1,4 @@
-# BonusBits Base Cookbook
+# Bonus Bits Base Cookbook
 [![Build Status](https://travis-ci.org/bonusbits/bonusbits_base.svg?branch=master)](https://travis-ci.org/bonusbits/bonusbits_base)
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
 
