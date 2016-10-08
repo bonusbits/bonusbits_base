@@ -6,4 +6,4 @@ branches:
   only:
     - master
 script:
-  - rake travisci
+  - bundle exec rake travisci
