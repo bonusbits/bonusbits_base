@@ -3,8 +3,6 @@ machine:
   - docker
   ruby:
     version: '2.3.1'
-  environment:
-    TESTS: ubuntu centos
   timezone:
     America/Los_Angeles
 
@@ -15,6 +13,6 @@ dependencies:
 
 test:
   override:
-  - TESTS=(${TESTS// / }) ; bundle exec rake circleci[${TESTS[$CIRCLE_NODE_INDEX]}]:
-      parallel: true #  Project Settings -> Tweaks -> Adjust Parallelism -> 2
+  - bundle exec rake circleci:
+      parallel: false #  Project Settings -> Tweaks -> Adjust Parallelism -> 2
       timeout: 900
