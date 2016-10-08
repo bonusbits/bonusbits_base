@@ -3,7 +3,7 @@ run_state['detected_environment'] =
   if /dev|qa|stg|prd/ =~ node.environment
     /dev|qa|stg|prd/.match(node.environment).to_s.downcase
   else
-    # For when environment is default Chef-Zero/Chef-Solo just consider it Dev
+    # Consider _default as 'Dev'
     'dev'
   end
 
@@ -29,13 +29,13 @@ default['bonusbits_base']['nodeinfo_script']['deploy'] = true
 memory_in_megabytes =
   case node['os']
   when /.*bsd/
-    node.memory.total.to_i / 1024 / 1024
+    node['memory']['total'].to_i / 1024 / 1024
   when 'linux'
-    node.memory.total[/\d*/].to_i / 1024
+    node['memory']['total'][/\d*/].to_i / 1024
   when 'darwin'
-    node.memory.total[/\d*/].to_i
+    node['memory']['total'][/\d*/].to_i
   when 'windows', 'solaris', 'hpux', 'aix'
-    node.memory.total[/\d*/].to_i / 1024
+    node['memory']['total'][/\d*/].to_i / 1024
   end
 
 default['bonusbits_base']['nodeinfo_script']['content'] = [

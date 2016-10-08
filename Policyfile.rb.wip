@@ -1,0 +1,6 @@
+# rubocop:disable Style/FileName
+name 'base'
+default_source :supermarket
+cookbook 'bonusbits_base', path: '.'
+cookbook 'bonusbits_library', github: 'bonusbits/bonusbits_library', branch: 'master'
+run_list 'bonusbits_base'

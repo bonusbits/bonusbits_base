@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 # Sometimes Organizations have different Versions of Chef Client Running between Linux and Windows
-linux_chef_client_version = '12.13.37'
-windows_chef_client_version = '12.13.37'
+linux_chef_client_version = '12.14.89'
+windows_chef_client_version = '12.14.89'
 
 describe 'Chef Client Version' do
   if linux?

@@ -5,28 +5,22 @@ driver:
   customize:
     memory: 512
     cpus: 1
-#    natdnshostresolver1: "on"
-#    natdnsproxy1: "on"
   driver_config:
     ssl_verify_mode: ":verify_none"
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 12.13.37
+  require_chef_omnibus: 12.14.89
   client_rb:
     ssl_verify_mode: ":verify_none"
   data_bags_path: "test/data_bags"
   encrypted_data_bag_secret_key_path: "test/data_bags/encrypted_data_bag_secret"
   roles_path: "test/roles"
   environments_path: "test/environments"
-#  http_proxy: http://10.0.2.2:8888
-#  https_proxy: http://10.0.2.2:8888
-#  ftp_proxy: http://10.0.2.2:8888
-#  no_proxy: "localhost,127.0.0.1,10.0.2.,33.33.33.,.localdomain.com"
 
 platforms:
   - name: centos-5.11
-  - name: centos-6.7
+  - name: centos-6.8
   - name: centos-7.2
   - name: ubuntu-14.04
   - name: ubuntu-16.04
@@ -35,35 +29,35 @@ suites:
   - name: base
     run_list:
       - role[base]
-    includes: ["centos-6.7", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
+    includes: ["centos-6.8", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
     provisioner:
       client_rb:
         environment: "bonusbits_base"
   - name: base_epel_repo
     run_list:
       - role[base]
-    includes: ["centos-6.7", "centos-7.2"]
+    includes: ["centos-6.8", "centos-7.2"]
     provisioner:
       client_rb:
         environment: "bonusbits_base_epel_repo"
   - name: base_no_firewall
     run_list:
       - role[base]
-    includes: ["centos-6.7", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
+    includes: ["centos-6.8", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
     provisioner:
       client_rb:
         environment: "bonusbits_base_no_firewall"
   - name: base_no_software
     run_list:
       - role[base]
-    includes: ["centos-6.7", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
+    includes: ["centos-6.8", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
     provisioner:
       client_rb:
         environment: "bonusbits_base_no_software"
   - name: base_proxy
     run_list:
       - role[base]
-    includes: ["centos-6.7", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
+    includes: ["centos-6.8", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
     provisioner:
       client_rb:
         environment: "bonusbits_base_proxy"

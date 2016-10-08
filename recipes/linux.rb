@@ -27,6 +27,10 @@ if install_software
     node.default['bonusbits_base']['linux']['selinux']['configure'] = false
     node.default['bonusbits_base']['firewall']['configure'] = false
   when 'redhat', 'centos', 'amazon'
+    package rh_package_list do
+      action package_action
+      only_if { install_base_list }
+    end
     setup_epel = node['bonusbits_base']['linux']['repos']['setup_epel']
     BonusBits::Output.report "Setup EPEL?           (#{setup_epel})"
     if setup_epel
@@ -35,10 +39,6 @@ if install_software
         action package_action
         only_if { install_epel_list }
       end
-    end
-    package rh_package_list do
-      action package_action
-      only_if { install_base_list }
     end
   when 'suse', 'opensuse'
     package suse_package_list do

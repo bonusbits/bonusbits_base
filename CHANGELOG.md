@@ -1,6 +1,15 @@
 ##CHANGE LOG
 ---
 
+##1.1.9 - 10/07/2016 - Levon Becker
+* Added example Policyfile (WIP)
+* Made node hash consistent
+* Updated to Chef client 12.14.89, Ruby 2.3.1 and newer gems included in ChefDK 0.18.30
+* Stripped down integration tests in Rakefile
+* Ditched coveralls at least for now
+* Tested CentOS 6.8
+* Switched so regular repo installs before epel repo installed. Usually epel installs are addins to a standard package.
+
 ##1.1.8 - 08/29/2016 - Levon Becker
 * Improved Docker? method
 * Removed the proxy test suites from EC2 and Docker Kitchen Config

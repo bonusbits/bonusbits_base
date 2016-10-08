@@ -1,12 +1,12 @@
 /.bundle/
 /.yardoc
-/Gemfile.lock
 /_yardoc/
 /coverage/
 /doc/
 /pkg/
 /spec/reports/
 /tmp/
+Policyfile.lock*
 *~
 *#
 .#*
@@ -23,7 +23,6 @@ pkg/
 Berksfile.lock
 
 # Bundler
-Gemfile.lock
 bin/*
 .bundle/*
 

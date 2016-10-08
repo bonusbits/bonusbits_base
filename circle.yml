@@ -2,7 +2,7 @@ machine:
   services:
   - docker
   ruby:
-    version: '2.1.8'
+    version: '2.3.1'
   environment:
     TESTS: ubuntu centos
   timezone:
@@ -10,7 +10,7 @@ machine:
 
 dependencies:
   override:
-  - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3 --without=ec2 vagrant windows:
+  - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3 --without=ec2 vagrant:
       timeout: 900
 
 test:
