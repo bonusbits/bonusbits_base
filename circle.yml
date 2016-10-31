@@ -13,6 +13,6 @@ dependencies:
 
 test:
   override:
-  - bundle exec rake circleci:
+  - bundle exec rake circleci --trace:
       parallel: false #  Project Settings -> Tweaks -> Adjust Parallelism -> 2
-      timeout: 900
+      timeout: 1800

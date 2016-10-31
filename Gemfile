@@ -14,6 +14,7 @@ group :unit do
   gem 'chef-sugar', '~> 3.4.0'
   gem 'fauxhai', '~> 3.9.0'
   gem 'coveralls', '~> 0.8.0'
+  gem 'rspec_junit_formatter', '~> 0.2.3'
 end
 
 group :integration do

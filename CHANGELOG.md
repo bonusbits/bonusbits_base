@@ -4,11 +4,12 @@
 ##1.1.9 - 10/07/2016 - Levon Becker
 * Added example Policyfile (WIP)
 * Made node hash consistent
-* Updated to Chef client 12.14.89, Ruby 2.3.1 and newer gems included in ChefDK 0.18.30
+* Updated to Chef client 12.15.19, Ruby 2.3.1p112 and newer gems included in ChefDK 0.19.6
 * Stripped down integration tests in Rakefile
-* Ditched coveralls at least for now
 * Tested CentOS 6.8
 * Switched so regular repo installs before epel repo installed. Usually epel installs are addins to a standard package.
+* Change detected environment logic to stop using deprecated node method call
+* Fixed EC2 AMI Search for Amazon Linux
 
 ##1.1.8 - 08/29/2016 - Levon Becker
 * Improved Docker? method

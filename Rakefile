@@ -12,7 +12,7 @@ namespace :style do
   FoodCritic::Rake::LintTask.new(:chef) do |task|
     task.options = {
       fail_tags: ['correctness'],
-      chef_version: '12.14.89',
+      chef_version: '12.15.19',
       tags: %w(~FC001 ~FC019)
     }
   end
@@ -20,10 +20,15 @@ end
 
 # Rspec and ChefSpec
 namespace :unit do
-  require 'coveralls/rake/task'
-  require 'rspec/core/rake_task'
   desc 'Unit Tests (Rspec & ChefSpec)'
+  require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:rspec)
+
+  desc 'Unit Tests for CircleCI'
+  RSpec::Core::RakeTask.new(:circleci_rspec) do |test|
+    # t.fail_on_error = false
+    test.rspec_opts = '--no-drb -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml'
+  end
 end
 
 # Integration Tests - Kitchen
@@ -66,7 +71,7 @@ desc 'Travis CI Tasks'
 task travisci: %w(style:chef style:ruby unit:rspec )
 
 desc 'Circle CI Tasks'
-task circleci: %w(style:chef style:ruby unit:rspec integration:docker)
+task circleci: %w(style:chef style:ruby unit:circleci_rspec integration:docker)
 
 desc 'Foodcritic, Rubocop & ChefSpec'
 task default: %w(style:chef style:ruby unit:rspec)
