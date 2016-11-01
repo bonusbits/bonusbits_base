@@ -11,7 +11,7 @@ case node['os']
   when 'linux'
     include_recipe 'bonusbits_base::linux'
     bonusbits_library_discovery 'Docker Discovery' do
-      action :docker
+      action :container
     end
   when 'windows'
     include_recipe 'bonusbits_base::windows'

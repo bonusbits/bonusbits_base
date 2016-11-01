@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-unless docker?
+unless container?
   if redhat?
     describe 'SELinux' do
       it 'Disabled' do

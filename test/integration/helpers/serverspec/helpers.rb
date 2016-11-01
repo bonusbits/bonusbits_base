@@ -52,7 +52,7 @@ def release?(test_version)
   os[:release] == test_version
 end
 
-def docker?
+def container?
   filename = '/proc/1/cgroup'
   file_contents = ::File.read(filename)
   if file_contents =~ /docker/ || file_contents =~ /lxc/

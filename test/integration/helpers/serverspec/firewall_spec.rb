@@ -13,7 +13,7 @@ default_iptables_chains = %w(
   FORWARD
 )
 
-if rhel_family? && !docker?
+if rhel_family? && !container?
   if @config_firewall
     describe 'Iptables' do
       it 'Base Rules Configured (Drop In, Allow 22, lo, icmp, rsync)' do
