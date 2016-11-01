@@ -13,6 +13,9 @@ rh_epel_package_list =
 suse_package_list =
   node['bonusbits_base']['linux']['packages']['suse_package_list']
 
+file_contents = ::File.read('/proc/1/cgroup')
+BonusBits::Output.report "REPORT: cgroup file content (#{file_contents})"
+
 # Install Software Packages
 install_software = node['bonusbits_base']['software']['install']
 BonusBits::Output.report "Install Software?     (#{install_software})"
