@@ -55,7 +55,7 @@ end
 def docker?
   filename = '/proc/1/cgroup'
   file_contents = ::File.read(filename)
-  if file_contents =~ /docker/
+  if file_contents =~ /docker/ || file_contents =~ /lxc/
     true
   else
     false
