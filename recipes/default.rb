@@ -10,7 +10,7 @@ BonusBits::Output.report "Detected Environment: (#{node.run_state['detected_envi
 case node['os']
   when 'linux'
     include_recipe 'bonusbits_base::linux'
-    bonusbits_library_discovery 'Docker Discovery' do
+    bonusbits_library_discovery 'Container Discovery' do
       action :container
     end
   when 'windows'
