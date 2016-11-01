@@ -9,3 +9,5 @@ else
   set :backend, :cmd
   set :os, family: 'windows'
 end
+
+puts "REPORT: ServerSpec OS FAMILY: (#{os[:family]})"

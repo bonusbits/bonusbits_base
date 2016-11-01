@@ -6,7 +6,7 @@ deb_package_list = %w(vim mlocate wget)
 if linux?
   if @install_software
     describe 'Software Packages' do
-      if redhat?
+      if rhel_family?
         it 'Installed' do
           rh_package_list.each do |package|
             expect(package(package)).to be_installed
@@ -23,7 +23,7 @@ if linux?
   else
     describe 'Software Packages' do
       # Split out because wget is often installed by default.
-      if redhat?
+      if rhel_family?
         it 'Not Installed' do
           expect(package('vim-enhanced')).to_not be_installed
           expect(package('mlocate')).to_not be_installed

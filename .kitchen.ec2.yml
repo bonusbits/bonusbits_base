@@ -125,13 +125,13 @@ suites:
     provisioner:
       client_rb:
         environment: "bonusbits_base_epel_repo"
-  - name: base_no_firewall
+  - name: base_firewall
     run_list:
       - role[base]
-    includes: ["amzn-2016-latest", "rhel-6", "rhel-7", "ubuntu-14.04", "ubuntu-16.04", "windows-2012r2"]
+    includes: ["rhel-6", "rhel-7", "windows-2012r2"]
     provisioner:
       client_rb:
-        environment: "bonusbits_base_no_firewall"
+        environment: "bonusbits_base_firewall"
   - name: base_no_software
     run_list:
       - role[base]

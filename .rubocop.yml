@@ -38,3 +38,13 @@ Encoding:
 
 Documentation:
   Enabled: false
+
+Style/CaseIndentation:
+  # Valid values are: case, end
+  IndentWhenRelativeTo: case
+  IndentOneStep: true
+
+#Style/CaseIndentation:
+#  Description: 'Indentation of when in a case/when/[else/]end.'
+#  StyleGuide: '#indent-when-to-case'
+#  Enabled: true

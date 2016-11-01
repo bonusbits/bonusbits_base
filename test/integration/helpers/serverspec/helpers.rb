@@ -8,6 +8,10 @@ def amazon?
   os[:family] == 'amazon'
 end
 
+def rhel_family?
+  %w(redhat amazon).include?(os[:family])
+end
+
 def redhat?
   os[:family] == 'redhat'
 end

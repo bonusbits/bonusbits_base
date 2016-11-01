@@ -2,6 +2,7 @@
 
 driver:
   name: docker
+  use_sudo: false # For Native Docker on Mac. Comment if using Toolbox (docker-machine)
   driver_config:
     ssl_verify_mode: ":verify_none"
 

@@ -1,4 +1,4 @@
-@config_firewall = true
+@config_firewall = false
 @install_software = true
 @setup_epel = false
 @install_epel_packages = false

@@ -1,4 +1,7 @@
-# Windows Defaults
-default['bonusbits_base']['windows']['setup_powershell'] = true
-default['bonusbits_base']['windows']['setup_winrm'] = true
-default['bonusbits_base']['windows']['add_users'] = true
+# Append Attribute Prefix
+default['bonusbits_base']['windows'].tap do |windows|
+  # Windows Defaults
+  windows['setup_powershell'] = true
+  windows['setup_winrm'] = true
+  windows['add_users'] = true
+end

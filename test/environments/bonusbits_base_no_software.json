@@ -8,9 +8,6 @@
   },
   "override_attributes": {
     "bonusbits_base": {
-      "firewall": {
-        "configure": false
-      },
       "software": {
         "install": false
       }

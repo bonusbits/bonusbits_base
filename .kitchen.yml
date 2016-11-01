@@ -21,7 +21,7 @@ provisioner:
 platforms:
   - name: centos-5.11
   - name: centos-6.8
-  - name: centos-7.2
+  - name: centos-7.3
   - name: ubuntu-14.04
   - name: ubuntu-16.04
 
@@ -29,35 +29,35 @@ suites:
   - name: base
     run_list:
       - role[base]
-    includes: ["centos-6.8", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
+    includes: ["centos-6.8", "centos-7.3", "ubuntu-14.04", "ubuntu-16.04"]
     provisioner:
       client_rb:
         environment: "bonusbits_base"
   - name: base_epel_repo
     run_list:
       - role[base]
-    includes: ["centos-6.8", "centos-7.2"]
+    includes: ["centos-6.8", "centos-7.3"]
     provisioner:
       client_rb:
         environment: "bonusbits_base_epel_repo"
-  - name: base_no_firewall
+  - name: base_firewall
     run_list:
       - role[base]
-    includes: ["centos-6.8", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
+    includes: ["centos-6.8", "centos-7.3"]
     provisioner:
       client_rb:
-        environment: "bonusbits_base_no_firewall"
+        environment: "bonusbits_base_firewall"
   - name: base_no_software
     run_list:
       - role[base]
-    includes: ["centos-6.8", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
+    includes: ["centos-6.8", "centos-7.3", "ubuntu-14.04", "ubuntu-16.04"]
     provisioner:
       client_rb:
         environment: "bonusbits_base_no_software"
   - name: base_proxy
     run_list:
       - role[base]
-    includes: ["centos-6.8", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
+    includes: ["centos-6.8", "centos-7.3", "ubuntu-14.04", "ubuntu-16.04"]
     provisioner:
       client_rb:
         environment: "bonusbits_base_proxy"

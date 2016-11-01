@@ -18,37 +18,37 @@ install_software = node['bonusbits_base']['software']['install']
 BonusBits::Output.report "Install Software?     (#{install_software})"
 if install_software
   case platform
-  when 'debian', 'ubuntu'
-    include_recipe 'apt'
-    package deb_package_list do
-      action package_action
-      only_if { install_base_list }
-    end
-    node.default['bonusbits_base']['linux']['selinux']['configure'] = false
-    node.default['bonusbits_base']['firewall']['configure'] = false
-  when 'redhat', 'centos', 'amazon'
-    package rh_package_list do
-      action package_action
-      only_if { install_base_list }
-    end
-    setup_epel = node['bonusbits_base']['linux']['repos']['setup_epel']
-    BonusBits::Output.report "Setup EPEL?           (#{setup_epel})"
-    if setup_epel
-      include_recipe 'yum-epel'
-      package rh_epel_package_list do
+    when 'debian', 'ubuntu'
+      include_recipe 'apt'
+      package deb_package_list do
         action package_action
-        only_if { install_epel_list }
+        only_if { install_base_list }
       end
-    end
-  when 'suse', 'opensuse'
-    package suse_package_list do
-      action package_action
-      only_if { install_base_list }
-    end
-    node.default['bonusbits_base']['linux']['selinux']['configure'] = false
-    node.default['bonusbits_base']['firewall']['configure'] = false
-  else
-    BonusBits::Output.break "OS Platform Unknown   (#{platform})"
+      node.default['bonusbits_base']['linux']['selinux']['configure'] = false
+      node.default['bonusbits_base']['firewall']['configure'] = false
+    when 'redhat', 'centos', 'amazon'
+      package rh_package_list do
+        action package_action
+        only_if { install_base_list }
+      end
+      setup_epel = node['bonusbits_base']['linux']['repos']['setup_epel']
+      BonusBits::Output.report "Setup EPEL?           (#{setup_epel})"
+      if setup_epel
+        include_recipe 'yum-epel'
+        package rh_epel_package_list do
+          action package_action
+          only_if { install_epel_list }
+        end
+      end
+    when 'suse', 'opensuse'
+      package suse_package_list do
+        action package_action
+        only_if { install_base_list }
+      end
+      node.default['bonusbits_base']['linux']['selinux']['configure'] = false
+      node.default['bonusbits_base']['firewall']['configure'] = false
+    else
+      BonusBits::Output.break "OS Platform Unknown   (#{platform})"
   end
 end
 

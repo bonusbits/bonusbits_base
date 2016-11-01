@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-if redhat?
+if rhel_family?
   if @setup_epel
     # Verify EPEL is setup
     describe 'EPEL Repo' do

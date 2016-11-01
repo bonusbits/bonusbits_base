@@ -1,13 +1,19 @@
 ##CHANGE LOG
 ---
 
+##1.2.0 - 10/30/2016 - Levon Becker
+* Changed default to not include Firewall. So an override would be needed to include. Really these days it's usually handled at a different layer such and security groups. Plus it's been nothing but problems for testing in various environments.
+* Added foodcritic exclusion to Rakefile for calling node method using key until they fix the rule to match Chef clients deprecation complaints
+* Made Rubocop happy with too long of a line in Rakefile
+* Switched from Docker Toolbox for Mac to Docker for Mac (native) because was getting crashes with Vbox version. So, had to Add use_sudo false in docker kitchen config for it to work correctly.
+
 ##1.1.9 - 10/07/2016 - Levon Becker
 * Added example Policyfile (WIP)
 * Made node hash consistent
 * Updated to Chef client 12.15.19, Ruby 2.3.1p112 and newer gems included in ChefDK 0.19.6
 * Stripped down integration tests in Rakefile
 * Tested CentOS 6.8
-* Switched so regular repo installs before epel repo installed. Usually epel installs are addins to a standard package.
+* Switched so regular repo installs before epel repo installed. Usually epel installs are addons to a standard package.
 * Change detected environment logic to stop using deprecated node method call
 * Fixed EC2 AMI Search for Amazon Linux
 
