@@ -4,12 +4,12 @@ def linux?
   %w(amazon debian redhat ubuntu suse opensuse).include?(os[:family])
 end
 
-def amazon?
-  os[:family] == 'amazon'
-end
-
 def rhel_family?
   %w(redhat amazon).include?(os[:family])
+end
+
+def amazon?
+  os[:family] == 'amazon'
 end
 
 def redhat?
