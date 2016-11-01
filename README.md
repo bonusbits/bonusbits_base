@@ -12,38 +12,32 @@ The secondary purpose of this cookbook is to give various examples that can be r
 
 # Supported Platforms
 * Linux
-    * Amazon (EC2 Only - Coming Soon)
+    * Amazon (EC2 Only)
     * RHEL (EC2 Only)
     * CentOS
     * Ubuntu
-* Windows (EC2 Only)
-    * 2012 R2 (Cookbook items WIP. Kitchen just spins up an instances currently.)
+* Windows (EC2 Only - WIP)
+    * 2012 R2 (Cookbook items WIP. Kitchen just spins up an instances currently and ServerSpec tests having issues.)
 
 # Successfully Tested Versions
-VirtualBox 5.1 and Vagrant 1.8.5 currently have problems. Downgrade to the specific versions listed below until things stabilize. 
-Also, I found as of the latest Chef client version 12.12.5 chef_solo does not exactly replicate chef_zero. Meaning chef_zero allows environment files whereas chef_solo did not.
-
 * Mac OSX (10.11.6)
-* Docker (1.11.2)
-* VirtualBox (5.0.26)
-* Vagrant (1.8.4)
+* Docker (1.12.1)
+* VirtualBox (5.1.8)
+* Vagrant (1.8.6)
     * Plugins
         * vagrant-vbguest (0.11.0)
         * vagrant-winrm (0.7.0)
-* Chef Development Kit (0.17.17)
-    * Ruby (2.1.8p440)
-    * Chef-client (12.13.37)
-    * Inspec (0.29.0)
-    * berkshelf (4.3.5)
+* Chef Development Kit (0.19.6)
+    * Ruby (2.3.1p112)
+    * Chef-client (12.15.19)
+    * berkshelf (5.1.0)
     * rubocop (0.39.0)
-    * foodcritic (7.0.1)
-    * test-kitchen (1.11.1)
-        * serverspec (2.36.0)
-    * kitchen-ec2 (1.1.0)
+    * foodcritic (7.1.0)
+    * test-kitchen (1.13.2)
+        * serverspec (2.37.2)
+    * kitchen-ec2 (1.2.0)
 * Additional Gems
-    * kitchen-docker (2.5.0)
-    * vagrant-wrapper (2.0.3)
-    * winrm-transport (1.0.3)
+    * kitchen-docker (2.6.0)
 
 # Features
 * Setup a virtual machine/s for testing on VirtualBox, Docker or AWS EC2.
@@ -131,12 +125,14 @@ The kitchen commands need to be ran from the root directory of the cookbook.
     AWS_SSH_KEY_PATH = {/path/to/sshkey.pem}
     AWS_PROFILE = {aws config profile name}
     AWS_REGION = {us-west-2 or us-east-1}
-    AWS_SECURITY_GROUP_1 = {security group ID}
-    AWS_SECURITY_GROUP_2 = {security group ID}
-    AWS_SUBNET = {subnet ID to deploy}
     AWS_VPC_ID = {VPC ID to deploy}
-    AWS_IAM_ROLE = {EC2 Instance IAM Profile Role Name}
+    AWS_SUBNET = {subnet ID to deploy}
+    AWS_PUBLIC_IP = {true or false}
+    AWS_SECURITY_GROUP_1 = {security group ID}
+    AWS_IAM_INSTANCE_PROFILE_1 = {EC2 Instance IAM Profile Role Name}
     ```
+    
+    Setup to support up to 5 security groups. More IAM Profiles staged for multiple instance role support.
 
 # NodeInfo Script
 You can run the nodeinfo script locally or use Test Kitchen to run it. You can have it run on one, multiple or all of the test suite VMs you have running.
@@ -191,36 +187,7 @@ Usually you don't have to deal with a proxy issue in AWS. The defaults I have as
 Keep in mind if you are not using Charles Proxy and pointing your BASH/PowerShell to it, you'll need to configure them as well.
 
 ## Enable Proxy in Kitchen Config
-Simply un-comment the lines I have excluded in the .kitchen.yml or create a ```.kitchen.local.yml``` that doesn't get committed and add your custom settings.
-Know that when you use the ```.kitchen.local.yml```, that an entire section is overroad by it. So you can't just try to add one override say under 'driver'.
-Your local kitchen file has to contain the whole driver section that includes your changes.
-
-```yaml
-driver:
-  name: vagrant
-  customize:
-    memory: 512
-    cpus: 1
-    natdnshostresolver1: "on"
-    natdnsproxy1: "on"
-  driver_config:
-    ssl_verify_mode: ":verify_none"
-
-provisioner:
-  name: chef_solo
-  require_chef_omnibus: 12.12.15
-  client_rb:
-    ssl_verify_mode: ":verify_none"
-  data_bags_path: "test/data_bags"
-  encrypted_data_bag_secret_key_path: "test/data_bags/encrypted_data_bag_secret"
-  roles_path: "test/roles"
-  environments_path: "test/environments"
-   http_proxy: http://10.0.2.2:8888
-   https_proxy: http://10.0.2.2:8888
-   ftp_proxy: http://10.0.2.2:8888
-   no_proxy: "localhost,127.0.0.1,10.0.2.,33.33.33.,.localdomain.com"
-```
-
+Finally Test Kitchen will use your shell environment Proxy settings!
 
 # Ruby Gem Source
 If you don't have internet access you'll need an internal Rubygem repo source with the neccessary gems to run the integration tests. I have add logic with attributes to set an internal Ruby gem source.

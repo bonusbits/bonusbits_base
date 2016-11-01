@@ -12,7 +12,7 @@ driver:
     <%= "- " + ENV['AWS_SECURITY_GROUP_5'] if ENV['AWS_SECURITY_GROUP_5'] %>
   subnet_id: <%= ENV['AWS_SUBNET'] %>
   vpc_id: <%= ENV['AWS_VPC_ID'] %>
-  iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE'] %>
+  iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
   region: <%= ENV['AWS_REGION'] %>
   instance_type: t2.micro
 
