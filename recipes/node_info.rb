@@ -1,5 +1,6 @@
 case node['os']
 when 'linux'
+  # TODO: Checksum doesn't seem to be working correctly. It only lays file down once.
   template '/usr/local/bin/nodeinfo' do
     source 'node_info/nodeinfo.sh.erb'
     owner 'root'
