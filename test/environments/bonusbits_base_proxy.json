@@ -8,7 +8,7 @@
   },
   "override_attributes": {
     "bonusbits_base": {
-      "network_proxy": {
+      "proxy": {
         "configure": true
       }
     }

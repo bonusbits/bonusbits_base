@@ -1,7 +1,7 @@
 # Bonus Bits Base Cookbook
-[![Build Status](https://travis-ci.org/bonusbits/bonusbits_base.svg?branch=master)](https://travis-ci.org/bonusbits/bonusbits_base)
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
-[![Coverage Status](https://coveralls.io/repos/github/bonusbits/bonusbits_base/badge.svg?branch=master)](https://coveralls.io/github/bonusbits/bonusbits_base?branch=master)
+[![Join the chat at https://gitter.im/bonusbits/bonusbits_base](https://badges.gitter.im/bonusbits/bonusbits_base.svg)](https://gitter.im/bonusbits/bonusbits_base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 # Purpose
 Chef Cookbook that will setup the basics for various flavors of Linux and Windows Servers.

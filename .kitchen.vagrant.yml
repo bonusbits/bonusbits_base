@@ -1,8 +1,10 @@
 ---
 
 driver:
-  name: docker
-  use_sudo: false # For Native Docker on Mac. Comment if using Toolbox (docker-machine)
+  name: vagrant
+  customize:
+    memory: 512
+    cpus: 1
   driver_config:
     ssl_verify_mode: ":verify_none"
 
@@ -17,27 +19,29 @@ provisioner:
   environments_path: "test/environments"
 
 platforms:
+  - name: centos-5.11
   - name: centos-6.8
   - name: centos-7.2
   - name: ubuntu-14.04
   - name: ubuntu-16.04
-  - name: windowsnano
 
 suites:
   - name: base
     run_list:
       - role[base]
+    verifier:
+      inspec_tests:
+        - name: bootstrap
+          git: https://github.com/bonusbits/inspec_bootstrap.git
+#        - name: bonusbits_base
+#          git: https://github.com/bonusbits/inspec_bonusbits_base.git
+        - path: /Users/levon/Development/github/bonusbits/inspec_bonusbits_base
+      attributes:
+        chef_version: 12.18.31
     includes: ["centos-6.8", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
     provisioner:
       client_rb:
         environment: "bonusbits_base"
-    attributes:
-      bonusbits_base:
-        linux:
-          selinux:
-            configure: false
-        firewall:
-          configure: false
   - name: base_epel_repo
     run_list:
       - role[base]
@@ -45,13 +49,13 @@ suites:
     provisioner:
       client_rb:
         environment: "bonusbits_base_epel_repo"
-    attributes:
-      bonusbits_base:
-        linux:
-          selinux:
-            configure: false
-        firewall:
-          configure: false
+  - name: base_firewall
+    run_list:
+      - role[base]
+    includes: ["centos-6.8", "centos-7.2"]
+    provisioner:
+      client_rb:
+        environment: "bonusbits_base_firewall"
   - name: base_no_software
     run_list:
       - role[base]
@@ -59,10 +63,10 @@ suites:
     provisioner:
       client_rb:
         environment: "bonusbits_base_no_software"
-    attributes:
-      bonusbits_base:
-        linux:
-          selinux:
-            configure: false
-        firewall:
-          configure: false
+  - name: base_proxy
+    run_list:
+      - role[base]
+    includes: ["centos-6.8", "centos-7.2", "ubuntu-14.04", "ubuntu-16.04"]
+    provisioner:
+      client_rb:
+        environment: "bonusbits_base_proxy"

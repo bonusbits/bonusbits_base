@@ -7,16 +7,19 @@ AllCops:
     - '*.lock'
     - 'vendor/**/*'
 
+Documentation:
+  Enabled: false
+
 Metrics/LineLength:
-  Max: 120
+  Max: 200
+
+Metrics/BlockLength:
+  Enabled: false
 
 Metrics/MethodLength:
   Max: 60
   CountComments: false
   Enabled: true
-
-#Style/FileName:
-#  Enabled: false
 
 Style/Encoding:
   Enabled: false
@@ -36,15 +39,5 @@ AlignParameters:
 Encoding:
   Enabled: false
 
-Documentation:
+Style/FrozenStringLiteralComment:
   Enabled: false
-
-Style/CaseIndentation:
-  # Valid values are: case, end
-  IndentWhenRelativeTo: case
-  IndentOneStep: true
-
-#Style/CaseIndentation:
-#  Description: 'Indentation of when in a case/when/[else/]end.'
-#  StyleGuide: '#indent-when-to-case'
-#  Enabled: true
