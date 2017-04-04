@@ -1,6 +1,6 @@
 default['bonusbits_base']['gem_source']['configure'] = false
-default['bonusbits_base']['gem_source']['internal_url'] =
-  'https://nexus.localdomain.com/mother/content/repositories/rubygems.org/'
+default['bonusbits_base']['gem_source']['source_url'] =
+  'https://artifactory.localdomain.com/artifactory/api/rubygems/'
 
 # Debug
 message_list = [

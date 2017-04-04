@@ -26,6 +26,9 @@ end
 # Configure Proxy
 include_recipe 'bonusbits_base::proxy' if node['bonusbits_base']['proxy']['configure']
 
+# Configure Certs
+include_recipe 'bonusbits_base::certs' if node['bonusbits_base']['certs']['configure']
+
 # Configure Gem Source
 include_recipe 'bonusbits_base::gem_source' if node['bonusbits_base']['gem_source']['configure']
 
