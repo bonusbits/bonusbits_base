@@ -2,10 +2,10 @@
 
 verifier:
   name: inspec
+  format: junit
+  output: $CIRCLE_TEST_REPORTS/inspec/results/%{platform}_%{suite}_inspec.xml
   #  format: doc
-    format: junit
   #  output: test/inspec/results/%{platform}_%{suite}_inspec.xml
-    output: $CIRCLE_TEST_REPORTS/inspec/results/%{platform}_%{suite}_inspec.xml
 
 platforms:
   - name: amazon-ec2
