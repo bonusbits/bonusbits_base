@@ -20,12 +20,14 @@ platforms:
     transport:
       username: ec2-user
       ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
   - name: amazon-docker
     driver_config:
       image: amazonlinux:latest
       intermediate_instructions:
         - RUN yum -y install upstart procps util-linux
       pid_one_command: /sbin/init
+
   - name: rhel6
     driver:
       image_search:
@@ -39,6 +41,7 @@ platforms:
     transport:
       username: ec2-user
       ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
   - name: rhel7
     driver:
       image_search:
@@ -51,6 +54,7 @@ platforms:
     transport:
       username: ec2-user
       ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
   - name: ubuntu-14.04
     driver:
       tags:
@@ -60,6 +64,7 @@ platforms:
     transport:
       username: ubuntu
       ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
   - name: ubuntu-16.04
     driver:
       tags:
@@ -69,6 +74,7 @@ platforms:
     transport:
       username: ubuntu
       ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
   - name: windows-2012r2
     driver:
       instance_type: m3.medium
@@ -79,6 +85,7 @@ platforms:
     transport:
       username: administrator
       ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
   - name: windows-2016
     driver:
       instance_type: m3.medium
@@ -139,6 +146,7 @@ suites:
           aws:
             inside: true
     includes: ["amazon-ec2"]
+
   - name: ec2_base_epel_repo
     provisioner:
       name: chef_zero
@@ -192,6 +200,7 @@ suites:
           aws:
             inside: true
     includes: ["amazon-ec2"]
+
   - name: ec2_base_no_software
     provisioner:
       name: chef_zero
@@ -244,6 +253,7 @@ suites:
           aws:
             inside: true
     includes: ["amazon-ec2"]
+
   - name: docker_base
     provisioner:
       name: dokken
@@ -286,6 +296,7 @@ suites:
         aws:
           inside: false
     includes: ["amazon-docker"]
+
   - name: docker_base_epel_repo
     provisioner:
       name: dokken
@@ -330,6 +341,7 @@ suites:
         aws:
           inside: false
     includes: ["amazon-docker"]
+
   - name: docker_base_no_software
     provisioner:
       name: dokken
