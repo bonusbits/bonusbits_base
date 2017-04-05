@@ -2,10 +2,10 @@
 
 verifier:
   name: inspec
-  format: junit
-  output: $CIRCLE_TEST_REPORTS/inspec/results/%{platform}_%{suite}_inspec.xml
-  #  format: doc
-  #  output: test/inspec/results/%{platform}_%{suite}_inspec.xml
+  format: <%= ENV['CI'] ? 'junit' : 'cli' %>
+  <% if ENV['CI'] %>
+  output: "$CIRCLE_TEST_REPORTS/inspec/results/%{platform}_%{suite}_inspec.xml"
+  <% end %>
 
 platforms:
   - name: amazon-ec2
