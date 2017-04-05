@@ -9,11 +9,12 @@ default['bonusbits_base']['proxy'].tap do |proxy|
   proxy['url'] = "http://#{proxy_host}:#{proxy_port}"
 
   proxy['no_proxy'] = 'localhost'
+  proxy['no_proxy'] += ',.localdomain.com'
   proxy['no_proxy'] += ',127.0.0.1'
   proxy['no_proxy'] += ',10.0.2.'
-  proxy['no_proxy'] += ',33.33.33.'
-  proxy['no_proxy'] += ',.localdomain.com'
-  # TODO: Add AWS no_proxy's
+  proxy['no_proxy'] += ',/var/run/docker.sock'
+  proxy['no_proxy'] += ',169.254.169.254'
+  # proxy['no_proxy'] += ',s3.amazonaws.com' # TODO: Make more specific for VPCe or make optional?
 
   proxy_url = node['bonusbits_base']['proxy']['url']
   no_proxy = node['bonusbits_base']['proxy']['no_proxy']
