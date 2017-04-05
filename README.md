@@ -25,7 +25,7 @@ I plan to work through the other distros over time.
 # Successfully Tested Versions
 | Driver | Version |
 | :--- | :--- |
-| Mac OSX | 10.12.3 |
+| Mac OSX | 10.12.4 |
 | Docker | 17.03.1-ce, build c6d412e |
 | Chef Development Kit | 1.2.22 |
 | Chef-client | 12.18.31 |
@@ -72,11 +72,11 @@ test
 ```
 
 The data bag items are just examples. They are not currently used in the cookbook.
-I added it mainly for when I copy/paste to write a new wrapper it's already staged for me.
+I added it mainly for when I copy/paste to write a new wrapper it's already staged.
 I usually end up adding the customers CA cert chain as part of my base cookbook.
 [Here's](https://www.bonusbits.com/wiki/HowTo:Add_Internal_Root_CA_to_CentOS_and_Chef_Client) some information on how to accomplish that task.
 
-#Kitchen Configurations
+# Kitchen Configurations
 The default Kitchen configuration ```.kitchen.yml``` is setup with AWS EC2 and Dokken Docker Drivers.
 
 If using Kitchen simple specify the test suite with the driver you'd like to use. Both driver gems are included with ChefDK. 
@@ -88,17 +88,17 @@ The kitchen commands need to be ran from the root directory of the cookbook.
 
 | Task | Driver | Command |
 | :--- | :--- | :--- |
-| List All Test Suites | EC2 | ```kitchen list``` |
-| List All Test Suites | Docker | ```KITCHEN_YAML=.kitchen.dokken.yml kitchen list``` |
-| Run Chef on a Single Test Suite | EC2 | ```kitchen converge base-amazon```| 
-| Run Integration Tests with ServerSpec on a Single Test Suite | Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen verify base-centos-511``` |
-| Test all Test Suites (destroy, create, converge, setup, verify and destroy) | EC2 | ```kitchen test``` | 
-| Test all Test Suites (destroy, create, converge, setup, verify and destroy) | Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen test``` | 
-| Login to a Single Test Suite That is Already Created | EC2 | ```kitchen login base-amazon``` |
-| Login to a Single Test Suite That is Already Created | Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen login base-amazon``` |
-| Create and Verify a Windows 2012 R2 EC2 Instance | EC2 | ```kitchen verify base-windows-2012r2```| 
+| List All Test Suites | ALL | ```kitchen list``` |
+| List All EC2 Test Suites | EC2 | ```kitchen list ec2``` |
+| List All Docker Test Suites | Docker | ```kitchen list docker``` |
+| Test all Test Suites (destroy, create, converge, setup, verify and destroy) | ALL | ```kitchen test``` | 
+| Test all EC2 Test Suites (destroy, create, converge, setup, verify and destroy) | EC2 | ```kitchen test ec2``` |
+| Run Chef on a Single Test Suite | EC2 | ```kitchen converge ec2-base-amazon```| 
+| Run Integration Tests with InSpec on a Single Test Suite | Docker | ```kitchen verify docker-base-amazon``` |
+| Login to a Single Test Suite That is Already Created | EC2 | ```kitchen login ec2-base-amazon``` |
+| Login to a Single Test Suite That is Already Created | Docker | ```kitchen login docker-base-amazon``` |
 
-# EC2 Requirements
+## EC2 Requirements
 1. Direct Connect, VPN or public subnet
     * A direct connect or VPN solution must be in place from you to the AWS VPC where you plan to stand up EC2 instances.
 2. NAT or IGW 
@@ -127,6 +127,10 @@ The kitchen commands need to be ran from the root directory of the cookbook.
     ```
     
     Setup to support up to 5 security groups. More IAM Profiles staged for multiple instance role support.
+    
+## Docker Requirements
+* Docker local install
+    * https://store.docker.com/search?type=edition&offering=community
 
 # NodeInfo Script
 You can run the nodeinfo script locally or use Test Kitchen to run it. You can have it run on one, multiple or all of the test suite VMs you have running.
@@ -135,31 +139,33 @@ Below are some examples:
 ## Example Output
 
 ```
-    ---------------------------------------------------------------
-    Node Information
-    ---------------------------------------------------------------
-    ## NETWORK ##
-    IP Address:                 (10.80.0.221)
-    Hostname:                   (ip-10-80-0-221)
-    FQDN:                       (ip-10-80-0-221.us-west-2.compute.internal)
-    ## AWS ##
-    Instance ID:                (i-0c32017a62a32ad3b)
-    Region:                     (us-west-2)
-    Availability Zone:          (us-west-2a)
-    AMI ID:                     (ami-d61a92b6)
-    ## PLATFORM ##
-    Platform:                   (redhat)
-    Platform Version:           (6.9)
-    Platform Family:            (rhel)
-    ## HARDWARE ##
-    CPU Count:                  (1)
-    Memory:                     (994MB)
-    ## CHEF ##
-    Detected Environment:       (dev)
-    Chef Environment:           (bonusbits_base_epel_repo)
-    Chef Roles:                 ([base])
-    Chef Recipes:               ([bonusbits_base, bonusbits_base::default])
-    ---------------------------------------------------------------
+
+---------------------------------------------------------------
+Node Information
+---------------------------------------------------------------
+## NETWORK ##
+IP Address:                 (10.80.0.221)
+Hostname:                   (ip-10-80-0-221)
+FQDN:                       (ip-10-80-0-221.us-west-2.compute.internal)
+## AWS ##
+Instance ID:                (i-0c32017a62a32ad3b)
+Region:                     (us-west-2)
+Availability Zone:          (us-west-2a)
+AMI ID:                     (ami-d61a92b6)
+## PLATFORM ##
+Platform:                   (redhat)
+Platform Version:           (6.9)
+Platform Family:            (rhel)
+## HARDWARE ##
+CPU Count:                  (1)
+Memory:                     (994MB)
+## CHEF ##
+Detected Environment:       (dev)
+Chef Environment:           (bonusbits_base_epel_repo)
+Chef Roles:                 ([base])
+Chef Recipes:               ([bonusbits_base, bonusbits_base::default])
+---------------------------------------------------------------
+
 ```
  
 ```---------------------------------------------------------------
