@@ -1,6 +1,6 @@
 machine:
   services:
-  - docker
+    - docker
   ruby:
     version: '2.3.1'
   timezone:
@@ -8,12 +8,13 @@ machine:
 
 dependencies:
   override:
-  - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3 --without=ec2 vagrant:
+    - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3:
       timeout: 900
 
 test:
   override:
-  - bundle exec rake circleci --trace:
+    - mkdir -p $CIRCLE_TEST_REPORTS/inspec/results
+    - bundle exec rake circleci --trace:
       parallel: false #  Project Settings -> Tweaks -> Adjust Parallelism -> 2
       timeout: 1800
 
