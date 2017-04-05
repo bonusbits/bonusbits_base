@@ -88,15 +88,15 @@ The kitchen commands need to be ran from the root directory of the cookbook.
 
 | Task | Driver | Command |
 | :--- | :--- | :--- |
-| List All Test Suites | EC2 | ```kitchen list``` |
-| List All Test Suites | Docker | ```KITCHEN_YAML=.kitchen.dokken.yml kitchen list``` |
-| Run Chef on a Single Test Suite | EC2 | ```kitchen converge base-amazon```| 
-| Run Integration Tests with ServerSpec on a Single Test Suite | Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen verify base-centos-511``` |
-| Test all Test Suites (destroy, create, converge, setup, verify and destroy) | EC2 | ```kitchen test``` | 
-| Test all Test Suites (destroy, create, converge, setup, verify and destroy) | Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen test``` | 
-| Login to a Single Test Suite That is Already Created | EC2 | ```kitchen login base-amazon``` |
-| Login to a Single Test Suite That is Already Created | Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen login base-amazon``` |
-| Create and Verify a Windows 2012 R2 EC2 Instance | EC2 | ```kitchen verify base-windows-2012r2```| 
+| List All Test Suites | ALL | ```kitchen list``` |
+| List EC2 Test Suites | EC2 | ```kitchen list ec2``` |
+| List Docker Test Suites | Docker | ```kitchen list docker``` |
+| Test all Test Suites (destroy, create, converge, setup, verify and destroy) | ALL | ```kitchen test``` | 
+| Test all EC2 Test Suites (destroy, create, converge, setup, verify and destroy) | EC2 | ```kitchen test ec2``` |
+| Run Chef on a Single Test Suite | EC2 | ```kitchen converge ec2-base-amazon```| 
+| Run Integration Tests with InSpec on a Single Test Suite | Docker | ```kitchen verify docker-base-amazon``` |
+| Login to a Single Test Suite That is Already Created | EC2 | ```kitchen login ec2-base-amazon``` |
+| Login to a Single Test Suite That is Already Created | Docker | ```kitchen login docker-base-amazon``` |
 
 # EC2 Requirements
 1. Direct Connect, VPN or public subnet
@@ -135,31 +135,33 @@ Below are some examples:
 ## Example Output
 
 ```
-    ---------------------------------------------------------------
-    Node Information
-    ---------------------------------------------------------------
-    ## NETWORK ##
-    IP Address:                 (10.80.0.221)
-    Hostname:                   (ip-10-80-0-221)
-    FQDN:                       (ip-10-80-0-221.us-west-2.compute.internal)
-    ## AWS ##
-    Instance ID:                (i-0c32017a62a32ad3b)
-    Region:                     (us-west-2)
-    Availability Zone:          (us-west-2a)
-    AMI ID:                     (ami-d61a92b6)
-    ## PLATFORM ##
-    Platform:                   (redhat)
-    Platform Version:           (6.9)
-    Platform Family:            (rhel)
-    ## HARDWARE ##
-    CPU Count:                  (1)
-    Memory:                     (994MB)
-    ## CHEF ##
-    Detected Environment:       (dev)
-    Chef Environment:           (bonusbits_base_epel_repo)
-    Chef Roles:                 ([base])
-    Chef Recipes:               ([bonusbits_base, bonusbits_base::default])
-    ---------------------------------------------------------------
+
+---------------------------------------------------------------
+Node Information
+---------------------------------------------------------------
+## NETWORK ##
+IP Address:                 (10.80.0.221)
+Hostname:                   (ip-10-80-0-221)
+FQDN:                       (ip-10-80-0-221.us-west-2.compute.internal)
+## AWS ##
+Instance ID:                (i-0c32017a62a32ad3b)
+Region:                     (us-west-2)
+Availability Zone:          (us-west-2a)
+AMI ID:                     (ami-d61a92b6)
+## PLATFORM ##
+Platform:                   (redhat)
+Platform Version:           (6.9)
+Platform Family:            (rhel)
+## HARDWARE ##
+CPU Count:                  (1)
+Memory:                     (994MB)
+## CHEF ##
+Detected Environment:       (dev)
+Chef Environment:           (bonusbits_base_epel_repo)
+Chef Roles:                 ([base])
+Chef Recipes:               ([bonusbits_base, bonusbits_base::default])
+---------------------------------------------------------------
+
 ```
  
 ```---------------------------------------------------------------
