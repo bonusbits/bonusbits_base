@@ -11,49 +11,50 @@ This is a great starting point for all your nodes. It's also a great example for
 The secondary purpose of this cookbook is to give various examples that can be replicated in other cookbooks. I did my best to include all the major coding and testing scenarios.
 
 # Supported Platforms
+At least temporarily I've focused only ona Amazon Linux. I have not tested all the other flavors since v2.0.0 release.
+I plan to work through the other distros over time.
 * Linux
     * Amazon (EC2 Only)
-    * RHEL (EC2 Only)
-    * CentOS
-    * Ubuntu
-* Windows (EC2 Only - WIP)
-    * 2012 R2 (Cookbook items WIP. Kitchen just spins up an instances currently and ServerSpec tests having issues.)
+    * RHEL 6/7 (EC2 Only) **Not Fully Tested**
+    * CentOS 6/7 **Not Fully Tested**
+    * Ubuntu 14/16 **Not Fully Tested**
+* Windows (EC2 Only - WIP) **May Never Get Around to Winderz**
+    * 2012 R2
+    * 2016
 
 # Successfully Tested Versions
-* Mac OSX (10.11.6)
-* Docker (1.12.1)
-* VirtualBox (5.1.8)
-* Vagrant (1.8.6)
-    * Plugins
-        * vagrant-vbguest (0.11.0)
-        * vagrant-winrm (0.7.0)
-* Chef Development Kit (0.19.6)
-    * Ruby (2.3.1p112)
-    * Chef-client (12.15.19)
-    * berkshelf (5.1.0)
-    * rubocop (0.39.0)
-    * foodcritic (7.1.0)
-    * test-kitchen (1.13.2)
-        * serverspec (2.37.2)
-    * kitchen-ec2 (1.2.0)
-* Additional Gems
-    * kitchen-docker (2.6.0)
+| Driver | Version |
+| :--- | :--- |
+| Mac OSX | 10.12.3 |
+| Docker | 17.03.1-ce, build c6d412e |
+| Chef Development Kit | 1.2.22 |
+| Chef-client | 12.18.31 |
 
 # Features
-* Setup a virtual machine/s for testing on VirtualBox, Docker or AWS EC2.
-* Install packages.
-    * I put a few basic packages I like, but you can override the array.
-* Option to setup proxy on VirtualBox VM
-* Locks down iptables to the minimum.
-    * Open each port as need with next level wrapper cookbooks.
-* Change Ruby Gem source for Chef client embedded Ruby to an internal mirror/source.
-* Create a small script for displaying useful information when on the VM called **nodeinfo**
-    * It should be in the default path by design.
-    * Type nodeinfo <enter> to get a short list of node information.
+All operations have attributes to disable/enable them. Here's what is out of the box.
+
+### Defaults (Item )
+* Create Docker or AWS EC2 Instance
+* Install basic packages.
+    * I put a few basic packages I like, but you can override the array.   
+* Install CloudWatch Logs Agent
+* Create Basic CloudWatch Logs Config
+    * Disable if going to deploy your own from your wrapper
+* Create **nodeinfo** shell script to output system info
+* Disable SeLinux
+* Add /usr/local/bin to sudo secure path in sudoers for Amazon Linux
+* Setup Yum Cron automatic security patches on Amazon Linux
+
+### Optionals    
+* Proxy Setup
+* Gem Source Change
+* EPEL Repo setup
+* Install EPEL Packages
+* Deploy Internal CA Certificate from Data Bag Item
 
 # JSON Chef Config Files
-I've created environment, roles and data bag items JSON files under the test folder.
-These are called by the Test Kitchen YAML configuration files instead of entering all the attribute overrides inside the YAML.
+There are Chef environments, roles and data bag items JSON files under the test folder.
+These are called by the Test Kitchen configurations instead of entering all the attribute overrides inside the YAML.
 It cleans up the kitchen YAML, plus makes it easier to quickly understand how you'd setup these Chef configurations in your environment.
 Basically copy/paste, instead of converting YAML to JSON... I've done it for you!
 
@@ -76,15 +77,11 @@ I usually end up adding the customers CA cert chain as part of my base cookbook.
 [Here's](https://www.bonusbits.com/wiki/HowTo:Add_Internal_Root_CA_to_CentOS_and_Chef_Client) some information on how to accomplish that task.
 
 #Kitchen Configurations
-The default Kitchen configuration ```.kitchen.yml``` is setup using the Vagrant driver. There are other Kitchen configurations for Docker and EC2 as seen below.
+The default Kitchen configuration ```.kitchen.yml``` is setup with AWS EC2 and Dokken Docker Drivers.
 
-To call another kitchen YAML is fairly easy and can be aliased to make it even easier.
-
-| Driver | Command |
-| :--- | :--- |
-| EC2 | ```kitchen <command>``` |
-| VirtualBox - Vagrant | ```KITCHEN_YAML=.kitchen.vagrant.yml kitchen <command>``` |
-| Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen <command>``` |
+If using Kitchen simple specify the test suite with the driver you'd like to use. Both driver gems are included with ChefDK. 
+The only prerequisites are having Docker installed and/or AWS Environment Variables setup. 
+Unless you are using a public subnet in AWS then you'll want a direct connect or VPN solution in place.
 
 ### Command Examples
 The kitchen commands need to be ran from the root directory of the cookbook.
@@ -92,24 +89,20 @@ The kitchen commands need to be ran from the root directory of the cookbook.
 | Task | Driver | Command |
 | :--- | :--- | :--- |
 | List All Test Suites | EC2 | ```kitchen list``` |
-| List All Test Suites | VirtualBox | ```KITCHEN_YAML=.kitchen.vagrant.yml kitchen list``` |
-| List All Test Suites | Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen list``` |
+| List All Test Suites | Docker | ```KITCHEN_YAML=.kitchen.dokken.yml kitchen list``` |
 | Run Chef on a Single Test Suite | EC2 | ```kitchen converge base-amazon```| 
 | Run Integration Tests with ServerSpec on a Single Test Suite | Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen verify base-centos-511``` |
 | Test all Test Suites (destroy, create, converge, setup, verify and destroy) | EC2 | ```kitchen test``` | 
 | Test all Test Suites (destroy, create, converge, setup, verify and destroy) | Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen test``` | 
 | Login to a Single Test Suite That is Already Created | EC2 | ```kitchen login base-amazon``` |
 | Login to a Single Test Suite That is Already Created | Docker | ```KITCHEN_YAML=.kitchen.docker.yml kitchen login base-amazon``` |
-| Login to a Single Test Suite That is Already Created | VirtualBox | ```KITCHEN_YAML=.kitchen.vagrant.yml kitchen login base-centos-68``` |
-| Run a Command on a Single Test Suite That is Already Created | VirtualBox | ```KITCHEN_YAML=.kitchen.vagrant.yml kitchen exec base-centos-68 -c '/bin/nodeinfo'``` | 
-| Destroy a Single Test Suite That is Already Created | VirtualBox | ```KITCHEN_YAML=.kitchen.vagrant.yml kitchen destroy base-centos-68```| 
 | Create and Verify a Windows 2012 R2 EC2 Instance | EC2 | ```kitchen verify base-windows-2012r2```| 
 
 # EC2 Requirements
-1. Direct Connect / VPN
+1. Direct Connect, VPN or public subnet
     * A direct connect or VPN solution must be in place from you to the AWS VPC where you plan to stand up EC2 instances.
 2. NAT or IGW 
-    * The subnet that you plan to stand up the EC2 instances in will need internet access to download Chef and Gem items.
+    * The subnet that you plan to stand up the EC2 instances may require internet access to pull from Github etc.
 3. AWS Credentials Profile Configured
     * Be sure to setup your AWS CLI profile even if you only have one. It's a more secure method to pass credentials to Test Kitchen.
     ```bash
@@ -186,24 +179,23 @@ Chef Recipes:         (["bonusbits_base", "bonusbits_base::default"])
 ---------------------------------------------------------------
 ```
  
-## Command Examples
-| Task | Command |
-| :--- | :--- |
-| Vagrant Base CentOS 6.7 | ```kitchen exec base-centos-67 -c '/usr/bin/nodeinfo'``` | 
-| All Running CentOS Vagrant Virtualbox VMs | ```kitchen exec centos -c '/usr/bin/nodeinfo'``` | 
-| RHEL 7 EC2 Instance | ```KITCHEN_YAML=.kitchen.ec2.yml kitchen exec base-rhel-7 -c '/usr/bin/nodeinfo'``` |
-| Windows 2012R2 EC2 Instance | ```KITCHEN_YAML=.kitchen.ec2.yml kitchen exec base-windows-2012r2 -c 'C:/Windows/System32/nodeinfo.cmd'``` |
-
 # Network Proxy
 I have stubbed out proxy support in the kitchen configuration yaml files and a temp workaround for local "Virtualbox" VMs.
 Usually you don't have to deal with a proxy issue in AWS. The defaults I have assume you are using [Charles Proxy](https://www.bonusbits.com/wiki/HowTo:Configure_Test_Kitchen_to_Use_Charles_Proxy), but you can override the attributes and change the kitchen configs to your own settings.
 Keep in mind if you are not using Charles Proxy and pointing your BASH/PowerShell to it, you'll need to configure them as well.
 
-## Enable Proxy in Kitchen Config
-Finally Test Kitchen will use your shell environment Proxy settings!
+## Enable Proxy in Kitchen Config (Deprecated)
+Finally Test Kitchen will use your shell environment variables automatically! 
 
-# Ruby Gem Source
-If you don't have internet access you'll need an internal Rubygem repo source with the neccessary gems to run the integration tests. I have add logic with attributes to set an internal Ruby gem source.
+# Testing
+* Style/Linting
+    * Foodcritic and Rubocop
+    * Ran from Rakefile tasks by CircleCI
+* Integration
+    * InSpec Profiles
+    * [inspec_bootstrap](https://github.com/bonusbits/inspec_bootstrap.git)
+    * [inspec_bonusbits_base](https://github.com/bonusbits/inspec_bonusbits_base.git)
+    * Ran from Rakefile tasks by CircleCI (.kitchen.dokken.yml)
 
 # Resources
 

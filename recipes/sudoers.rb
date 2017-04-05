@@ -1,5 +1,6 @@
 case node['os']
 when 'linux'
+  package 'sudo'
   # Add /usr/local/bin to sudoers Secure Path
   ruby_block 'Add /usr/local/bin to sudoers Secure Path' do
     block do

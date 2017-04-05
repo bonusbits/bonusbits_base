@@ -1,29 +1,5 @@
 ---
 
-driver:
-  name: ec2
-  associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
-  aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
-  security_group_ids:
-  <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
-    - <%= secgroup %>
-  <% end %>
-  subnet_id: <%= ENV['AWS_SUBNET'] %>
-  vpc_id: <%= ENV['AWS_VPC_ID'] %>
-  iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
-  region: <%= ENV['AWS_REGION'] %>
-  instance_type: t2.micro
-
-provisioner:
-  name: chef_zero
-  require_chef_omnibus: 12.18.31
-  data_bags_path: test/data_bags
-  encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
-  roles_path: test/roles
-  environments_path: test/environments
-  driver_config:
-    ssl_verify_mode: ":verify_none"
-
 verifier:
   name: inspec
   #  format: doc
@@ -32,7 +8,7 @@ verifier:
   #  output: $CIRCLE_TEST_REPORTS/inspec/results/%{platform}_%{suite}_inspec.xml
 
 platforms:
-  - name: amazon
+  - name: amazon-ec2
     driver:
       image_search:
         owner-id: 137112412989
@@ -44,6 +20,12 @@ platforms:
     transport:
       username: ec2-user
       ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+  - name: amazon-docker
+    driver_config:
+      image: amazonlinux:latest
+      intermediate_instructions:
+        - RUN yum -y install upstart procps util-linux
+      pid_one_command: /sbin/init
   - name: rhel6
     driver:
       image_search:
@@ -71,9 +53,6 @@ platforms:
       ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
   - name: ubuntu-14.04
     driver:
-#      image_search:
-#        owner-id: 099720109477
-#        name: RHEL-7.?_HVM_GA-*-x86_64-1-Hourly2-GP2
       tags:
         Name: kitchen-bonusbits-base-ubuntu14-<%= ENV['USER'] %>
         Created-By: Test Kitchen
@@ -112,7 +91,36 @@ platforms:
       ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
 
 suites:
-  - name: base
+  - name: ec2_base
+    provisioner:
+      name: chef_zero
+      require_chef_omnibus: 12.18.31
+      data_bags_path: test/data_bags
+      encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
+      roles_path: test/roles
+      environments_path: test/environments
+      client_rb:
+        environment: bonusbits_base
+    driver:
+      name: ec2
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      security_group_ids:
+      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
+        - <%= secgroup %>
+      <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET'] %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
+      region: <%= ENV['AWS_REGION'] %>
+      instance_type: t2.micro
+      tags:
+        Name: kitchen-bonusbits-base-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        Owner: <%= ENV['USER'] %>
+    transport:
+      username: ec2-user
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
     run_list:
       - role[base]
     verifier:
@@ -125,16 +133,42 @@ suites:
         chef_version: 12.18.31
         inside_aws: true
         configure_sudoers: true
-    includes: ["amazon", "rhel6", "rhel7", "ubuntu-14.04", "ubuntu-16.04", "windows-2012r2", "windows-2016"]
-    provisioner:
-      client_rb:
-        environment: "bonusbits_base"
     attributes:
         bonusbits_base:
           deployment_type: ec2
           aws:
             inside: true
-  - name: base_epel_repo
+    includes: ["amazon-ec2"]
+  - name: ec2_base_epel_repo
+    provisioner:
+      name: chef_zero
+      require_chef_omnibus: 12.18.31
+      data_bags_path: test/data_bags
+      encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
+      roles_path: test/roles
+      environments_path: test/environments
+      client_rb:
+        environment: bonusbits_base
+    driver:
+      name: ec2
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      security_group_ids:
+      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
+        - <%= secgroup %>
+      <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET'] %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
+      region: <%= ENV['AWS_REGION'] %>
+      instance_type: t2.micro
+      tags:
+        Name: kitchen-bonusbits-base-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        Owner: <%= ENV['USER'] %>
+    transport:
+      username: ec2-user
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
     run_list:
       - role[base]
     verifier:
@@ -149,7 +183,6 @@ suites:
         configure_sudoers: true
         configure_epel: true
         install_epel_packages: true
-    includes: ["amazon", "rhel6", "rhel7"]
     provisioner:
       client_rb:
         environment: "bonusbits_base_epel_repo"
@@ -158,30 +191,37 @@ suites:
           deployment_type: ec2
           aws:
             inside: true
-  - name: base_firewall
-    run_list:
-      - role[base]
-    verifier:
-      inspec_tests:
-        - name: bootstrap
-          git: https://github.com/bonusbits/inspec_bootstrap.git
-        - name: bonusbits_base
-          git: https://github.com/bonusbits/inspec_bonusbits_base.git
-      attributes:
-        chef_version: 12.18.31
-        inside_aws: true
-        configure_sudoers: true
-        configure_firewall: true
-    includes: ["rhel6", "rhel7", "windows-2012r2", "windows-2016"]
+    includes: ["amazon-ec2"]
+  - name: ec2_base_no_software
     provisioner:
+      name: chef_zero
+      require_chef_omnibus: 12.18.31
+      data_bags_path: test/data_bags
+      encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
+      roles_path: test/roles
+      environments_path: test/environments
       client_rb:
-        environment: "bonusbits_base_firewall"
-    attributes:
-        bonusbits_base:
-          deployment_type: ec2
-          aws:
-            inside: true
-  - name: base_no_software
+        environment: bonusbits_base
+    driver:
+      name: ec2
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      security_group_ids:
+      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
+        - <%= secgroup %>
+      <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET'] %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
+      region: <%= ENV['AWS_REGION'] %>
+      instance_type: t2.micro
+      tags:
+        Name: kitchen-bonusbits-base-<%= ENV['USER'] %>
+        Created-By: Test Kitchen
+        Owner: <%= ENV['USER'] %>
+    transport:
+      username: ec2-user
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
     run_list:
       - role[base]
     verifier:
@@ -195,7 +235,6 @@ suites:
         inside_aws: true
         configure_sudoers: true
         install_packages: false
-    includes: ["amazon", "rhel6", "rhel7", "ubuntu-14.04", "ubuntu-16.04", "windows-2012r2", "windows-2016"]
     provisioner:
       client_rb:
         environment: "bonusbits_base_no_software"
@@ -204,3 +243,133 @@ suites:
           deployment_type: ec2
           aws:
             inside: true
+    includes: ["amazon-ec2"]
+  - name: docker_base
+    provisioner:
+      name: dokken
+      data_bags_path: test/data_bags
+      encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
+      roles_path: test/roles
+      environments_path: test/environments
+      chef_log_level: info
+      client_rb:
+        environment: bonusbits_base
+    driver:
+      name: dokken
+      chef_version: '12.18.31'
+      privileged: true # because Docker and SystemD/Upstart
+      volumes: '/var/lib/docker'
+      driver_config:
+        ssl_verify_mode: ":verify_none"
+    transport:
+      name: dokken
+    run_list:
+      - role[base]
+    verifier:
+      inspec_tests:
+        - name: bootstrap
+          git: https://github.com/bonusbits/inspec_bootstrap.git
+        - name: bonusbits_base
+          git: https://github.com/bonusbits/inspec_bonusbits_base.git
+      attributes:
+        chef_version: 12.18.31
+        inside_aws: false
+        configure_sudoers: true
+    attributes:
+      bonusbits_base:
+        deployment_type: docker
+        linux:
+          selinux:
+            configure: false
+        firewall:
+          configure: false
+        aws:
+          inside: false
+    includes: ["amazon-docker"]
+  - name: docker_base_epel_repo
+    provisioner:
+      name: dokken
+      data_bags_path: test/data_bags
+      encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
+      roles_path: test/roles
+      environments_path: test/environments
+      chef_log_level: info
+      client_rb:
+        environment: bonusbits_base_epel_repo
+    driver:
+      name: dokken
+      chef_version: '12.18.31'
+      privileged: true # because Docker and SystemD/Upstart
+      volumes: '/var/lib/docker'
+      driver_config:
+        ssl_verify_mode: ":verify_none"
+    transport:
+      name: dokken
+    run_list:
+      - role[base]
+    verifier:
+      inspec_tests:
+        - name: bootstrap
+          git: https://github.com/bonusbits/inspec_bootstrap.git
+        - name: bonusbits_base
+          git: https://github.com/bonusbits/inspec_bonusbits_base.git
+      attributes:
+        chef_version: 12.18.31
+        inside_aws: false
+        configure_sudoers: true
+        configure_epel: true
+        install_epel_packages: true
+    attributes:
+      bonusbits_base:
+        deployment_type: docker
+        linux:
+          selinux:
+            configure: false
+        firewall:
+          configure: false
+        aws:
+          inside: false
+    includes: ["amazon-docker"]
+  - name: docker_base_no_software
+    provisioner:
+      name: dokken
+      data_bags_path: test/data_bags
+      encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
+      roles_path: test/roles
+      environments_path: test/environments
+      chef_log_level: info
+      client_rb:
+        environment: bonusbits_base_no_software
+    driver:
+      name: dokken
+      chef_version: '12.18.31'
+      privileged: true # because Docker and SystemD/Upstart
+      volumes: '/var/lib/docker'
+      driver_config:
+        ssl_verify_mode: ":verify_none"
+    transport:
+      name: dokken
+    run_list:
+      - role[base]
+    verifier:
+      inspec_tests:
+        - name: bootstrap
+          git: https://github.com/bonusbits/inspec_bootstrap.git
+        - name: bonusbits_base
+          git: https://github.com/bonusbits/inspec_bonusbits_base.git
+      attributes:
+        chef_version: 12.18.31
+        inside_aws: false
+        configure_sudoers: true
+        install_packages: false
+    attributes:
+      bonusbits_base:
+        deployment_type: docker
+        linux:
+          selinux:
+            configure: false
+        firewall:
+          configure: false
+        aws:
+          inside: false
+    includes: ["amazon-docker"]

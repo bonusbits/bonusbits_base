@@ -9,6 +9,7 @@ run_state['detected_environment'] =
 
 # Deployment Type
 default['bonusbits_base']['deployment_type'] = 'ec2'
+default['bonusbits_base']['local_file_cache'] = Chef::Config[:file_cache_path]
 
 # Debug
 message_list = [

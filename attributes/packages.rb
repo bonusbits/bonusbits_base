@@ -3,10 +3,6 @@ default['bonusbits_base']['packages']['configure'] = true
 default['bonusbits_base']['packages']['linux'].tap do |linux|
   linux['install_packages'] = true
 
-  # EPEL Repos
-  linux['epel']['configure'] = false
-  linux['epel']['install_packages'] = false
-
   # Packages Lists
   linux['debian_packages'] = %w(
     awscli
@@ -23,10 +19,6 @@ default['bonusbits_base']['packages']['linux'].tap do |linux|
     util-linux
     vim
     which
-  )
-
-  linux['epel_packages'] = %w(
-    htop
   )
 
   linux['redhat_packages'] = %w(
@@ -96,9 +88,7 @@ message_list = [
   '',
   '** Packages **',
   "INFO: Configure             (#{node['bonusbits_base']['packages']['configure']})",
-  "INFO: Install Base Packages (#{node['bonusbits_base']['packages']['linux']['install_packages']})",
-  "INFO: Configure EPEL        (#{node['bonusbits_base']['packages']['linux']['epel']['configure']})",
-  "INFO: Install EPEL Packages (#{node['bonusbits_base']['packages']['linux']['epel']['install_packages']})"
+  "INFO: Install Base Packages (#{node['bonusbits_base']['packages']['linux']['install_packages']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

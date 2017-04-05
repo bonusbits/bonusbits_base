@@ -43,26 +43,22 @@ namespace :integration do
     Kitchen::Config.new(loader: kitchen_loader, log_level: :info)
   end
 
-  # Run Each Test Instance in All Test Suites from YAML
-  desc 'kitchen - docker - test'
+  # Docker Test Suites
+  desc 'kitchen - docker - tests'
   task :docker do
-    load_kitchen_config('.kitchen.docker.yml').instances.each do |instance|
+    load_kitchen_config('.kitchen.yml').instances.each do |instance|
+      # puts "Instance Suite Name: (#{instance.suite.name})"
+      next unless instance.suite.name =~ /^docker_.*/
+      # puts 'It made it Next...'
       instance.test(:always)
     end
   end
 
-  # Run Each Test Instance in All Test Suites from YAML
+  # EC2 Test Suites
   desc 'kitchen - ec2 - test'
   task :ec2 do
     load_kitchen_config('.kitchen.yml').instances.each do |instance|
-      instance.test(:always)
-    end
-  end
-
-  # Run Each Test Instance in All Test Suites from YAML
-  desc 'kitchen - vagrant - test'
-  task :vagrant do
-    load_kitchen_config('.kitchen.vagrant.yml').instances.each do |instance|
+      next unless instance.suite.name =~ /^ec2_.*/
       instance.test(:always)
     end
   end
@@ -75,14 +71,4 @@ desc 'Foodcritic & Rubocop'
 task style_only: %w(style:chef style:ruby)
 
 desc 'Circle CI Tasks'
-# task circleci: %w(style:chef style:ruby integration:docker)
-task circleci: %w(style:chef style:ruby)
-
-desc 'Foodcritic, Rubocop, ChefSpec and Docker Integration Tests'
-task docker_ci: %w(style:chef style:rubyintegration:docker)
-
-desc 'Foodcritic, Rubocop, ChefSpec and EC2 Integration Tests'
-task ec2_ci: %w(style:chef style:ruby integration:ec2)
-
-desc 'Foodcritic, Rubocop, ChefSpec and VagrantIntegration Tests'
-task vagrant_ci: %w(style:chef style:ruby integration:vagrant)
+task circleci: %w(style:chef style:ruby integration:docker)

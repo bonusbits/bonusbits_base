@@ -8,13 +8,9 @@
   },
   "override_attributes": {
     "bonusbits_base": {
-      "packages": {
-        "linux": {
-          "epel": {
-            "configure": true,
-            "install_packages": true
-          }
-        }
+      "epel": {
+        "configure": true,
+        "install_packages": true
       }
     }
   }

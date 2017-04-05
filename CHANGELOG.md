@@ -11,7 +11,14 @@
 * Removed Coverage badges
 * Removed TravisCI sticking with CircleCi
 * Added Gitter badge
-* 
+* Added Draft CA Certs logic
+* Drafted aws cli install for Redhat
+* Switched EC2 driver as default kitchen config
+* Added proxy option for CloudWatch Logs
+* Expanded gem source logic
+* Added EC2 info to Node Info Script
+* Moved Node Info Script to /usr/local/bin/nodeinfo
+* Added Sudoers secure path to include /usr/local/bin
 
 ## 1.2.0 - 10/30/2016 - Levon Becker
 * Changed default to not include Firewall. So an override would be needed to include. Really these days it's usually handled at a different layer such and security groups. Plus it's been nothing but problems for testing in various environments.

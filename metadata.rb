@@ -11,7 +11,6 @@ issues_url 'https://github.com/bonusbits/bonusbits_base/issues'
 depends 'bonusbits_library'
 depends 'yum-epel'
 depends 'apt'
-depends 'firewall'
 depends 'selinux'
 
 %w(

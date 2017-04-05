@@ -31,7 +31,7 @@ when 'linux'
   when 'centos', 'redhat', 'ubuntu' # ~FC024
     package 'python'
 
-    local_download_temp = node['bonusbits_base']['local_download_temp']
+    local_download_temp = node['bonusbits_base']['local_file_cache']
     # Install CloudWatch Logs Agent
     ruby_block 'Install CloudWatch Logs Agent' do
       block do
