@@ -156,7 +156,7 @@ suites:
       roles_path: test/roles
       environments_path: test/environments
       client_rb:
-        environment: bonusbits_base
+        environment: bonusbits_base_epel_repo
     driver:
       name: ec2
       associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
@@ -191,9 +191,6 @@ suites:
         configure_sudoers: true
         configure_epel: true
         install_epel_packages: true
-    provisioner:
-      client_rb:
-        environment: "bonusbits_base_epel_repo"
     attributes:
         bonusbits_base:
           deployment_type: ec2
@@ -210,7 +207,7 @@ suites:
       roles_path: test/roles
       environments_path: test/environments
       client_rb:
-        environment: bonusbits_base
+        environment: bonusbits_base_no_software
     driver:
       name: ec2
       associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
@@ -244,9 +241,6 @@ suites:
         inside_aws: true
         configure_sudoers: true
         install_packages: false
-    provisioner:
-      client_rb:
-        environment: "bonusbits_base_no_software"
     attributes:
         bonusbits_base:
           deployment_type: ec2
@@ -288,11 +282,9 @@ suites:
     attributes:
       bonusbits_base:
         deployment_type: docker
-        linux:
+        security:
           selinux:
             configure: false
-        firewall:
-          configure: false
         aws:
           inside: false
     includes: ["amazon-docker"]
@@ -333,11 +325,9 @@ suites:
     attributes:
       bonusbits_base:
         deployment_type: docker
-        linux:
+        security:
           selinux:
             configure: false
-        firewall:
-          configure: false
         aws:
           inside: false
     includes: ["amazon-docker"]
@@ -377,11 +367,9 @@ suites:
     attributes:
       bonusbits_base:
         deployment_type: docker
-        linux:
+        security:
           selinux:
             configure: false
-        firewall:
-          configure: false
         aws:
           inside: false
     includes: ["amazon-docker"]
