@@ -1,0 +1,32 @@
+[general]
+state_file = /var/lib/awslogs/agent-state
+use_gzip_http_content_encoding = true
+
+[cloud-init]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-cloud-init" %>
+datetime_format = %b %d %H:%M:%S
+file = /var/log/cloud-init.log
+
+[cloud-init-output]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-cloud-init-output" %>
+file = /var/log/cloud-init-output.log
+
+[cfn-init]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-cfn-init" %>
+datetime_format = %Y-%m-%d %H:%M:%S,%f
+file = /var/log/cfn-init.log
+
+[cfn-init-cmd]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-cfn-init-cmd" %>
+datetime_format = %Y-%m-%d %H:%M:%S,%f
+file = /var/log/cfn-init-cmd.log
+
+[yum]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-yum" %>
+datetime_format = %b %d %H:%M:%S
+file = /var/log/yum.log

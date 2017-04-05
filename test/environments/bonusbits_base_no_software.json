@@ -8,8 +8,8 @@
   },
   "override_attributes": {
     "bonusbits_base": {
-      "software": {
-        "install": false
+      "packages": {
+        "configure": false
       }
     }
   }

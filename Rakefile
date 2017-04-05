@@ -12,8 +12,8 @@ namespace :style do
   FoodCritic::Rake::LintTask.new(:chef) do |task|
     task.options = {
       fail_tags: ['correctness'],
-      chef_version: '12.15.19',
-      tags: %w(~FC001 ~FC019 ~FC039)
+      chef_version: '12.18.31',
+      tags: %w(~FC001 ~FC019 ~FC016 ~FC039)
     }
   end
 end
@@ -43,48 +43,33 @@ namespace :integration do
     Kitchen::Config.new(loader: kitchen_loader, log_level: :info)
   end
 
-  # Run Each Test Instance in All Test Suites from YAML
-  desc 'kitchen - docker - test'
+  # Docker Test Suites
+  desc 'kitchen - docker - tests'
   task :docker do
-    load_kitchen_config('.kitchen.docker.yml').instances.each do |instance|
+    load_kitchen_config('.kitchen.yml').instances.each do |instance|
+      # puts "Instance Suite Name: (#{instance.suite.name})"
+      next unless instance.suite.name =~ /^docker_.*/
+      # puts 'It made it Next...'
       instance.test(:always)
     end
   end
 
-  # Run Each Test Instance in All Test Suites from YAML
+  # EC2 Test Suites
   desc 'kitchen - ec2 - test'
   task :ec2 do
-    load_kitchen_config('.kitchen.ec2.yml').instances.each do |instance|
-      instance.test(:always)
-    end
-  end
-
-  # Run Each Test Instance in All Test Suites from YAML
-  desc 'kitchen - vagrant - test'
-  task :vagrant do
     load_kitchen_config('.kitchen.yml').instances.each do |instance|
+      next unless instance.suite.name =~ /^ec2_.*/
       instance.test(:always)
     end
   end
 end
 
 desc 'Foodcritic, Rubocop & ChefSpec'
-task default: %w(style:chef style:ruby unit:rspec)
+task default: %w(style:chef style:ruby)
 
 desc 'Foodcritic & Rubocop'
 task style_only: %w(style:chef style:ruby)
 
-desc 'Travis CI Tasks'
-task travisci: %w(style:chef style:ruby unit:rspec)
-
 desc 'Circle CI Tasks'
-task circleci: %w(style:chef style:ruby unit:circleci_rspec integration:docker)
-
-desc 'Foodcritic, Rubocop, ChefSpec and Docker Integration Tests'
-task docker_ci: %w(style:chef style:ruby unit:rspec integration:docker)
-
-desc 'Foodcritic, Rubocop, ChefSpec and EC2 Integration Tests'
-task ec2_ci: %w(style:chef style:ruby unit:rspec integration:ec2)
-
-desc 'Foodcritic, Rubocop, ChefSpec and VagrantIntegration Tests'
-task vagrant_ci: %w(style:chef style:ruby unit:rspec integration:vagrant)
+# task circleci: %w(style:chef style:ruby integration:docker)
+task circleci: %w(style:chef style:ruby)

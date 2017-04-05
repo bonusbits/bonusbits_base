@@ -1,0 +1,32 @@
+[commands]
+#  What kind of update to use:
+# default                            = yum upgrade
+# security                           = yum --security upgrade
+# security-severity:Critical         = yum --sec-severity=Critical upgrade
+# minimal                            = yum --bugfix update-minimal
+# minimal-security                   = yum --security update-minimal
+# minimal-security-severity:Critical =  --sec-severity=Critical update-minimal
+update_cmd = security
+update_messages = yes
+download_updates = yes
+apply_updates = yes
+random_sleep = 120
+
+[emitters]
+emit_via = stdio
+output_width = 80
+
+[email]
+email_from = root@localhost
+email_to = root
+email_host = localhost
+
+[groups]
+group_list = None
+group_package_types = mandatory, default
+
+[base]
+debuglevel = -2
+mdpolicy = group:main
+# assumeyes = True
+exclude = kernel*
