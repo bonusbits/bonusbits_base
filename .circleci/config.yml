@@ -30,6 +30,6 @@ jobs:
 #          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
       - run:
           name: Test
-          command: echo $(/opt/chef/embedded/knife -v)
+          command: echo $(/opt/chef/embedded/bin/knife -v)
       - store_test_results:
           path: test-reports/
