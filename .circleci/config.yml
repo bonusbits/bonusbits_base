@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Install Debugging Packages
           command: yum install -y mlocate vim-enhanced
-       - run:
+      - run:
           name: Install Ruby
           command: yum install -y ruby23 ruby23-devel
       - run:
