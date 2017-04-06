@@ -10,9 +10,6 @@ jobs:
       - run:
           name: Yum Update
           command: yum update -y --exclude=kernel*
-      #- run:
-      #    name: Install Development Tools
-      #    command: yum groupinstall "Development Tools"
       - run:
           name: Install Development Tools (Stripped Down Version)
           command: yum install -y git gcc gcc-c++ glibc glibc-devel patch make automake autoconf rpm-build which curl curl-devel openssl openssl-devel zlib zlib-devel apr-devel apr-util-devel httpd-devel sqlite-devel
@@ -25,14 +22,8 @@ jobs:
       - run:
           name: Install Bundler
           command: gem install bundler --no-ri --no-rdoc
-#      - run:
-#          name: Install Docker
-#          command: yum install -y docker
       - run:
           name: Bundle Gems
           command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
-#      - run:
-#          name: Run CircleCI Rake Task
-#          command: bundle exec rake circleci --trace
       - store_test_results:
           path: test-reports/
