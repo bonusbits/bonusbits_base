@@ -1,3 +1,6 @@
+# Deploy AWS Profile Script
+include_recipe 'bonusbits_base::aws' if node['bonusbits_base']['aws']['inside']
+
 # Container Discovery
 case node['platform']
 when 'amazon'
