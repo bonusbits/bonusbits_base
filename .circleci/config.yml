@@ -11,11 +11,11 @@ jobs:
           name: Yum Update
           command: yum update -y --exclude=kernel*
       - run:
-          name: Install Development Tools (Stripped Down Version)
-          command: yum install -y git gcc gcc-c++ glibc glibc-devel patch make automake autoconf rpm-build which curl curl-devel openssl openssl-devel zlib zlib-devel apr-devel apr-util-devel httpd-devel sqlite-devel
+          name: Install Development Tools
+          command: yum groupinstall "Development Tools"
       - run:
           name: Install Debugging Packages
-          command: yum install -y mlocate vim-enhanced
+          command: yum install -y git mlocate vim-enhanced
       - run:
           name: Install Ruby
           command: yum install -y ruby23 ruby23-devel
@@ -25,5 +25,8 @@ jobs:
       - run:
           name: Bundle Gems
           command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+      - run:
+          name: Test
+          command: echo $(/opt/chef/embedded/knife -v)
       - store_test_results:
           path: test-reports/
