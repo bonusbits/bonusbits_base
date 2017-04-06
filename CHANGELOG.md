@@ -1,6 +1,11 @@
 ##CHANGE LOG
 ---
 
+## 2.0.1 - 04/05/2017 - Levon Becker
+* Switch kitchen-dokken to kitchen-docker because @someara says [not going to add support](https://github.com/someara/kitchen-dokken/issues/88) for CircleCi (lxc)
+* Fixed yum updated exclude argument syntax
+* Fixed InSpec attributes to be strings to deal with odd boolean randomly would or would't work.
+
 ## 2.0.0 - 04/03/2017 - Levon Becker
 * Changed logic around EPEL repo for Amazon Linux. By Default EPEL repo is setup. I could add removal logic later if desired.
 * Bumped Chef Client Version to 12.18.31
