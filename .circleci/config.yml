@@ -7,13 +7,19 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Yum Update
+          command: yum update -y --exclude=kernel*
+      - run:
+          name: Install Ruby
+          command: yum install -y ruby23
+      - run:
+          name: Install Bundler
+          command: gem install bundler --no-ri --no-rdoc
+      - run:
           name: Bundle Gems
           command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
-      - run:
-          name: Create InSpec Results Directory
-          command: mkdir -p $CIRCLE_TEST_REPORTS/inspec/results
       - run:
           name: Run CircleCI Rake Task
           command: bundle exec rake circleci --trace
       - store_test_results:
-                path: test-reports/
+          path: test-reports/
