@@ -1,5 +1,4 @@
-##CHANGE LOG
----
+## CHANGE LOG
 
 ## 2.0.1 - 04/05/2017 - Levon Becker
 * Switch kitchen-dokken to kitchen-docker because @someara says [not going to add support](https://github.com/someara/kitchen-dokken/issues/88) for CircleCi (lxc)
