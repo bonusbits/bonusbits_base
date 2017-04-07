@@ -35,7 +35,7 @@ COPY test/node/client.rb /opt/chef-repo/client.rb
 
 WORKDIR /opt/chef-repo/cookbooks/${cookbook_name}
 RUN yum groupinstall -y "Development Tools"
-RUN /opt/chef/embedded/bin/gem install berkshelf --no-ri --no-rdoc
+RUN /opt/chef/embedded/bin/bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
 RUN /opt/chef/embedded/bin/berks install
 RUN /opt/chef/embedded/bin/berks vendor /opt/chef-repo/cookbooks/
 

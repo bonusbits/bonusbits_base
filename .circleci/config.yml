@@ -4,32 +4,42 @@ jobs:
     working_directory: ~/circulate
     docker:
       - image: amazonlinux:latest
-      - image: chef/chef:12.18.31
     steps:
-      - checkout
       - run:
           name: Create Test Directory
           command: mkdir test-reports
-#      - run:
-#          name: Yum Update
-#          command: yum update -y --exclude=kernel*
-#      - run:
-#          name: Install Development Tools
-#          command: yum groupinstall "Development Tools"
-#      - run:
-#          name: Install Debugging Packages
-#          command: yum install -y git mlocate vim-enhanced
-#      - run:
-#          name: Install Ruby
-#          command: yum install -y ruby23 ruby23-devel
-#      - run:
-#          name: Install Bundler
-#          command: gem install bundler --no-ri --no-rdoc
-#      - run:
-#          name: Bundle Gems
-#          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
       - run:
-          name: Test
-          command: echo $(/opt/chef/embedded/bin/knife -v)
+          name: Yum Update
+          command: yum update -y --exclude=kernel*
+      - run:
+          name: Install Development Tools
+          command: yum groupinstall -y "Development Tools"
+      - run:
+          name: Install Debugging Packages
+          command: yum install -y git mlocate vim-enhanced
+      #- run:
+      #    name: Install Ruby
+      #    command: yum install -y ruby23 ruby23-devel
+      - run:
+          name: Install Chef Client
+          command: curl -L https://omnitruck.chef.io/install.sh | bash -s -- -v 12.18.31
+      - run:
+          name: Create Chef Repo Directory
+          command: mkdir -p vendor/chef-repo
+  configure_chef:
+    working_directory: ~/circulate/vendor/chef-repo
+      - checkout
+      - run:
+          name: Create Subfolders
+          command: mkdir -p cookbooks checksums environments cache backup data_bags roles
+      - run:
+          name: Install Bundler
+          command: gem install bundler --no-ri --no-rdoc
+      - run:
+          name: Bundle Gems
+          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+      - run:
+          name: Run Rake Task
+          command: bundle exec rake circleci --trace
       - store_test_results:
           path: test-reports/
