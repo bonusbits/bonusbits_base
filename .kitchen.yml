@@ -4,7 +4,7 @@ verifier:
   name: inspec
   format: <%= ENV['CI'] ? 'junit' : 'cli' %>
   <% if ENV['CI'] %>
-  output: "$CIRCLE_TEST_REPORTS/inspec/results/%{platform}_%{suite}_inspec.xml"
+  output: "test-reports/%{platform}_%{suite}_inspec.xml"
   <% end %>
 
 platforms:
