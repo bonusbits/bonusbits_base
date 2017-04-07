@@ -19,17 +19,6 @@ when 'linux'
     #   command '. /etc/environment'
     #   action :nothing
     # end
-
-    # Deploy Profile Script
-    template '/etc/profile.d/proxy.sh' do
-      source 'proxy/proxy.sh.erb'
-      owner 'root'
-      group 'root'
-      mode '0644'
-      only_if { node['bonusbits_base']['proxy']['configure'] }
-      notifies :run, 'execute[source_proxy_profile_script]', :immediately
-    end
-
     # Run Profile Script
     ruby_block 'source_proxy_profile_script' do
       block do
@@ -53,6 +42,17 @@ when 'linux'
           ENV['no_proxy'] == node['bonusbits_base']['proxy']['no_proxy']
       end
     end
+
+    # Deploy Profile Script
+    template '/etc/profile.d/proxy.sh' do
+      source 'proxy/proxy.sh.erb'
+      owner 'root'
+      group 'root'
+      mode '0644'
+      only_if { node['bonusbits_base']['proxy']['configure'] }
+      notifies :run, 'ruby_block[source_proxy_profile_script]', :immediately
+    end
+
   end
 when 'windows'
   return

@@ -13,6 +13,7 @@ platforms:
       image_search:
         owner-id: 137112412989
         name: amzn-ami-hvm-2016.*x86_64-gp2
+      instance_initiated_shutdown_behavior: terminate
       tags:
         Name: kitchen-bonusbits-base-amazon-<%= ENV['USER'] %>
         Created-By: Test Kitchen
@@ -46,6 +47,7 @@ platforms:
         owner-id: 309956199498
         name: RHEL-6.?_HVM_GA-*-x86_64-1-Hourly2-GP2
       instance_type: t2.micro
+      instance_initiated_shutdown_behavior: terminate
       tags:
         Name: kitchen-bonusbits-base-rhel6-<%= ENV['USER'] %>
         Created-By: Test Kitchen
@@ -59,6 +61,7 @@ platforms:
       image_search:
         owner-id: 309956199498
         name: RHEL-7.?_HVM_GA-*-x86_64-1-Hourly2-GP2
+      instance_initiated_shutdown_behavior: terminate
       tags:
         Name: kitchen-bonusbits-base-rhel7-<%= ENV['USER'] %>
         Created-By: Test Kitchen
@@ -69,6 +72,7 @@ platforms:
 
   - name: ubuntu-14.04
     driver:
+      instance_initiated_shutdown_behavior: terminate
       tags:
         Name: kitchen-bonusbits-base-ubuntu14-<%= ENV['USER'] %>
         Created-By: Test Kitchen
@@ -79,6 +83,7 @@ platforms:
 
   - name: ubuntu-16.04
     driver:
+      instance_initiated_shutdown_behavior: terminate
       tags:
         Name: kitchen-bonusbits-base-ubuntu16-<%= ENV['USER'] %>
         Created-By: Test Kitchen
@@ -89,6 +94,7 @@ platforms:
 
   - name: windows-2012r2
     driver:
+      instance_initiated_shutdown_behavior: terminate
       instance_type: m3.medium
       tags:
         Name: kitchen-bonusbits-base-windows-2012r2-<%= ENV['USER'] %>
@@ -100,6 +106,7 @@ platforms:
 
   - name: windows-2016
     driver:
+      instance_initiated_shutdown_behavior: terminate
       instance_type: m3.medium
       tags:
         Name: kitchen-bonusbits-base-windows-2012r2-<%= ENV['USER'] %>

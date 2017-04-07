@@ -2,16 +2,6 @@ ENV['AWS_REGION'] = node['bonusbits_base']['aws']['region']
 
 case node['os']
 when 'linux'
-  # Deploy Profile Script
-  template '/etc/profile.d/aws.sh' do
-    source 'aws/aws_profile.sh.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
-    only_if { node['bonusbits_base']['aws']['inside'] }
-    notifies :run, 'execute[source_aws_profile_script]', :immediately
-  end
-
   # Run Profile Script
   ruby_block 'source_aws_profile_script' do
     block do
@@ -32,6 +22,16 @@ when 'linux'
     not_if do
       ENV['AWS_REGION'] == node['bonusbits_base']['aws']['region']
     end
+  end
+
+  # Deploy Profile Script
+  template '/etc/profile.d/aws.sh' do
+    source 'aws/aws_profile.sh.erb'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    only_if { node['bonusbits_base']['aws']['inside'] }
+    notifies :run, 'ruby_block[source_aws_profile_script]', :immediately
   end
 
   case node['platform']

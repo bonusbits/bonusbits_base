@@ -7,5 +7,10 @@
   "default_attributes": {
   },
   "override_attributes": {
+    "kitchen_shutdown": {
+      "configure": true,
+      "minute": "0",
+      "hour": "2"
+    }
   }
 }
