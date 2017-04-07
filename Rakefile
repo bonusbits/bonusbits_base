@@ -71,5 +71,5 @@ desc 'Foodcritic & Rubocop'
 task style_only: %w(style:chef style:ruby)
 
 desc 'Circle CI Tasks'
-# task circleci: %w(style:chef style:ruby integration:docker)
-task circleci: %w(style:chef style:ruby)
+task circleci: %w(style:chef style:ruby integration:docker)
+# task circleci: %w(style:chef style:ruby)
