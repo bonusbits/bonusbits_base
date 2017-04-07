@@ -10,6 +10,7 @@ jobs:
       America/Los_Angeles
     working_directory: ~/circulate
     steps:
+      - checkout
       - run:
           name: Create Test Directory
           command: mkdir test-reports
