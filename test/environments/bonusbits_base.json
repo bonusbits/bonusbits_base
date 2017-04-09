@@ -9,9 +9,7 @@
     "override_attributes": {
         "bonusbits_base": {
             "kitchen_shutdown": {
-                "configure": true,
-                "minute": "0",
-                "hour": "2"
+                "configure": true
             }
         }
     }
