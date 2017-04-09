@@ -1,7 +1,7 @@
 default['bonusbits_base']['kitchen_shutdown']['configure'] = false
-# Default 2AM UTC = 7PM PST/10PM EST
+# Default 7AM UTC = 11PM PST/2AM EST
 default['bonusbits_base']['kitchen_shutdown']['minute'] = '0'
-default['bonusbits_base']['kitchen_shutdown']['hour'] = '2'
+default['bonusbits_base']['kitchen_shutdown']['hour'] = '6'
 
 # Debug
 message_list = [
