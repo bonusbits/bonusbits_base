@@ -11,8 +11,8 @@ when 'linux'
       Chef::Log.warn("Open3: BASH Command (#{bash_command})")
       out, err, status = Open3.capture3(bash_command)
       Chef::Log.warn("Open3: Status (#{status})")
+      Chef::Log.warn("Open3: Standard Out (#{out})")
       unless status.success?
-        Chef::Log.warn("Open3: Standard Out (#{out})")
         Chef::Log.warn("Open3: Error Out (#{err})")
         raise 'Failed!'
       end

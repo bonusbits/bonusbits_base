@@ -10,6 +10,11 @@
     "bonusbits_base": {
       "packages": {
         "configure": false
+      },
+      "kitchen_shutdown": {
+        "configure": true,
+        "minute": "0",
+        "hour": "2"
       }
     }
   }

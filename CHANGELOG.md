@@ -1,5 +1,20 @@
-##CHANGE LOG
----
+## CHANGE LOG
+
+## 2.1.0 - 04/08/2017 - Levon Becker
+* Switch kitchen-dokken to kitchen-docker because @someara says [not going to add support](https://github.com/someara/kitchen-dokken/issues/88) for CircleCi (lxc)
+* ^^ ?? switch back and test in CircleCI 2.0 Beta ?? ^^
+* Fixed yum updated exclude argument syntax
+* Fixed InSpec attributes to be strings to deal with odd boolean randomly would or would't work.
+* Converted from CircleCI 1.0 to 2.0 and got integration testing working!
+* Created a Dockerfile and .dockerignore and updated README with info
+* Created CloudFormation example and updated README with info
+* Added Audit cookbook for running remote InSpec profiles on Docker local builds 
+    * I'm guessing they will add inspec exec url support later, then I can ditch for that function
+    * Should keep, add logic/test for reporting to Chef compliance, visibility servers
+* Added some custom BASH profile MOTD stuff for fun
+* Added Kitchen Shutdown option to have a scheduled cron shutdown/terminate an EC2 instance if forget it on over night etc.
+* Added deployment_type, deployment_location and deployment_method detection in default attributes (WIP)
+* Updated Amazon Linux version to 2017* in kitchen config
 
 ## 2.0.0 - 04/03/2017 - Levon Becker
 * Changed logic around EPEL repo for Amazon Linux. By Default EPEL repo is setup. I could add removal logic later if desired.

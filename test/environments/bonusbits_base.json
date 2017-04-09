@@ -1,11 +1,18 @@
 {
-  "name": "bonusbits_base",
-  "description": "BonusBits Base Environment",
-  "cookbook_versions": {},
-  "json_class": "Chef::Environment",
-  "chef_type": "environment",
-  "default_attributes": {
-  },
-  "override_attributes": {
-  }
+    "name": "bonusbits_base",
+    "description": "BonusBits Base Environment",
+    "cookbook_versions": {},
+    "json_class": "Chef::Environment",
+    "chef_type": "environment",
+    "default_attributes": {
+    },
+    "override_attributes": {
+        "bonusbits_base": {
+            "kitchen_shutdown": {
+                "configure": true,
+                "minute": "0",
+                "hour": "2"
+            }
+        }
+    }
 }

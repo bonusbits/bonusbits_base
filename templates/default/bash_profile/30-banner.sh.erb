@@ -1,0 +1,6 @@
+#!/bin/sh
+lolcat /var/lib/update-motd/bonusbits_banner
+echo "https://www.bonusbits.com"
+echo ''
+version=$(rpm -q --qf '%{version}' system-release)
+echo "https://aws.amazon.com/amazon-linux-ami/$version-release-notes/"

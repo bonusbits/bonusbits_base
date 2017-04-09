@@ -72,7 +72,7 @@ end
 message_list = [
   '',
   '** Node Info **',
-  "INFO: Configure             (#{node['bonusbits_base']['node_info']['configure']})"
+  "Configure                   (#{node['bonusbits_base']['node_info']['configure']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

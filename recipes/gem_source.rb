@@ -3,7 +3,6 @@ case node['os']
 when 'linux'
   # Set System Root RubyGem Source
   gemrc_path = '/root/.gemrc'
-  Chef::Log.warn("Writing Gemrc Config to (#{gemrc_path}/.gemrc)")
   template gemrc_path do
     source 'gem_source/gemrc.erb'
     owner 'root'
@@ -11,7 +10,7 @@ when 'linux'
     mode '0644'
   end
 
-  # Set Chef RubyGem Source # TODO: Not sure we'll need this with above
+  # Set Chef RubyGem Source # TODO: This needed with above?
   ruby_block 'Set Chef RubyGem Source' do
     block do
       source_url = node['bonusbits_base']['gem_source']['source_url']
@@ -22,14 +21,14 @@ when 'linux'
       Chef::Log.warn("Open3: BASH Command (#{bash_command})")
       out, err, status = Open3.capture3(bash_command)
       Chef::Log.warn("Open3: Status (#{status})")
+      Chef::Log.warn("Open3: Standard Out (#{out})")
       unless status.success?
-        Chef::Log.warn("Open3: Standard Out (#{out})")
         Chef::Log.warn("Open3: Error Out (#{err})")
         raise 'Failed!'
       end
     end
     action :run
-    only_if do # TODO: Need to test that this condition is working correctly
+    only_if do
       require 'open3'
       bash_command = '/opt/chef/embedded/bin/gem sources'
       out, _err, _status = Open3.capture3(bash_command)
@@ -38,7 +37,6 @@ when 'linux'
   end
 when 'windows'
   gemrc_path = "#{ENV['USERPROFILE']}/.gemrc"
-  Chef::Log.warn("Writing Gemrc Config to (#{gemrc_path}/.gemrc)")
   template gemrc_path do
     source 'gem_source/gemrc.erb'
   end

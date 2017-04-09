@@ -4,7 +4,7 @@ default['bonusbits_base']['yum_cron']['configure'] = true
 message_list = [
   '',
   '** Yum Cron **',
-  "INFO: Configure             (#{node['bonusbits_base']['yum_cron']['configure']})"
+  "Configure                   (#{node['bonusbits_base']['yum_cron']['configure']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

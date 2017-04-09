@@ -2,7 +2,6 @@
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
 [![Join the chat at https://gitter.im/bonusbits/bonusbits_base](https://badges.gitter.im/bonusbits/bonusbits_base.svg)](https://gitter.im/bonusbits/bonusbits_base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-
 # Purpose
 Chef Cookbook that will setup the basics for various flavors of Linux and Windows Servers.
 Be sure to set appropriate overrides for what you do and don't want to be setup in your environment files.
@@ -29,6 +28,15 @@ I plan to work through the other distros over time.
 | Docker | 17.03.1-ce, build c6d412e |
 | Chef Development Kit | 1.2.22 |
 | Chef-client | 12.18.31 |
+
+
+# Attributes (TODO: WIP)
+| Section | Attribute | Default | Description |
+| :--- | :--- | :--- | :--- |
+| Audit | bonusbits_base:audit:configure | false | only when deployed with dockerfile |
+| AWS | bonusbits_base:aws:inside | false | discovery toggles this |
+| AWS | bonusbits_base:aws:install_tools | false | Install aws cli on other none Amazon Linux OSs |
+| AWS | bonusbits_base:aws:region | N/A | Used Ohai EC2 Plugin to Discover, but optional overriding this way |
 
 # Features
 All operations have attributes to disable/enable them. Here's what is out of the box.
@@ -76,7 +84,49 @@ I added it mainly for when I copy/paste to write a new wrapper it's already stag
 I usually end up adding the customers CA cert chain as part of my base cookbook.
 [Here's](https://www.bonusbits.com/wiki/HowTo:Add_Internal_Root_CA_to_CentOS_and_Chef_Client) some information on how to accomplish that task.
 
-# Kitchen Configurations
+# CloudFormation
+## Prerequisites
+* VPC with Public (If Using ALB) and Private subnets
+    * [Example Template](https://github.com/bonusbits/cloudformation_templates/blob/master/infrastructure/vpc.yml)
+* Internet Access from EC2 Instance
+    * [Example NAT Gateway Template](https://github.com/bonusbits/cloudformation_templates/blob/master/infrastructure/nat-gateway.yml)
+    * [Example VPN BGP Template](https://github.com/bonusbits/cloudformation_templates/blob/master/infrastructure/vpn-bgp.yml)
+    * [Example Sophos UTM 9 Template](https://github.com/bonusbits/cloudformation_templates/blob/master/infrastructure/utm9.yml)
+
+## Launcher
+Click this button to open AWS CloudFormation web console with the Template URL automatically entered.<br>
+[![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?&templateURL=https://s3.amazonaws.com/bonusbits-public/cloudformation-templates/cookbooks/bonusbits-base.yml)
+
+## CloudFormation Tasks
+Public S3 Link:<br> 
+[https://s3.amazonaws.com/bonusbits-public/cloudformation-templates/cookbooks/bonusbits-base.yml](https://s3.amazonaws.com/bonusbits-public/cloudformation-templates/cookbooks/bonusbits-base.yml)
+
+The [CloudFormation Template](https://github.com/bonusbits/bonusbits_base/blob/master/cloudformation/bonusbits-base.yml)  the following:
+
+1. Create Autoscale Group for service check (hardware failure) DR not Scaling (No ELB/ALB)
+2. Adds the EC2 Instance to selected Security Groups
+4. Create IAM Instance Profile Role
+5. Create Cloudwatch Logs Group
+6. UserData
+    1. Installs some basic packages needed for bootstrapping
+        1. cfn-init
+        2. aws-cfn-bootstrap
+        3. cloud-init
+        4. git
+    2. Run cfn-init
+    3. Signal completed after Chef run (cfn-signal)
+7. Cloud Init (cfn-init)
+    1. Configure CFN Hup and Auto Reloader Hook Conf
+    2. Setup and Execute Chef Zero
+        1. Install ChefDK from internet
+            * Using ChefDK because already has berkshelf and InSpec etc.
+        2. Create Chef Configuration Files
+        3. Download bonusbits_base cookbook from Github
+        4. Download depend cookbooks with berks
+        4. Triggers Chef Zero run
+    4. Warm EBS Volume  
+
+# Test Kitchen
 The default Kitchen configuration ```.kitchen.yml``` is setup with AWS EC2 and Dokken Docker Drivers.
 
 If using Kitchen simple specify the test suite with the driver you'd like to use. Both driver gems are included with ChefDK. 
@@ -132,6 +182,36 @@ The kitchen commands need to be ran from the root directory of the cookbook.
 * Docker local install
     * https://store.docker.com/search?type=edition&offering=community
 
+# Dockerfile
+There is a Dockerfile in the root of the cookbook that can be used to build a local Amazon Linux Docker Image using Chef Client / Chef Zero.
+It is setup to run the InSpec Tests at the end of the Chef Run for this type of deployment.
+
+## Usage
+#### Build Local Image
+```docker build -f Dockerfile . -t bonusbits_base```
+
+#### Create Container
+```docker run --name amazonlinux_base -it bonusbits_base```
+
+#### Start Container (Optional)
+```docker start amazonlinux_base```
+
+#### Login Container (Optional)
+```docker exec -it amazonlinux_base /bin/bash --login```
+
+### Cleanup
+#### Stop Container
+```docker stop amazonlinux_base```
+
+#### Remove Container
+```docker rm amazonlinux_base```
+
+#### Remove Image
+```docker rmi bonusbits_base```
+
+# Docker Image
+There is an Amazon Linux Docker image built from this cookbook on Docker Hub if interested it can be found [HERE](https://hub.docker.com/r/bonusbits/amazonlinux-base/)
+
 # NodeInfo Script
 You can run the nodeinfo script locally or use Test Kitchen to run it. You can have it run on one, multiple or all of the test suite VMs you have running.
 Below are some examples:
@@ -185,14 +265,6 @@ Chef Recipes:         (["bonusbits_base", "bonusbits_base::default"])
 ---------------------------------------------------------------
 ```
  
-# Network Proxy
-I have stubbed out proxy support in the kitchen configuration yaml files and a temp workaround for local "Virtualbox" VMs.
-Usually you don't have to deal with a proxy issue in AWS. The defaults I have assume you are using [Charles Proxy](https://www.bonusbits.com/wiki/HowTo:Configure_Test_Kitchen_to_Use_Charles_Proxy), but you can override the attributes and change the kitchen configs to your own settings.
-Keep in mind if you are not using Charles Proxy and pointing your BASH/PowerShell to it, you'll need to configure them as well.
-
-## Enable Proxy in Kitchen Config (Deprecated)
-Finally Test Kitchen will use your shell environment variables automatically! 
-
 # Testing
 * Style/Linting
     * Foodcritic and Rubocop
