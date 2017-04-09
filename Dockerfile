@@ -9,7 +9,7 @@ ARG chef_role=base
 ARG chef_environment=bonusbits_base
 ARG chef_config_path=/opt/chef-repo
 
-LABEL version="2.1.0" \
+LABEL version="2.1.1" \
       description="Amazon Linux Image built from bonusbits_base cookbook." \
       github="https://github.com/bonusbits/bonusbits_base" \
       website="https://www.bonusbits.com"
@@ -49,8 +49,8 @@ encrypted_data_bag_secret \'${chef_config_path}/data_bags/encrypted_data_bag_sec
 
 # Download Dependant Cookbooks
 WORKDIR ${chef_config_path}/cookbooks/${cookbook_name}
-RUN /opt/chefdk/embedded/bin/berks install
-RUN /opt/chefdk/embedded/bin/berks vendor ${chef_config_path}/cookbooks/
+RUN /opt/chefdk/bin/berks install
+RUN /opt/chefdk/bin/berks vendor ${chef_config_path}/cookbooks/
 
 # Run Chef
 RUN /opt/chefdk/bin/chef-client -z --config ${chef_config_path}/client.rb -o "role[${chef_role}]" --environment "${chef_environment}" --log_level info --force-formatter --chef-zero-port 8889

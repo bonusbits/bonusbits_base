@@ -9,10 +9,7 @@
   "override_attributes": {
     "bonusbits_base": {
       "packages": {
-        "configure": false
-      },
-      "kitchen_shutdown": {
-        "configure": true
+        "install": false
       }
     }
   }

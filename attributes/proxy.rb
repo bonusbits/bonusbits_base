@@ -3,10 +3,23 @@ default['bonusbits_base']['proxy'].tap do |proxy|
 
   proxy['host'] = '10.0.2.2'
   proxy['port'] = '8888'
+  proxy['use_ssl'] = false
+  run_state['proxy'] = Hash.new
+  run_state['proxy']['user'] = nil
+  run_state['proxy']['password'] = nil
 
   proxy_host = node['bonusbits_base']['proxy']['host']
   proxy_port = node['bonusbits_base']['proxy']['port']
-  proxy['url'] = "http://#{proxy_host}:#{proxy_port}"
+  use_ssl = node['bonusbits_base']['proxy']['use_ssl']
+  protocol = use_ssl ? 'https' : 'http'
+  proxy_user = node.run_state['proxy']['user']
+  proxy_password = node.run_state['proxy']['password']
+  proxy['url'] =
+    if proxy_user.nil?
+      "#{protocol}://#{proxy_host}:#{proxy_port}"
+    else
+      "#{protocol}://#{proxy_user}:#{proxy_password}@#{proxy_host}:#{proxy_port}"
+    end
 
   proxy['no_proxy'] = 'localhost'
   proxy['no_proxy'] += ',.localdomain.com'
@@ -34,7 +47,10 @@ end
 message_list = [
   '',
   '** Proxy **',
-  "Configure                   (#{node['bonusbits_base']['proxy']['configure']})"
+  "Configure                   (#{node['bonusbits_base']['proxy']['configure']})",
+  "Host Address                (#{node['bonusbits_base']['proxy']['host']})",
+  "Host Port                   (#{node['bonusbits_base']['proxy']['port']})",
+  "Use SSL                     (#{node['bonusbits_base']['proxy']['use_ssl']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

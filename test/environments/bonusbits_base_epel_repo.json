@@ -11,9 +11,6 @@
       "epel": {
         "configure": true,
         "install_packages": true
-      },
-      "kitchen_shutdown": {
-        "configure": true
       }
     }
   }

@@ -10,9 +10,6 @@
     "bonusbits_base": {
       "proxy": {
         "configure": true
-      },
-      "kitchen_shutdown": {
-        "configure": true
       }
     }
   }

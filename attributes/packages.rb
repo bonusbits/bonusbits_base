@@ -1,11 +1,29 @@
-default['bonusbits_base']['packages']['configure'] = true
-default['bonusbits_base']['packages']['update'] = true
-
-default['bonusbits_base']['packages']['linux'].tap do |linux|
-  linux['install_packages'] = true
+default['bonusbits_base']['packages'].tap do |packages|
+  packages['install'] = true
+  packages['update'] = true
 
   # Packages Lists
-  linux['debian_packages'] = %w(
+  packages['amazon']['packages'] = %w(
+    aws-cli
+    ca-certificates
+    curl
+    git
+    gzip
+    htop
+    mlocate
+    net-tools
+    openssh-clients
+    openssh-server
+    openssl
+    procps
+    sudo
+    upstart
+    util-linux
+    vim-enhanced
+    which
+  )
+
+  packages['debian']['packages'] = %w(
     awscli
     curl
     git
@@ -22,7 +40,7 @@ default['bonusbits_base']['packages']['linux'].tap do |linux|
     which
   )
 
-  linux['redhat_packages'] = %w(
+  packages['redhat']['packages'] = %w(
     ca-certificates
     curl
     git
@@ -40,7 +58,7 @@ default['bonusbits_base']['packages']['linux'].tap do |linux|
     which
   )
 
-  linux['suse_packages'] = %w(
+  packages['suse']['packages'] = %w(
     awscli
     curl
     git
@@ -56,31 +74,11 @@ default['bonusbits_base']['packages']['linux'].tap do |linux|
     which
   )
 
-  linux['windows_packages'] = %w(
+  packages['windows']['packages'] = %w(
     aws-cli
     powershell
     sysinternals
     git
-  )
-
-  linux['amazon_packages'] = %w(
-    aws-cli
-    ca-certificates
-    curl
-    git
-    gzip
-    htop
-    mlocate
-    net-tools
-    openssh-clients
-    openssh-server
-    openssl
-    procps
-    sudo
-    upstart
-    util-linux
-    vim-enhanced
-    which
   )
 end
 
@@ -88,8 +86,7 @@ end
 message_list = [
   '',
   '** Packages **',
-  "Configure                   (#{node['bonusbits_base']['packages']['configure']})",
-  "Install Base Packages       (#{node['bonusbits_base']['packages']['linux']['install_packages']})",
+  "Install Base Packages       (#{node['bonusbits_base']['packages']['install']})",
   "Update System Packages      (#{node['bonusbits_base']['packages']['update']})"
 ]
 message_list.each do |message|
