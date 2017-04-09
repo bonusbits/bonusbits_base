@@ -210,7 +210,7 @@ It is setup to run the InSpec Tests at the end of the Chef Run for this type of 
 ```docker rmi bonusbits_base```
 
 # Docker Image
-There is an Amazon Linux Docker image built from this cookbook on Docker Hub if interested it can be found [HERE](https://hub.docker.com/r/bonusbits/amazonlinux-base/)
+There is an Amazon Linux Docker image built from this cookbook on Docker Hub if interested it can be found [HERE](https://hub.docker.com/r/bonusbits/amazonlinux_base/)
 
 # NodeInfo Script
 You can run the nodeinfo script locally or use Test Kitchen to run it. You can have it run on one, multiple or all of the test suite VMs you have running.
