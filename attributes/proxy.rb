@@ -34,7 +34,7 @@ end
 message_list = [
   '',
   '** Proxy **',
-  "INFO: Configure             (#{node['bonusbits_base']['proxy']['configure']})"
+  "Configure                   (#{node['bonusbits_base']['proxy']['configure']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

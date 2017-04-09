@@ -12,8 +12,8 @@ end
 message_list = [
   '',
   '** Epel **',
-  "INFO: Configure             (#{node['bonusbits_base']['epel']['configure']})",
-  "INFO: Install EPEL Packages (#{node['bonusbits_base']['epel']['install_packages']})"
+  "Configure                   (#{node['bonusbits_base']['epel']['configure']})",
+  "Install EPEL Packages       (#{node['bonusbits_base']['epel']['install_packages']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

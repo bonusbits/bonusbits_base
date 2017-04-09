@@ -6,7 +6,7 @@ default['bonusbits_base']['gem_source']['source_url'] =
 message_list = [
   '',
   '** Gem Source **',
-  "INFO: Configure             (#{node['bonusbits_base']['gem_source']['configure']})"
+  "Configure                   (#{node['bonusbits_base']['gem_source']['configure']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

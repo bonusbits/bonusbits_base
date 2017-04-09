@@ -1,4 +1,4 @@
-# Deploy AWS Profile Script
+# Deploy AWS Profile Script & Tools
 include_recipe 'bonusbits_base::aws' if node['bonusbits_base']['aws']['inside']
 
 # Container Discovery
@@ -8,11 +8,6 @@ when 'amazon'
   include_recipe 'bonusbits_base::yum_cron' if node['bonusbits_base']['yum_cron']['configure']
 else
   return
-end
-
-# Run Container Discovery
-bonusbits_library_discovery 'Container Discovery' do
-  action :container
 end
 
 # Setup CloudWatch Logs
@@ -33,9 +28,6 @@ include_recipe 'bonusbits_base::security' if node['bonusbits_base']['security'][
 # Install Packages
 include_recipe 'bonusbits_base::packages' if node['bonusbits_base']['packages']['configure']
 
-# Install AWS Tools (Pip Required) TODO: Finish Recipe
-# include_recipe 'bonusbits_base::aws' if node['bonusbits_base']['aws']['install_tools']
-
 # Configure Sudoers on EC2 Instance
 include_recipe 'bonusbits_base::sudoers' if node['bonusbits_base']['sudoers']['configure']
 
@@ -44,3 +36,12 @@ include_recipe 'bonusbits_base::epel' if node['bonusbits_base']['epel']['configu
 
 # Configure Node Info
 include_recipe 'bonusbits_base::node_info' if node['bonusbits_base']['node_info']['configure']
+
+# Configure Kitchen Shutdown
+include_recipe 'bonusbits_base::kitchen_shutdown' if node['bonusbits_base']['kitchen_shutdown']['configure']
+
+# Configure BonusBits Bash Profile
+include_recipe 'bonusbits_base::bash_profile' if node['bonusbits_base']['bash_profile']['configure']
+
+# Run InSpec Tests
+include_recipe 'audit' if node['bonusbits_base']['audit']['configure']

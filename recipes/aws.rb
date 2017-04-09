@@ -1,5 +1,6 @@
 ENV['AWS_REGION'] = node['bonusbits_base']['aws']['region']
 
+# Deploy AWS Profile
 case node['os']
 when 'linux'
   # Run Profile Script
@@ -33,7 +34,14 @@ when 'linux'
     only_if { node['bonusbits_base']['aws']['inside'] }
     notifies :run, 'ruby_block[source_aws_profile_script]', :immediately
   end
+when 'windows'
+  return
+else
+  return
+end
 
+# Deploy AWS Tools to Non Amazon Linux
+if node['bonusbits_base']['aws']['install_tools']
   case node['platform']
   when 'redhat'
     # TODO: WIP
@@ -78,8 +86,4 @@ when 'linux'
   else
     return
   end
-when 'windows'
-  return
-else
-  return
 end

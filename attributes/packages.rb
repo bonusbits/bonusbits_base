@@ -1,4 +1,5 @@
 default['bonusbits_base']['packages']['configure'] = true
+default['bonusbits_base']['packages']['update'] = true
 
 default['bonusbits_base']['packages']['linux'].tap do |linux|
   linux['install_packages'] = true
@@ -87,8 +88,9 @@ end
 message_list = [
   '',
   '** Packages **',
-  "INFO: Configure             (#{node['bonusbits_base']['packages']['configure']})",
-  "INFO: Install Base Packages (#{node['bonusbits_base']['packages']['linux']['install_packages']})"
+  "Configure                   (#{node['bonusbits_base']['packages']['configure']})",
+  "Install Base Packages       (#{node['bonusbits_base']['packages']['linux']['install_packages']})",
+  "Update System Packages      (#{node['bonusbits_base']['packages']['update']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

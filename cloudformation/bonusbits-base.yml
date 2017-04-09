@@ -1,0 +1,463 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: DR Autoscaling Amazon Linux EC2 Instance Configured with Chef Zero
+Parameters:
+  # Ownership
+  Owner:
+    Type: String
+    Default: FirstName LastName
+  DeleteAfter:
+    Type: String
+    Default: 00/00/201x
+
+  # Network
+  VPC:
+    Type: AWS::EC2::VPC::Id
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+  SecurityGroups:
+    Type: List<AWS::EC2::SecurityGroup::Id>
+
+  # Instance
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+  InstanceType:
+    Type: String
+    AllowedValues:
+    - t2.nano
+    - t2.micro
+    - t2.small
+    - t2.medium
+    - m3.medium
+    - m4.large
+    - c3.medium
+    - c4.medium
+    Default: t2.micro
+
+  # Deployment
+  CookbookName:
+    Type: String
+    Default: bonusbits_base
+  CookbookVersion:
+    Type: String
+    Default: latest
+  ChefDkVersion:
+    Type: String
+    Default: 1.2.22
+  DataBagSecret:
+    Type: String
+    NoEcho: true
+    MinLength: 684
+    Default: "CYEh1mnfH+TrzeVa8cyDAHWicV8hKni7P40xVPUn2Cm8638QvFS24iK7DRtP5VlDpogSaxDm050riKcAZ++rwUsJdUcQyx6KdXIMKEVml+ZjYW9BC3c4fMWPYbBkdWHBTpUP6OpMl9eNdPoa36vKRuxBrYGAKzLLDlTTqvoRlKEpAKpdSdgp3zZnGeymEeYYyG2Lv9p6ZbmlcDqRdB2hPu+grNkDWNrwDfV/UxF3QOtLQQB7c5edDHa1rmegNbP1Gb/h2Gu+HFf2sQnCFnjG20rxwJaL5lSdUs2AOdR+B+fDL+y7o6LxIN3n3EQWfdzzDsJXFjKhF0b+mAAmgJy9q2R1Sqr0f0X078icvu9zlUMjgJxSAShsXW00y9swcItQXFpJTFXnaswbd7YtJBsrNvfcOuSF9GhO6y1vCTbeOUMet+G6KbDIO0YxKF+fi07VPSTkAoXznC0t9o8s7Kqdd1pgx3xxVr80r9v3uKZcM+wMBk7TrpswKr6A4sIT0kBaJTgr37uDH8uIoiqEpxHfHEge6vVWfJyRaXjdyG7aJ3VwuJvSrIkuVJCam3ie2Dr09KBUWNYHXOmPb3eM0ByudcXNS0IXNAWqQJ5leNTINcqq4OZmAJHHOUo7qJhtqLVtr+Zwcady+WQ0ta1kmhQuWJ8RAhCCBUCUTISKEtXuF8E="
+
+Metadata:
+  TemplateAuthor: Levon Becker
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      # Ownership
+      - Label:
+          default: Ownership
+        Parameters:
+          - Owner
+          - DeleteAfter
+
+      # Network
+      - Label:
+          default: Network
+        Parameters:
+          - VPC
+          - Subnets
+          - SecurityGroups
+
+      # Instance
+      - Label:
+          default: Instance
+        Parameters:
+          - KeyPairName
+          - InstanceType
+
+      # Deployment
+      - Label:
+          default: Deployment
+        Parameters:
+          - CookbookName
+          - CookbookVersion
+          - ChefDkVersion
+          - DataBagSecret
+
+    ParameterLabels:
+      # Ownership
+      Owner:
+        default: Team or Individual Owner
+      DeleteAfter:
+        default: Delete After Date
+
+      # Network
+      VPC:
+        default: VPC ID
+      Subnets:
+        default: Subnets
+      SecurityGroups:
+        default: Security Groups
+
+      # Instance
+      KeyPairName:
+        default: EC2 Key Pair Name
+      InstanceType:
+        default: Instance Type
+
+      # Deployment
+      CookbookName:
+        default: Cookbook Name
+      CookbookVersion:
+        default: Cookbook Version
+      ChefDkVersion:
+        default: ChefDK Version
+      DataBagSecret:
+        default: Data Bag Secret
+
+Outputs:
+  # Ownership
+  Owner:
+    Description: Team or Individual that Owns this Formation.
+    Value: !Ref Owner
+  DeleteAfter:
+    Description: It is ok to delete the Formation after this date.
+    Value: !Ref DeleteAfter
+
+  # Network
+  VPC:
+    Value: !Ref VPC
+  Subnets:
+    Value: !Join [',', !Ref Subnets]
+  SecurityGroups:
+    Value: !Join [',', !Ref SecurityGroups]
+
+  # Instance
+  KeyPairName:
+    Description: Key Pair Name Used.
+    Value: !Ref KeyPairName
+  InstanceType:
+    Description: Instance Type Used.
+    Value: !Ref InstanceType
+
+  # Deployment
+  CookbookName:
+    Value: !Ref CookbookName
+  CookbookVersion:
+    Value: !Ref CookbookVersion
+  ChefDkVersion:
+    Value: !Ref ChefDkVersion
+
+  # Generated
+  AMI:
+    Description: AMI Used.
+    Value: !FindInMap [ RegionMap, !Ref "AWS::Region", EBS ]
+  IAMRole:
+    Description: IAM Instance Profile Role Created.
+    Value: !Ref IamRole
+
+Mappings:
+  RegionMap:
+      # Amazon Linux AMI 2017.03 was released on 2017-04-04
+      # N. Virginia
+      us-east-1:
+        EBS: ami-22ce4934
+      # Ohio
+      us-east-2:
+        EBS: ami-7bfcd81e
+      # Oregon
+      us-west-2:
+        EBS: ami-8ca83fec
+      # N. California
+      us-west-1:
+        EBS: ami-9e247efe
+      # Canada
+      ca-central-1:
+        EBS: ami-8601bce2
+      # Ireland
+      eu-west-1:
+        EBS: ami-e5083683
+      # London
+      eu-west-2:
+        EBS: ami-11130775
+      # Frankfurt
+      eu-central-1:
+        EBS: ami-5b06d634
+      # Singapore
+      ap-southeast-1:
+        EBS: ami-a2bc03c1
+      # Seoul
+      ap-northeast-1:
+        EBS: ami-8369baed
+      # Tokyo
+      ap-northeast-2:
+        EBS: ami-859bbfe2
+      # Sydney
+      ap-southeast-2:
+        EBS: ami-8bf2fde8
+      # Mumbai
+      ap-south-1:
+        EBS: ami-815625ee
+      # Sao Paulo
+      sa-east-1:
+        EBS: ami-a97013c5
+      # Beijing
+      cn-north-1:
+        EBS: ami-b3d80ede
+      # GovCloud
+      us-gov-west-1:
+        EBS: ami-700a8f11
+
+Conditions:
+  # Condition for if SSH access not wanted for maybe a prd env
+  HasKeyPair: !Not [!Equals [ !Ref KeyPairName, '' ]]
+
+Resources:
+  # CloudWatch
+  CloudWatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref "AWS::StackName"
+      RetentionInDays: '30'
+
+  # IAM
+  IamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Ref AWS::StackName
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+
+  IamPolicies:
+    Type: AWS::IAM::Policy
+    DependsOn: IamRole
+    Properties:
+      PolicyName: !Join [ '', [ !Ref "AWS::StackName", -instance-policy ] ]
+      Roles: [!Ref IamRole]
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        # Allow Full S3 Access
+        - Effect: Allow
+          Action:
+          - s3:*
+          Resource: "*"
+        # Allow Write CloudWatch Logs
+        - Effect: Allow
+          Action:
+          - cloudwatch:PutMetricData
+          Resource: "*"
+        - Effect: Allow
+          Action:
+          - logs:PutLogEvents
+          - logs:CreateLogStream
+          - logs:DescribeLogStreams
+          - logs:CreateLogGroup
+          Resource:
+            Fn::Join:
+            - ''
+            - - 'arn:aws:logs:'
+              - !Ref AWS::Region
+              - ":"
+              - !Ref AWS::AccountId
+              - ":log-group:"
+              - !Ref CloudWatchLogsGroup
+              - ":log-stream:*"
+
+  IamInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    DependsOn: IamRole
+    Properties:
+      Path: "/"
+      Roles: [!Ref IamRole]
+
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    DependsOn:
+      - LaunchConfiguration
+    Properties:
+      VPCZoneIdentifier: !Ref Subnets
+      LaunchConfigurationName: !Ref LaunchConfiguration
+      MinSize: 1
+      MaxSize: 1
+      DesiredCapacity: 1
+      MetricsCollection:
+        - Granularity: 1Minute
+          Metrics:
+            - GroupMinSize
+            - GroupMaxSize
+            - GroupDesiredCapacity
+            - GroupInServiceInstances
+            - GroupPendingInstances
+            - GroupStandbyInstances
+            - GroupTerminatingInstances
+            - GroupTotalInstances
+      Tags:
+        - Key: Name
+          Value: !Ref "AWS::StackName"
+          PropagateAtLaunch: true
+        - Key: Owner
+          Value: !Ref Owner
+          PropagateAtLaunch: true
+        - Key: DeleteAfter
+          Value: !Ref DeleteAfter
+          PropagateAtLaunch: true
+    CreationPolicy:
+      ResourceSignal:
+        Count: 1
+        Timeout: PT15M
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MinInstancesInService: 1
+        MaxBatchSize: 1
+
+  LaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    DependsOn:
+      - IamInstanceProfile
+    Properties:
+      AssociatePublicIpAddress: false
+      ImageId: !FindInMap [ RegionMap, !Ref "AWS::Region", EBS ]
+      SecurityGroups: !Ref SecurityGroups
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref IamInstanceProfile
+      KeyName: !If [ HasKeyPair, !Ref KeyPairName, !Ref "AWS::NoValue"]
+      InstanceMonitoring: true
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            DeleteOnTermination: true
+            VolumeType: gp2
+            VolumeSize: 8
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash -xe
+            yum update -y
+            yum install -y aws-cfn-bootstrap aws-cli cloud-init git
+            /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource LaunchConfiguration --region ${AWS::Region} --configsets ec2_setup
+            /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource AutoScalingGroup --region ${AWS::Region}
+    Metadata:
+      AWS::CloudFormation::Init:
+        configSets:
+          ec2_setup:
+            - config_cfn
+            - install_chefdk
+            - setup_chef_client
+            - run_chef_client
+            - warm_ebs
+        config_cfn:
+          files:
+            "/etc/cfn/cfn-hup.conf":
+              content: !Sub |
+                [main]
+                stack=${AWS::StackId}
+                region=${AWS::Region}
+              mode: '000400'
+              owner: root
+              group: root
+            "/etc/cfn/hooks.d/cfn-auto-reloader.conf":
+              content: !Sub |
+                [cfn-auto-reloader-hook]
+                triggers=post.update
+                path=Resources.LaunchConfiguration.Metadata.AWS::CloudFormation::Init
+                action=/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource LaunchConfiguration --region ${AWS::Region} --configsets ec2_setup
+                runas=root
+          services:
+            sysvinit:
+              cfn-hup:
+                enabled: true
+                ensureRunning: true
+                files:
+                  - /etc/cfn/cfn-hup.conf
+                  - /etc/cfn/hooks.d/cfn-auto-reloader.conf
+        install_chefdk:
+          commands:
+            01_install_chefdk:
+              command: !Sub "curl -L https://omnitruck.chef.io/install.sh | bash -s -- -P chefdk -v ${ChefDkVersion}"
+        setup_chef_client:
+          commands:
+            01_mkdir_chef_repo:
+              command: "mkdir -p /opt/chef-repo"
+            02_mkdir_chef_repo_subdirs:
+              cwd: /opt/chef-repo
+              command: "mkdir -p cookbooks checksums environments cache backup data_bags roles"
+            03_download_cookbook:
+              cwd: /opt/chef-repo/cookbooks
+              command: !Sub "git clone --branch ${CookbookVersion} https://github.com/bonusbits/${CookbookName}.git"
+            04_deploy_databags:
+              cwd: /opt/chef-repo
+              command: !Sub "cp -R cookbooks/${CookbookName}/test/data_bags/${CookbookName} data_bags/"
+            05_download_dependent_cookbook:
+              cwd: !Sub /opt/chef-repo/cookbooks/${CookbookName}
+              command: !Sub "/opt/chefdk/embedded/bin/berks install"
+            06_vendor_dependent_cookbook:
+              cwd: !Sub /opt/chef-repo/cookbooks/${CookbookName}
+              command: !Sub "/opt/chefdk/embedded/bin/berks vendor /opt/chef-repo/cookbooks/"
+          files:
+            "/opt/chef-repo/encrypted_data_bag_secret":
+              content: !Sub ${DataBagSecret}
+            "/opt/chef-repo/client.rb":
+              content: !Sub |
+                node_name 'ec2_node'
+                checksum_path '/opt/chef-repo/checksums'
+                file_cache_path '/opt/chef-repo/cache'
+                file_backup_path '/opt/chef-repo/backup'
+                cookbook_path '/opt/chef-repo/cookbooks'
+                data_bag_path '/opt/chef-repo/data_bags'
+                environment_path '/opt/chef-repo/environments'
+                role_path '/opt/chef-repo/roles'
+                chef_server_url 'http://127.0.0.1:8889'
+                encrypted_data_bag_secret '/opt/chef-repo/data_bags/encrypted_data_bag_secret'
+            "/opt/chef-repo/environments/aws.json":
+              content: !Sub |
+               {
+                   "name": "aws",
+                   "description": "Environment",
+                   "cookbook_versions": {},
+                   "json_class": "Chef::Environment",
+                   "chef_type": "environment",
+                   "default_attributes": {
+                   },
+                   "override_attributes": {
+                       "${CookbookName}": {
+                           "cloudwatch_logs": {
+                               "logs_group_name": "${CloudWatchLogsGroup}"
+                           }
+                       }
+                   }
+               }
+            "/opt/chef-repo/roles/ec2.json":
+              content: !Sub |
+                {
+                  "name": "ec2",
+                  "description": "Role",
+                  "json_class": "Chef::Role",
+                  "default_attributes": {},
+                  "override_attributes": {
+                  },
+                  "chef_type": "role",
+                  "run_list": [
+                    "recipe[${CookbookName}]"
+                  ],
+                  "env_run_lists": {
+                  }
+                }
+        run_chef_client:
+          commands:
+            01_run_chef:
+              command: "/opt/chefdk/bin/chef-client -z -o 'role[ec2]' --environment 'aws' --config /opt/chef-repo/client.rb --log_level info --force-formatter --chef-zero-port 8889"
+        warm_ebs:
+          commands:
+            01_warm_ebs:
+              command: "echo 'ACTION: Performing EBS Warming' && dd if=/dev/xvda of=/dev/xvda conv=notrunc bs=1M status=progress"

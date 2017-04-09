@@ -4,7 +4,7 @@ default['bonusbits_base']['sudoers']['configure'] = true
 message_list = [
   '',
   '** Sudoers **',
-  "INFO: Configure             (#{node['bonusbits_base']['sudoers']['configure']})"
+  "Configure                   (#{node['bonusbits_base']['sudoers']['configure']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

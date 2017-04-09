@@ -12,6 +12,7 @@ depends 'bonusbits_library'
 depends 'yum-epel'
 depends 'apt'
 depends 'selinux'
+depends 'audit' # Allows Running InSpec as Part of Chef Run including Remote Profiles
 
 %w(
   amazon

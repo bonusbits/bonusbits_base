@@ -12,7 +12,7 @@ platforms:
     driver:
       image_search:
         owner-id: 137112412989
-        name: amzn-ami-hvm-2016.*x86_64-gp2
+        name: amzn-ami-hvm-2017.*x86_64-gp2
       instance_initiated_shutdown_behavior: terminate
       tags:
         Name: kitchen-bonusbits-base-amazon-<%= ENV['USER'] %>

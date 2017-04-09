@@ -6,7 +6,8 @@ default['bonusbits_base']['cloudwatch_logs']['logs_group_name'] = 'kitchen-bonus
 message_list = [
   '',
   '** CloudWatch Logs **',
-  "INFO: Configure             (#{node['bonusbits_base']['cloudwatch_logs']['configure']})"
+  "Configure                   (#{node['bonusbits_base']['cloudwatch_logs']['configure']})",
+  "Log Group Name              (#{node['bonusbits_base']['cloudwatch_logs']['logs_group_name']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

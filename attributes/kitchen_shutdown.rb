@@ -7,9 +7,9 @@ default['bonusbits_base']['kitchen_shutdown']['hour'] = '2'
 message_list = [
   '',
   '** Kitchen Shutdown **',
-  "INFO: Configure             (#{node['bonusbits_base']['kitchen_shutdown']['configure']})",
-  "INFO: Min to Shutdown       (#{node['bonusbits_base']['kitchen_shutdown']['minute']})",
-  "INFO: Hour to Shutdown      (#{node['bonusbits_base']['kitchen_shutdown']['hour']})"
+  "Configure                   (#{node['bonusbits_base']['kitchen_shutdown']['configure']})",
+  "Min to Shutdown             (#{node['bonusbits_base']['kitchen_shutdown']['minute']})",
+  "Hour to Shutdown            (#{node['bonusbits_base']['kitchen_shutdown']['hour']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)
