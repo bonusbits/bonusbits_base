@@ -4,7 +4,7 @@ maintainer_email 'levon.becker.github@bonusbits.com'
 license 'MIT'
 description 'Foundation Wrapper Cookbook for all Nodes'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '2.1.2'
+version '2.1.3'
 source_url 'https://github.com/bonusbits/bonusbits_base'
 issues_url 'https://github.com/bonusbits/bonusbits_base/issues'
 
