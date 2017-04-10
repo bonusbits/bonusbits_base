@@ -1,5 +1,8 @@
 ## CHANGE LOG
 
+## 2.1.3 - 04/10/2017 - Levon Becker
+* Added /etc/sysconfig/network creation for Docker containers for Nginx type inits to work
+
 ## 2.1.2 - 04/10/2017 - Levon Becker
 * Fixed missing period in detect environment logic
 * Tweaked regex of rake tasks to be more flexible to test suite names

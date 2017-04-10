@@ -43,5 +43,8 @@ include_recipe 'bonusbits_base::kitchen_shutdown' if node['bonusbits_base']['kit
 # Configure BonusBits Bash Profile
 include_recipe 'bonusbits_base::bash_profile' if node['bonusbits_base']['bash_profile']['configure']
 
+# Configure BonusBits Bash Profile
+include_recipe 'bonusbits_base::docker' if node['bonusbits_base']['docker']['deploy_sysconfig_network']
+
 # Run InSpec Tests
 include_recipe 'audit' if node['bonusbits_base']['audit']['configure']
