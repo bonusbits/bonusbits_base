@@ -1,8 +1,8 @@
 # Package Lists
-amazon_packages = node['bonusbits_base']['packages']['linux']['amazon_packages']
-debian_packages = node['bonusbits_base']['packages']['linux']['debian_packages']
-redhat_packages = node['bonusbits_base']['packages']['linux']['redhat_packages']
-suse_packages = node['bonusbits_base']['packages']['linux']['suse_packages']
+amazon_packages = node['bonusbits_base']['packages']['amazon']['packages']
+debian_packages = node['bonusbits_base']['packages']['debian']['packages']
+redhat_packages = node['bonusbits_base']['packages']['redhat']['packages']
+suse_packages = node['bonusbits_base']['packages']['suse']['packages']
 
 if node['bonusbits_base']['packages']['update']
   # Update System Packages

@@ -1,5 +1,14 @@
 ## CHANGE LOG
 
+## 2.1.1 - 04/09/2017 - Levon Becker
+* Switch kitchen shutdown to be true if deployed by kitchen and an EC2 instance. Still can be over-road in Environment/Node/Role.
+* Changed default kitchen shutdown time to 6AM UTC/11PM PST/2AM EST
+* Removed redundant package attribute
+* Renamed packages attributes for package lists
+* Added all attributes to table in README
+* Added optional ssl **https** for Proxy URL
+* Added optional user/password Proxy authentication
+
 ## 2.1.0 - 04/08/2017 - Levon Becker
 * Switch kitchen-dokken to kitchen-docker because @someara says [not going to add support](https://github.com/someara/kitchen-dokken/issues/88) for CircleCi (lxc)
 * ^^ ?? switch back and test in CircleCI 2.0 Beta ?? ^^

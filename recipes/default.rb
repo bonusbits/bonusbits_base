@@ -26,7 +26,7 @@ include_recipe 'bonusbits_base::gem_source' if node['bonusbits_base']['gem_sourc
 include_recipe 'bonusbits_base::security' if node['bonusbits_base']['security']['configure']
 
 # Install Packages
-include_recipe 'bonusbits_base::packages' if node['bonusbits_base']['packages']['configure']
+include_recipe 'bonusbits_base::packages' if node['bonusbits_base']['packages']['install']
 
 # Configure Sudoers on EC2 Instance
 include_recipe 'bonusbits_base::sudoers' if node['bonusbits_base']['sudoers']['configure']

@@ -7,10 +7,5 @@
     "default_attributes": {
     },
     "override_attributes": {
-        "bonusbits_base": {
-            "kitchen_shutdown": {
-                "configure": true
-            }
-        }
     }
 }
