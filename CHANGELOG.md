@@ -1,5 +1,9 @@
 ## CHANGE LOG
 
+## 2.1.2 - 04/10/2017 - Levon Becker
+* Fixed missing period in detect environment logic
+* Tweaked regex of rake tasks to be more flexible to test suite names
+
 ## 2.1.1 - 04/09/2017 - Levon Becker
 * Switch kitchen shutdown to be true if deployed by kitchen and an EC2 instance. Still can be over-road in Environment/Node/Role.
 * Changed default kitchen shutdown time to 6AM UTC/11PM PST/2AM EST
