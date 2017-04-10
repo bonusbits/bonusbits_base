@@ -48,7 +48,7 @@ namespace :integration do
   task :docker do
     load_kitchen_config('.kitchen.yml').instances.each do |instance|
       # puts "Instance Suite Name: (#{instance.suite.name})"
-      next unless instance.suite.name =~ /^docker_.*/
+      next unless instance.suite.name =~ /^docker.*/
       # puts 'It made it Next...'
       instance.test(:always)
     end
@@ -58,7 +58,7 @@ namespace :integration do
   desc 'kitchen - ec2 - test'
   task :ec2 do
     load_kitchen_config('.kitchen.yml').instances.each do |instance|
-      next unless instance.suite.name =~ /^ec2_.*/
+      next unless instance.suite.name =~ /^ec2.*/
       instance.test(:always)
     end
   end

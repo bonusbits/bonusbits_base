@@ -1,7 +1,7 @@
 # Determine Environment
 run_state['detected_environment'] =
   if /dev|qa|stg|prd/ =~ node.environment
-    /dev|qa|stg|prd/.match(nodeenvironment).to_s.downcase
+    /dev|qa|stg|prd/.match(node.environment).to_s.downcase
   else
     # Consider _default as 'Dev'
     'dev'
