@@ -22,6 +22,6 @@ jobs:
           command: bundle exec rake circleci --trace
       - store_test_results:
           path: test-reports/
-    notify:
-      webhooks:
-        - url: https://webhooks.gitter.im/e/076791447ffdd7cf8037
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/076791447ffdd7cf8037
