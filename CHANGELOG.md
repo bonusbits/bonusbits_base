@@ -1,5 +1,8 @@
 ## CHANGE LOG
 
+## 2.1.4 - 04/10/2017 - Levon Becker
+* Added windows cookbook dependent
+
 ## 2.1.3 - 04/10/2017 - Levon Becker
 * Added /etc/sysconfig/network creation for Docker containers for Nginx type inits to work
 

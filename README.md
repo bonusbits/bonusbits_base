@@ -30,7 +30,7 @@ I plan to work through the other distros over time.
 | Chef-client | 12.18.31 |
 
 
-# Attributes (TODO: WIP)
+# Attributes
 | Section          | Attribute                                          | Default                                                                                        | Type    | Description                                                        |
 | :--------------- | :------------------------------------------------- | :------                                                                                        | :------ | :----------------------------------------------------------------- |
 | Audit            | bonusbits_base:audit:configure                     | false                                                                                          | Boolean | only when deployed with dockerfile                                 |
@@ -302,7 +302,10 @@ Chef Roles:           (["base"])
 Chef Recipes:         (["bonusbits_base", "bonusbits_base::default"])
 ---------------------------------------------------------------
 ```
- 
+
+# Cookbook Dependencies
+![](images/cookbook_dependencies.png)
+
 # Testing
 * Style/Linting
     * Foodcritic and Rubocop
