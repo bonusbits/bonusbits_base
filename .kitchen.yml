@@ -35,7 +35,7 @@ platforms:
         ssl_verify_mode: ":verify_none"
     provisioner:
       name: chef_zero
-      require_chef_omnibus: 12.18.31
+      require_chef_omnibus: 12.19.36
       data_bags_path: test/data_bags
       encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
       roles_path: test/roles
@@ -120,7 +120,7 @@ suites:
   - name: ec2_base
     provisioner:
       name: chef_zero
-      require_chef_omnibus: 12.18.31
+      require_chef_omnibus: 12.19.36
       data_bags_path: test/data_bags
       encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
       roles_path: test/roles
@@ -157,7 +157,7 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.18.31'
+        chef_version: '12.19.36'
         inside_aws: 'true'
         configure_sudoers: 'true'
     attributes:
@@ -170,7 +170,7 @@ suites:
   - name: ec2_base_epel_repo
     provisioner:
       name: chef_zero
-      require_chef_omnibus: 12.18.31
+      require_chef_omnibus: 12.19.36
       data_bags_path: test/data_bags
       encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
       roles_path: test/roles
@@ -206,7 +206,7 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.18.31'
+        chef_version: '12.19.36'
         inside_aws: 'true'
         configure_sudoers: 'true'
         configure_epel: 'true'
@@ -221,7 +221,7 @@ suites:
   - name: ec2_base_no_software
     provisioner:
       name: chef_zero
-      require_chef_omnibus: 12.18.31
+      require_chef_omnibus: 12.19.36
       data_bags_path: test/data_bags
       encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
       roles_path: test/roles
@@ -258,7 +258,7 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.18.31'
+        chef_version: '12.19.36'
         configure_cloudwatch_logs: 'true'
         inside_aws: 'true'
         install_packages: 'false'
@@ -282,7 +282,7 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.18.31'
+        chef_version: '12.19.36'
         inside_aws: 'false'
         configure_sudoers: 'true'
     attributes:
@@ -308,7 +308,7 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.18.31'
+        chef_version: '12.19.36'
         inside_aws: 'false'
         configure_sudoers: 'true'
         configure_epel: 'true'
@@ -336,7 +336,7 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.18.31'
+        chef_version: '12.19.36'
         inside_aws: 'false'
         install_packages: 'false'
         configure_sudoers: 'true'

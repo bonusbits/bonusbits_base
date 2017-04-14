@@ -2,8 +2,8 @@ FROM amazonlinux:latest
 MAINTAINER Levon Becker "levon.docker@bonusbits.com"
 
 # Build Cookbook Args
-#ARG chef_client_version=12.18.31
-ARG chefdk_version=1.2.22
+#ARG chef_client_version=12.19.36
+ARG chefdk_version=1.3.40
 ARG cookbook_name=bonusbits_base
 ARG chef_role=base
 ARG chef_environment=bonusbits_base

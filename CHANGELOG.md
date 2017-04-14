@@ -1,5 +1,8 @@
 ## CHANGE LOG
 
+## 2.1.5 - 04/13/2017 - Levon Becker
+* Upgraded and test with chefdk 1.3.40 / chef-client 12.19.36
+
 ## 2.1.4 - 04/10/2017 - Levon Becker
 * Added windows cookbook dependent
 
@@ -37,7 +40,7 @@
 
 ## 2.0.0 - 04/03/2017 - Levon Becker
 * Changed logic around EPEL repo for Amazon Linux. By Default EPEL repo is setup. I could add removal logic later if desired.
-* Bumped Chef Client Version to 12.18.31
+* Bumped Chef Client Version to 12.19.36
 * Added CloudWatch Logs configuration
 * Switched from ServerSpec to InSpec
 * Moved Inspec tests to profile repo so can be used by other cookbooks to check settings by this cookbook are correct [HERE](https://github.com/bonusbits/inspec_bonusbits_base)
