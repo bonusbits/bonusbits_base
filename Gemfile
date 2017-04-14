@@ -7,7 +7,7 @@ group :style do
   gem 'chef', '12.19.36'
   gem 'foodcritic', '~> 10.2'
   gem 'rainbow', '~> 2.2.1'
-  gem 'rubocop', '~> 0.47'
+  gem 'rubocop', '~> 0.47.1'
 end
 
 group :unit do
