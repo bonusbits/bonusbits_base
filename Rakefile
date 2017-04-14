@@ -64,7 +64,7 @@ namespace :integration do
   end
 end
 
-desc 'Foodcritic, Rubocop & ChefSpec'
+desc 'Foodcritic & Rubocop'
 task default: %w(style:chef style:ruby)
 
 desc 'Foodcritic & Rubocop'
