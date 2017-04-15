@@ -1,5 +1,8 @@
 ## CHANGE LOG
 
+## 2.1.8 - 04/15/2017 - Levon Becker
+* Set to start awslogs at end of cloudwatch_logs recipe so it'll start streaming chef-client.log 
+
 ## 2.1.7 - 04/15/2017 - Levon Becker
 * Switch Dockerfile to copy client.rb instead of creating it.
 * Added restart notification to /etc/awslogs/awscli.conf template resource
