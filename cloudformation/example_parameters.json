@@ -37,7 +37,7 @@
     },
     {
         "ParameterKey": "ChefDkVersion",
-        "ParameterValue": "1.2.22"
+        "ParameterValue": "1.3.40"
     },
     {
         "ParameterKey": "DataBagSecret",

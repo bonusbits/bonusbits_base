@@ -1,35 +1,20 @@
+inside_aws = node['bonusbits_base']['aws']['inside']
+
 case node['os']
 when 'linux'
-  directory '/etc/awslogs' do
-    owner 'root'
-    group 'root'
-    mode '0755'
-  end
-
-  # Deploy AWS CLI Config
-  template '/etc/awslogs/awscli.conf' do
-    source 'cloudwatch_logs/awscli.conf.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
-  end
-
-  # Deploy AWS CloudWatch Logs Proxy Config
-  template '/etc/awslogs/proxy.conf' do
-    source 'cloudwatch_logs/proxy.conf.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
-    notifies :restart, 'service[awslogs]', :delayed
-    only_if { node['bonusbits_base']['proxy']['configure'] }
-  end
-
   case node['platform']
   when 'amazon'
     # Install CloudWatch Logs Agent
     package 'awslogs'
   when 'centos', 'redhat', 'ubuntu' # ~FC024
     package 'python'
+
+    # TODO: Needed?
+    directory '/etc/awslogs' do
+      owner 'root'
+      group 'root'
+      mode '0755'
+    end
 
     local_download_temp = node['bonusbits_base']['local_file_cache']
     # Install CloudWatch Logs Agent
@@ -79,10 +64,29 @@ when 'linux'
       owner 'root'
       group 'root'
       mode '0755'
-      notifies :restart, 'service[awslogs]', :delayed
+      notifies :restart, 'service[awslogs]', :delayed if inside_aws
     end
   else
     return
+  end
+
+  # Deploy AWS CLI Config
+  template '/etc/awslogs/awscli.conf' do
+    source 'cloudwatch_logs/awscli.conf.erb'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    notifies :restart, 'service[awslogs]', :delayed if inside_aws
+  end
+
+  # Deploy AWS CloudWatch Logs Proxy Config
+  template '/etc/awslogs/proxy.conf' do
+    source 'cloudwatch_logs/proxy.conf.erb'
+    owner 'root'
+    group 'root'
+    mode '0644'
+    notifies :restart, 'service[awslogs]', :delayed if inside_aws
+    only_if { node['bonusbits_base']['proxy']['configure'] }
   end
 
   # Deploy AWS CloudWatch Logs Config
@@ -92,15 +96,13 @@ when 'linux'
     group 'root'
     mode '0644'
     notifies :restart, 'service[awslogs]', :delayed
-    only_if { node['bonusbits_base']['aws']['inside'] } # Ohai EC2 Plugin Used
-    # Wrapper Cookbook Should Lay down this file with customizations
-    only_if { node['bonusbits_base']['cloudwatch_logs']['deploy_logs_conf'] }
+    only_if { inside_aws } # Ohai EC2 Plugin Used
   end
 
   # Define Service
   service 'awslogs' do
     service_name 'awslogs'
-    action [:enable, :start]
+    action [:enable]
     only_if { node['bonusbits_base']['aws']['inside'] }
   end
 when 'windows'

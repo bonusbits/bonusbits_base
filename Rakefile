@@ -12,7 +12,7 @@ namespace :style do
   FoodCritic::Rake::LintTask.new(:chef) do |task|
     task.options = {
       fail_tags: ['correctness'],
-      chef_version: '12.18.31',
+      chef_version: '12.19.36',
       tags: %w(~FC001 ~FC019 ~FC016 ~FC039)
     }
   end
@@ -64,7 +64,7 @@ namespace :integration do
   end
 end
 
-desc 'Foodcritic, Rubocop & ChefSpec'
+desc 'Foodcritic & Rubocop'
 task default: %w(style:chef style:ruby)
 
 desc 'Foodcritic & Rubocop'

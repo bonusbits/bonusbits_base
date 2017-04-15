@@ -2,6 +2,30 @@
 state_file = /var/lib/awslogs/agent-state
 use_gzip_http_content_encoding = true
 
+[messages]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-messages" %>
+datetime_format = %b %d %H:%M:%S
+file = /var/log/messages
+
+[yum]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-yum" %>
+datetime_format = %b %d %H:%M:%S
+file = /var/log/yum.log
+
+[cron]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-cron" %>
+datetime_format = %b %d %H:%M:%S
+file = /var/log/cron
+
+[chef-client]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-chef-client" %>
+datetime_format = [%Y-%m-%dT%H:%M:%S-%z]
+file = /var/log/chef-client.log
+
 [cloud-init]
 log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
 log_stream_name = <%= "#{node['ec2']['instance_id']}-cloud-init" %>
@@ -25,8 +49,6 @@ log_stream_name = <%= "#{node['ec2']['instance_id']}-cfn-init-cmd" %>
 datetime_format = %Y-%m-%d %H:%M:%S,%f
 file = /var/log/cfn-init-cmd.log
 
-[yum]
-log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
-log_stream_name = <%= "#{node['ec2']['instance_id']}-yum" %>
-datetime_format = %b %d %H:%M:%S
-file = /var/log/yum.log
+<% node['bonusbits_base']['cloudwatch_logs']['additional_logs'].each do |content| %>
+<%= content %>
+<% end %>

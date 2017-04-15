@@ -43,7 +43,7 @@ Parameters:
     Default: latest
   ChefDkVersion:
     Type: String
-    Default: 1.2.22
+    Default: 1.3.40
   DataBagSecret:
     Type: String
     NoEcho: true
@@ -152,7 +152,7 @@ Outputs:
   # Generated
   AMI:
     Description: AMI Used.
-    Value: !FindInMap [ RegionMap, !Ref "AWS::Region", EBS ]
+    Value: !FindInMap [ RegionMap, !Ref "AWS::Region", amazon ]
   IAMRole:
     Description: IAM Instance Profile Role Created.
     Value: !Ref IamRole
@@ -162,52 +162,52 @@ Mappings:
       # Amazon Linux AMI 2017.03 was released on 2017-04-04
       # N. Virginia
       us-east-1:
-        EBS: ami-22ce4934
+        amazon: ami-22ce4934
       # Ohio
       us-east-2:
-        EBS: ami-7bfcd81e
+        amazon: ami-7bfcd81e
       # Oregon
       us-west-2:
-        EBS: ami-8ca83fec
+        amazon: ami-8ca83fec
       # N. California
       us-west-1:
-        EBS: ami-9e247efe
+        amazon: ami-9e247efe
       # Canada
       ca-central-1:
-        EBS: ami-8601bce2
+        amazon: ami-8601bce2
       # Ireland
       eu-west-1:
-        EBS: ami-e5083683
+        amazon: ami-e5083683
       # London
       eu-west-2:
-        EBS: ami-11130775
+        amazon: ami-11130775
       # Frankfurt
       eu-central-1:
-        EBS: ami-5b06d634
+        amazon: ami-5b06d634
       # Singapore
       ap-southeast-1:
-        EBS: ami-a2bc03c1
+        amazon: ami-a2bc03c1
       # Seoul
       ap-northeast-1:
-        EBS: ami-8369baed
+        amazon: ami-8369baed
       # Tokyo
       ap-northeast-2:
-        EBS: ami-859bbfe2
+        amazon: ami-859bbfe2
       # Sydney
       ap-southeast-2:
-        EBS: ami-8bf2fde8
+        amazon: ami-8bf2fde8
       # Mumbai
       ap-south-1:
-        EBS: ami-815625ee
+        amazon: ami-815625ee
       # Sao Paulo
       sa-east-1:
-        EBS: ami-a97013c5
+        amazon: ami-a97013c5
       # Beijing
       cn-north-1:
-        EBS: ami-b3d80ede
+        amazon: ami-b3d80ede
       # GovCloud
       us-gov-west-1:
-        EBS: ami-700a8f11
+        amazon: ami-700a8f11
 
 Conditions:
   # Condition for if SSH access not wanted for maybe a prd env
@@ -327,7 +327,7 @@ Resources:
       - IamInstanceProfile
     Properties:
       AssociatePublicIpAddress: false
-      ImageId: !FindInMap [ RegionMap, !Ref "AWS::Region", EBS ]
+      ImageId: !FindInMap [ RegionMap, !Ref "AWS::Region", amazon ]
       SecurityGroups: !Ref SecurityGroups
       InstanceType: !Ref InstanceType
       IamInstanceProfile: !Ref IamInstanceProfile
@@ -399,11 +399,11 @@ Resources:
               cwd: /opt/chef-repo
               command: !Sub "cp -R cookbooks/${CookbookName}/test/data_bags/${CookbookName} data_bags/"
             05_download_dependent_cookbook:
-              cwd: !Sub /opt/chef-repo/cookbooks/${CookbookName}
+              cwd: !Sub "/opt/chef-repo/cookbooks/${CookbookName}"
               command: !Sub "/opt/chefdk/embedded/bin/berks install"
             06_vendor_dependent_cookbook:
-              cwd: !Sub /opt/chef-repo/cookbooks/${CookbookName}
-              command: !Sub "/opt/chefdk/embedded/bin/berks vendor /opt/chef-repo/cookbooks/"
+              cwd: !Sub "/opt/chef-repo/cookbooks/${CookbookName}"
+              command: !Sub "export HOME=/root && /opt/chefdk/embedded/bin/berks vendor /opt/chef-repo/cookbooks/"
           files:
             "/opt/chef-repo/encrypted_data_bag_secret":
               content: !Sub ${DataBagSecret}
@@ -419,6 +419,9 @@ Resources:
                 role_path '/opt/chef-repo/roles'
                 chef_server_url 'http://127.0.0.1:8889'
                 encrypted_data_bag_secret '/opt/chef-repo/data_bags/encrypted_data_bag_secret'
+                log_level :info
+                log_location '/var/log/chef-client.log'
+                verify_api_cert false
             "/opt/chef-repo/environments/aws.json":
               content: !Sub |
                {
@@ -437,26 +440,10 @@ Resources:
                        }
                    }
                }
-            "/opt/chef-repo/roles/ec2.json":
-              content: !Sub |
-                {
-                  "name": "ec2",
-                  "description": "Role",
-                  "json_class": "Chef::Role",
-                  "default_attributes": {},
-                  "override_attributes": {
-                  },
-                  "chef_type": "role",
-                  "run_list": [
-                    "recipe[${CookbookName}]"
-                  ],
-                  "env_run_lists": {
-                  }
-                }
         run_chef_client:
           commands:
             01_run_chef:
-              command: "/opt/chefdk/bin/chef-client -z -o 'role[ec2]' --environment 'aws' --config /opt/chef-repo/client.rb --log_level info --force-formatter --chef-zero-port 8889"
+              command: !Sub "/opt/chefdk/bin/chef-client -z -o 'recipe[${CookbookName}]' --environment 'aws' --config /opt/chef-repo/client.rb --log_level info --force-formatter --chef-zero-port 8889"
         warm_ebs:
           commands:
             01_warm_ebs:

@@ -2,14 +2,14 @@ FROM amazonlinux:latest
 MAINTAINER Levon Becker "levon.docker@bonusbits.com"
 
 # Build Cookbook Args
-#ARG chef_client_version=12.18.31
-ARG chefdk_version=1.2.22
+#ARG chef_client_version=12.19.36
+ARG chefdk_version=1.3.40
 ARG cookbook_name=bonusbits_base
 ARG chef_role=base
 ARG chef_environment=bonusbits_base
 ARG chef_config_path=/opt/chef-repo
 
-LABEL version="2.1.1" \
+LABEL version="2.1.7" \
       description="Amazon Linux Image built from bonusbits_base cookbook." \
       github="https://github.com/bonusbits/bonusbits_base" \
       website="https://www.bonusbits.com"
@@ -34,18 +34,7 @@ COPY . cookbooks/${cookbook_name}/
 COPY test/roles/* roles/
 COPY test/environments/* environments/
 COPY test/data_bags/* data_bags/
-#COPY test/node/client.rb client.rb
-RUN printf $"node_name \'docker_node\'\n\
-checksum_path \'${chef_config_path}/checksums\'\n\
-file_cache_path \'${chef_config_path}/cache\'\n\
-file_backup_path \'${chef_config_path}/backup\'\n\
-cookbook_path \'${chef_config_path}/cookbooks\'\n\
-data_bag_path \'${chef_config_path}/data_bags\'\n\
-environment_path \'${chef_config_path}/environments\'\n\
-role_path \'${chef_config_path}/roles\'\n\
-chef_server_url \'http://127.0.0.1:8889\'\n\
-encrypted_data_bag_secret \'${chef_config_path}/data_bags/encrypted_data_bag_secret\'\n"\
-> client.rb
+COPY test/node/client.rb ${chef_config_path}/client.rb
 
 # Download Dependant Cookbooks
 WORKDIR ${chef_config_path}/cookbooks/${cookbook_name}

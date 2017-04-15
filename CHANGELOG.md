@@ -1,5 +1,28 @@
 ## CHANGE LOG
 
+## 2.1.7 - 04/15/2017 - Levon Becker
+* Switch Dockerfile to copy client.rb instead of creating it.
+* Added restart notification to /etc/awslogs/awscli.conf template resource
+* Added chef-client logging to client.rb for Docker
+* Added Deployment section to nodeinfo
+* Improved node content logic to dry up some code
+
+## 2.1.6 - 04/15/2017 - Levon Becker
+* Fixed CloudWatch Logs Config order so default with us-east-1 no longer left
+* Added CloudWatch Logs /var/log/chef-client.log stream
+* Added Client.rb updated to log chef run to /var/log/chef-client.log
+* CFN: Renamed AMI map last key from EBS to amazon
+* CFN: Removed role since just calling the recipe for run list and change chef run to call the recipe instead.
+
+## 2.1.5 - 04/13/2017 - Levon Becker
+* Upgraded and test with chefdk 1.3.40 / chef-client 12.19.36
+
+## 2.1.4 - 04/10/2017 - Levon Becker
+* Added windows cookbook dependent
+
+## 2.1.3 - 04/10/2017 - Levon Becker
+* Added /etc/sysconfig/network creation for Docker containers for Nginx type inits to work
+
 ## 2.1.2 - 04/10/2017 - Levon Becker
 * Fixed missing period in detect environment logic
 * Tweaked regex of rake tasks to be more flexible to test suite names
@@ -31,7 +54,7 @@
 
 ## 2.0.0 - 04/03/2017 - Levon Becker
 * Changed logic around EPEL repo for Amazon Linux. By Default EPEL repo is setup. I could add removal logic later if desired.
-* Bumped Chef Client Version to 12.18.31
+* Bumped Chef Client Version to 12.19.36
 * Added CloudWatch Logs configuration
 * Switched from ServerSpec to InSpec
 * Moved Inspec tests to profile repo so can be used by other cookbooks to check settings by this cookbook are correct [HERE](https://github.com/bonusbits/inspec_bonusbits_base)

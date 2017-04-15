@@ -26,11 +26,11 @@ I plan to work through the other distros over time.
 | :--- | :--- |
 | Mac OSX | 10.12.4 |
 | Docker | 17.03.1-ce, build c6d412e |
-| Chef Development Kit | 1.2.22 |
-| Chef-client | 12.18.31 |
+| Chef Development Kit | 1.3.40 |
+| Chef-client | 12.19.36 |
 
 
-# Attributes (TODO: WIP)
+# Attributes
 | Section          | Attribute                                          | Default                                                                                        | Type    | Description                                                        |
 | :--------------- | :------------------------------------------------- | :------                                                                                        | :------ | :----------------------------------------------------------------- |
 | Audit            | bonusbits_base:audit:configure                     | false                                                                                          | Boolean | only when deployed with dockerfile                                 |
@@ -302,7 +302,10 @@ Chef Roles:           (["base"])
 Chef Recipes:         (["bonusbits_base", "bonusbits_base::default"])
 ---------------------------------------------------------------
 ```
- 
+
+# Cookbook Dependencies
+![](images/cookbook_dependencies.png)
+
 # Testing
 * Style/Linting
     * Foodcritic and Rubocop
