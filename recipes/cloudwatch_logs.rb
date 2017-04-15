@@ -102,8 +102,8 @@ when 'linux'
   # Define Service
   service 'awslogs' do
     service_name 'awslogs'
-    action [:enable]
-    only_if { node['bonusbits_base']['aws']['inside'] }
+    action [:enable, :start]
+    only_if { inside_aws }
   end
 when 'windows'
   return
