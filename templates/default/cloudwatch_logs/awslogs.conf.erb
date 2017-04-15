@@ -30,3 +30,15 @@ log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'
 log_stream_name = <%= "#{node['ec2']['instance_id']}-yum" %>
 datetime_format = %b %d %H:%M:%S
 file = /var/log/yum.log
+
+[cron]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-cron" %>
+datetime_format = %b %d %H:%M:%S
+file = /var/log/cron
+
+[chef-client]
+log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
+log_stream_name = <%= "#{node['ec2']['instance_id']}-chef-client" %>
+datetime_format = [%Y-%m-%dT%H:%M:%S-%z]
+file = /var/log/chef-client.log

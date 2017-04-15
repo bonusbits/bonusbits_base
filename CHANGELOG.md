@@ -1,5 +1,12 @@
 ## CHANGE LOG
 
+## 2.1.6 - 04/15/2017 - Levon Becker
+* Fixed CloudWatch Logs Config order so default with us-east-1 no longer left
+* Added CloudWatch Logs /var/log/chef-client.log stream
+* Added Client.rb updated to log chef run to /var/log/chef-client.log
+* CFN: Renamed AMI map last key from EBS to amazon
+* CFN: Removed role since just calling the recipe for run list and change chef run to call the recipe instead.
+
 ## 2.1.5 - 04/13/2017 - Levon Becker
 * Upgraded and test with chefdk 1.3.40 / chef-client 12.19.36
 
