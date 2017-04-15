@@ -28,7 +28,7 @@ default['bonusbits_base']['deployment_type'] =
 
 # Determine Deployment Location
 default['bonusbits_base']['deployment_location'] =
-  if ENV['CIRCLECI']
+  if ENV['CIRCLECI'] == 'true'
     'circleci'
   elsif BonusBits::Discovery.aws?(node['fqdn'], node['platform_family'])
     'aws'
