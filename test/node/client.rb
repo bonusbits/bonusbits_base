@@ -8,3 +8,6 @@ environment_path '/opt/chef-repo/environments'
 role_path '/opt/chef-repo/roles'
 chef_server_url 'http://127.0.0.1:8889'
 encrypted_data_bag_secret '/opt/chef-repo/data_bags/encrypted_data_bag_secret'
+log_level :info
+log_location '/var/log/chef-client.log'
+verify_api_cert false

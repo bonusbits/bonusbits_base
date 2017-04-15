@@ -1,5 +1,12 @@
 ## CHANGE LOG
 
+## 2.1.7 - 04/15/2017 - Levon Becker
+* Switch Dockerfile to copy client.rb instead of creating it.
+* Added restart notification to /etc/awslogs/awscli.conf template resource
+* Added chef-client logging to client.rb for Docker
+* Added Deployment section to nodeinfo
+* Improved node content logic to dry up some code
+
 ## 2.1.6 - 04/15/2017 - Levon Becker
 * Fixed CloudWatch Logs Config order so default with us-east-1 no longer left
 * Added CloudWatch Logs /var/log/chef-client.log stream

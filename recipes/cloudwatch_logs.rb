@@ -1,3 +1,5 @@
+inside_aws = node['bonusbits_base']['aws']['inside']
+
 case node['os']
 when 'linux'
   case node['platform']
@@ -62,7 +64,7 @@ when 'linux'
       owner 'root'
       group 'root'
       mode '0755'
-      notifies :restart, 'service[awslogs]', :delayed
+      notifies :restart, 'service[awslogs]', :delayed if inside_aws
     end
   else
     return
@@ -74,6 +76,7 @@ when 'linux'
     owner 'root'
     group 'root'
     mode '0644'
+    notifies :restart, 'service[awslogs]', :delayed if inside_aws
   end
 
   # Deploy AWS CloudWatch Logs Proxy Config
@@ -82,7 +85,7 @@ when 'linux'
     owner 'root'
     group 'root'
     mode '0644'
-    notifies :restart, 'service[awslogs]', :delayed
+    notifies :restart, 'service[awslogs]', :delayed if inside_aws
     only_if { node['bonusbits_base']['proxy']['configure'] }
   end
 
@@ -93,15 +96,13 @@ when 'linux'
     group 'root'
     mode '0644'
     notifies :restart, 'service[awslogs]', :delayed
-    only_if { node['bonusbits_base']['aws']['inside'] } # Ohai EC2 Plugin Used
-    # Wrapper Cookbook Should Lay down this file with customizations
-    only_if { node['bonusbits_base']['cloudwatch_logs']['deploy_logs_conf'] }
+    only_if { inside_aws } # Ohai EC2 Plugin Used
   end
 
   # Define Service
   service 'awslogs' do
     service_name 'awslogs'
-    action [:enable, :start]
+    action [:enable]
     only_if { node['bonusbits_base']['aws']['inside'] }
   end
 when 'windows'
