@@ -27,6 +27,8 @@ default['bonusbits_base']['deployment_type'] =
   end
 
 # Determine Deployment Location
+## Circleci Logic Does not work if spawning Docker
+## containers in CircleCi because nested VM. Override in Kitchen Config
 default['bonusbits_base']['deployment_location'] =
   if ENV['CIRCLECI']
     'circleci'

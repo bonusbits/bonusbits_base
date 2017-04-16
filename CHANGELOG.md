@@ -1,5 +1,10 @@
 ## CHANGE LOG
 
+## 2.1.9 - 04/15/2017 - Levon Becker
+* Removed unnecessary attributes in kitchen config now that auto deployment discovery wrote.
+* Fixed CircleCI detection
+* Conditioned Selinux to not run if Docker
+
 ## 2.1.8 - 04/15/2017 - Levon Becker
 * Set to start awslogs at end of cloudwatch_logs recipe so it'll start streaming chef-client.log 
 

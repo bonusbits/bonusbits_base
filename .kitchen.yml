@@ -160,11 +160,6 @@ suites:
         chef_version: '12.19.36'
         inside_aws: 'true'
         configure_sudoers: 'true'
-    attributes:
-        bonusbits_base:
-          deployment_type: ec2
-          aws:
-            inside: true
     includes: ["amazon-ec2"]
 
   - name: ec2_base_epel_repo
@@ -211,11 +206,6 @@ suites:
         configure_sudoers: 'true'
         configure_epel: 'true'
         install_epel_packages: 'true'
-    attributes:
-        bonusbits_base:
-          deployment_type: ec2
-          aws:
-            inside: true
     includes: ["amazon-ec2"]
 
   - name: ec2_base_no_software
@@ -262,11 +252,6 @@ suites:
         configure_cloudwatch_logs: 'true'
         inside_aws: 'true'
         install_packages: 'false'
-    attributes:
-        bonusbits_base:
-          deployment_type: ec2
-          aws:
-            inside: true
     includes: ["amazon-ec2"]
 
   - name: docker_base
@@ -283,16 +268,12 @@ suites:
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         chef_version: '12.19.36'
-        inside_aws: 'false'
         configure_sudoers: 'true'
     attributes:
+      <% if ENV['CIRCLECI'] %>
       bonusbits_base:
-        deployment_type: docker
-        security:
-          selinux:
-            configure: false
-        aws:
-          inside: false
+        deployment_location: 'circleci'
+      <% end %>
     includes: ["amazon-docker"]
 
   - name: docker_base_epel_repo
@@ -309,18 +290,14 @@ suites:
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         chef_version: '12.19.36'
-        inside_aws: 'false'
         configure_sudoers: 'true'
         configure_epel: 'true'
         install_epel_packages: 'true'
     attributes:
+      <% if ENV['CIRCLECI'] %>
       bonusbits_base:
-        deployment_type: docker
-        security:
-          selinux:
-            configure: false
-        aws:
-          inside: false
+        deployment_location: 'circleci'
+      <% end %>
     includes: ["amazon-docker"]
 
   - name: docker_base_no_software
@@ -341,11 +318,8 @@ suites:
         install_packages: 'false'
         configure_sudoers: 'true'
     attributes:
+      <% if ENV['CIRCLECI'] %>
       bonusbits_base:
-        deployment_type: docker
-        security:
-          selinux:
-            configure: false
-        aws:
-          inside: false
+        deployment_location: 'circleci'
+      <% end %>
     includes: ["amazon-docker"]
