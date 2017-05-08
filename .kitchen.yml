@@ -120,6 +120,7 @@ suites:
   - name: ec2_base
     provisioner:
       name: chef_zero
+      always_update_cookbooks: true
       require_chef_omnibus: 12.19.36
       data_bags_path: test/data_bags
       encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
@@ -153,18 +154,16 @@ suites:
       inspec_tests:
         - name: bootstrap
           git: https://github.com/bonusbits/inspec_bootstrap.git
-#        - path: test/inspec_bonusbits_base
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         chef_version: '12.19.36'
-        inside_aws: 'true'
-        configure_sudoers: 'true'
     includes: ["amazon-ec2"]
 
   - name: ec2_base_epel_repo
     provisioner:
       name: chef_zero
+      always_update_cookbooks: true
       require_chef_omnibus: 12.19.36
       data_bags_path: test/data_bags
       encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
@@ -202,8 +201,6 @@ suites:
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         chef_version: '12.19.36'
-        inside_aws: 'true'
-        configure_sudoers: 'true'
         configure_epel: 'true'
         install_epel_packages: 'true'
     includes: ["amazon-ec2"]
@@ -249,8 +246,6 @@ suites:
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         chef_version: '12.19.36'
-        configure_cloudwatch_logs: 'true'
-        inside_aws: 'true'
         install_packages: 'false'
     includes: ["amazon-ec2"]
 
@@ -268,7 +263,6 @@ suites:
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         chef_version: '12.19.36'
-        configure_sudoers: 'true'
     attributes:
       <% if ENV['CIRCLECI'] %>
       bonusbits_base:
@@ -290,7 +284,6 @@ suites:
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         chef_version: '12.19.36'
-        configure_sudoers: 'true'
         configure_epel: 'true'
         install_epel_packages: 'true'
     attributes:
@@ -314,9 +307,7 @@ suites:
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         chef_version: '12.19.36'
-        inside_aws: 'false'
         install_packages: 'false'
-        configure_sudoers: 'true'
     attributes:
       <% if ENV['CIRCLECI'] %>
       bonusbits_base:

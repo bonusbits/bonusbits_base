@@ -22,7 +22,7 @@ I plan to work through the other distros over time.
     * 2016
 
 # Successfully Tested Versions
-| Driver | Version |
+| Software | Version |
 | :--- | :--- |
 | Mac OSX | 10.12.4 |
 | Docker | 17.03.1-ce, build c6d412e |
