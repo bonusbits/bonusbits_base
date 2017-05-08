@@ -241,7 +241,6 @@ suites:
       inspec_tests:
         - name: bootstrap
           git: https://github.com/bonusbits/inspec_bootstrap.git
-#        - path: test/inspec_bonusbits_base
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
