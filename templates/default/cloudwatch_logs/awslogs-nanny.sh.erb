@@ -1,0 +1,11 @@
+#!/bin/sh
+# Version: 1.1.2-rpm
+
+# This script will restart the awslogs service if it has died
+
+service awslogs status >/dev/null
+status=$?
+
+if [ "$status" -eq "1" -o "$status" -eq "2" ]; then
+    service awslogs restart
+fi
