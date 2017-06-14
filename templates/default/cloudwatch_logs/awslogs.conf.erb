@@ -1,49 +1,65 @@
 [general]
-state_file = /var/lib/awslogs/agent-state
+state_file = <%= @state_file %>
 use_gzip_http_content_encoding = true
 
 [messages]
+buffer_duration = 5000
+initial_position = start_of_file
 log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
 log_stream_name = <%= "#{node['ec2']['instance_id']}-messages" %>
 datetime_format = %b %d %H:%M:%S
 file = /var/log/messages
 
 [yum]
+buffer_duration = 5000
+initial_position = start_of_file
 log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
 log_stream_name = <%= "#{node['ec2']['instance_id']}-yum" %>
 datetime_format = %b %d %H:%M:%S
 file = /var/log/yum.log
 
 [cron]
+buffer_duration = 5000
+initial_position = start_of_file
 log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
 log_stream_name = <%= "#{node['ec2']['instance_id']}-cron" %>
 datetime_format = %b %d %H:%M:%S
 file = /var/log/cron
 
 [chef-client]
+buffer_duration = 5000
+initial_position = start_of_file
 log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
 log_stream_name = <%= "#{node['ec2']['instance_id']}-chef-client" %>
 datetime_format = [%Y-%m-%dT%H:%M:%S-%z]
 file = /var/log/chef-client.log
 
 [cloud-init]
+buffer_duration = 5000
+initial_position = start_of_file
 log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
 log_stream_name = <%= "#{node['ec2']['instance_id']}-cloud-init" %>
 datetime_format = %b %d %H:%M:%S
 file = /var/log/cloud-init.log
 
 [cloud-init-output]
+buffer_duration = 5000
+initial_position = start_of_file
 log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
 log_stream_name = <%= "#{node['ec2']['instance_id']}-cloud-init-output" %>
 file = /var/log/cloud-init-output.log
 
 [cfn-init]
+buffer_duration = 5000
+initial_position = start_of_file
 log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
 log_stream_name = <%= "#{node['ec2']['instance_id']}-cfn-init" %>
 datetime_format = %Y-%m-%d %H:%M:%S,%f
 file = /var/log/cfn-init.log
 
 [cfn-init-cmd]
+buffer_duration = 5000
+initial_position = start_of_file
 log_group_name = <%= node['bonusbits_base']['cloudwatch_logs']['logs_group_name'] %>
 log_stream_name = <%= "#{node['ec2']['instance_id']}-cfn-init-cmd" %>
 datetime_format = %Y-%m-%d %H:%M:%S,%f

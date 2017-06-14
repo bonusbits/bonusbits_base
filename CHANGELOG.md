@@ -1,5 +1,12 @@
 ## CHANGE LOG
 
+## 2.2.0 - 05/19/2017 - Levon Becker
+* Updated Cloudwatch Logs logic for CentOS and RHEL support.
+* Switched to using bonusbits_library shell library to DRY up some code
+* Added Cookbook version badge to README
+* Added untested draft of backup to s3 logic
+* Added untested draft of Cloudwatch monitoring agent setup
+
 ## 2.1.9 - 04/15/2017 - Levon Becker
 * Removed unnecessary attributes in kitchen config now that auto deployment discovery wrote.
 * Fixed CircleCI detection

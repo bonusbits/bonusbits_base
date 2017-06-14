@@ -1,5 +1,6 @@
 # Bonus Bits Base Cookbook
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
+[![Chef cookbook](https://img.shields.io/badge/cookbook-v2.2.0-blue.svg)](https://github.com/bonusbits/bonusbits_base)
 [![Join the chat at https://gitter.im/bonusbits/bonusbits_base](https://badges.gitter.im/bonusbits/bonusbits_base.svg)](https://gitter.im/bonusbits/bonusbits_base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # Purpose

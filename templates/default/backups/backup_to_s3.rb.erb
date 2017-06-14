@@ -1,0 +1,197 @@
+#!/usr/bin/env ruby
+
+# Libraries
+require 'optparse'
+require 'pp'
+require 'fileutils'
+require 'logger'
+require 'open3'
+require 'rubygems/package'
+require 'zlib'
+
+# # Manual Testing Examples
+# @tmp_dir = '/tmp/backups'
+# @options['backup_path'] = '/'
+# @options['s3_full_path'] = 'bucket/backups/instanceid-backup.tar.gz'
+# @options['region'] = 'us-west-2'
+# @options['log_file'] = '/var/log/backups.log'
+# nohup /opt/chef/embedded/bin/ruby /usr/bin/backup_to_s3.rb &
+
+# Global Variables
+@script_version = '2.0.0'
+@time_stamp = Time.now.utc.strftime('%Y%m%d-%H%M%S')
+@date_time = Time.now.utc.strftime('%Y%m%d-%H%M')
+@tmp_dir = <%= node['bonusbits_base']['backups']['local_tmp_path'] %>
+@tmp_tar_name = "backup-#{@date_time}.tar"
+@tmp_tgz_name = "backup-#{@date_time}.tar.gz"
+@tmp_tar_fullname = "#{@tmp_dir}/#{@tmp_tar_name}"
+@tmp_tgz_fullname = "#{@tmp_dir}/#{@tmp_tgz_name}"
+
+# Defaults Options
+@options = Hash.new
+@options['backup_path'] = <%= node['bonusbits_base']['backups']['backup_path'] %>
+@options['s3_full_path'] = <%= node['bonusbits_base']['backups']['s3_full_path'] %>
+@options['log_file'] = <%= node['bonusbits_base']['backups']['log_path'] %>
+@options['region'] = <%= node['bonusbits_base']['aws']['region'] %>
+
+options_parser = OptionParser.new do |opts|
+  opts.banner = 'Usage: backup_to_s3.rb [OPTIONS]'
+  opts.separator ''
+  opts.separator 'Options:'
+  opts.on('-b', '--backup-path FULLNAME', 'Backup Full Path') do |opt|
+    @options['backup_path'] = opt
+  end
+  opts.on('-s', '--s3-fullpath FULLNAME', 'Full S3 Path (Not URL)') do |opt|
+    @options['s3_full_path'] = opt
+  end
+  opts.on('-p', '--logfile-path FULLNAME', 'Log File Path') do |opt|
+    @options['log_file'] = opt
+  end
+  opts.on('-l', '--log-level LOGLEVEL', 'Log Output Level (info, warn, debug or fatal)') do |opt|
+    @options['log_level'] = opt
+  end
+  opts.on('-h', '--help', '(Flag) Show this message') do
+    puts opts
+    exit 0
+  end
+  opts.on('-v', '--version', '(Flag) Output Script Version') do
+    puts "Backup to S3 v#{@script_version}"
+    exit 0
+  end
+end
+options_parser.parse(ARGV)
+
+def init_logger
+  @logger = Logger.new(@options['log_file'])
+  @logger.level = Object.const_get("Logger::#{@options['log_level'].upcase}") rescue Logger::INFO
+  @logger.progname = 'Backup to S3'
+  @logger.formatter = proc do |severity, datetime, _progname, msg|
+    date_format = datetime.strftime('%Y-%m-%d %H:%M:%S')
+    puts "[#{date_format}] #{severity}: #{msg}"
+    "[#{date_format}] #{severity}: #{msg}\n"
+  end
+end
+
+def show_header
+  @logger.info '**** STARTING BACKUP ****'
+  @logger.info "Backup to S3 v#{@script_version} | Ruby v#{RUBY_VERSION} | by Levon Becker"
+  @logger.info ''
+  @logger.debug "Backup Path:       (#{@options['backup_path']})"
+  @logger.debug "S3 Full Path:      (#{@options['s3_full_path']})"
+  @logger.debug "Temp Directory:    (#{@tmp_dir})"
+  @logger.debug "Temp Tar Name:     (#{@tmp_tar_name})"
+  @logger.debug "Temp TGZ Name:     (#{@tmp_tgz_name})"
+  @logger.debug "Temp Tar FullName: (#{@tmp_tar_fullname})"
+  @logger.debug "Temp TGZ FullName: (#{@tmp_tgz_fullname})"
+  @logger.debug "Logfile:           (#{@options['log_file']})"
+  @logger.debug "Log Level:         (#{@options['log_level']})"
+end
+
+def show_footer(start_time, end_time, run_time)
+  @logger.info "Start Time:        #{start_time}"
+  @logger.info "End Time:          #{end_time}"
+  @logger.info "Run Time:          #{run_time}"
+  @logger.info '**** FINISHED BACKUP ****'
+end
+
+def cleanup_tmp
+  @logger.info 'Cleaning up Temp'
+  return unless File.directory?(@tmp_dir)
+  @logger.info "Deleting Temp Path Contents (#{@tmp_dir}/**/*)"
+  FileUtils.rm_rf(Dir.glob("#{@tmp_dir}/**/*", File::FNM_DOTMATCH))
+end
+
+def create_tmp
+  @logger.info 'Creating Temp Directory'
+  FileUtils.mkdir_p(@tmp_dir) unless File.directory?(@tmp_dir)
+end
+
+def time_diff(start_time, end_time)
+  Time.at((start_time - end_time).round.abs).utc.strftime('%H:%M:%S')
+end
+
+def run_command(shell_command, sensitive = false)
+  # Set sensitive to true if you don't want outputs that may have secrets
+  # Run Shell Command and Capture StrOut, StrErr, and Status
+  @logger.debug("Open3: Shell Command (#{shell_command})") unless sensitive
+  out, err, status = Open3.capture3(shell_command)
+  @logger.debug("Open3: Status (#{status})")
+  @logger.debug("Open3: Standard Out (#{out})") unless sensitive
+  successful = status.success?
+  @logger.debug("Open3: Successful? (#{successful})")
+  @logger.debug("Open3: Error Out (#{err})") unless successful
+  successful
+end
+
+def run_command_return_strout(shell_command, sensitive = false)
+  # Set sensitive to true if you don't want outputs that may have secrets
+  # Run Shell Command and Capture StrOut, StrErr, and Status
+  # Return StrOut
+  @logger.debug("Open3: Shell Command (#{shell_command})") unless sensitive
+  out, err, status = Open3.capture3(shell_command)
+  @logger.debug("Open3: Status (#{status})")
+  @logger.debug("Open3: Standard Out (#{out})") unless sensitive
+  successful = status.success?
+  @logger.debug("Open3: Successful? (#{successful})")
+  @logger.debug("Open3: Error Out (#{err})") unless successful
+  out
+end
+
+def check_space
+  @logger.info 'Checking Free Space'
+  source_size_mb = run_command_return_strout("du -sm #{@options['backup_path']} | awk '{print $1}'").strip.to_i
+  target_free_space_mb = run_command_return_strout('df -m / | awk \'{print $4}\' | grep -vE \'^Available\'').strip.to_i
+  @logger.info "Source Size in MB (#{source_size_mb})"
+  @logger.debug "Source Size x2 for Gzip Space in MB (#{source_size_mb * 2})"
+  @logger.info "Target Free Space in MB (#{target_free_space_mb})"
+  @logger.debug "Target Minus Double Source (#{target_free_space_mb - (source_size_mb * 2)})"
+  # Need double the space because tar and tar.gz are there at same time temporarily
+  if target_free_space_mb > (source_size_mb * 2)
+    @logger.info 'Temp Backup Space OK'
+    true
+  else
+    @logger.error 'Not Enough Local Free Disk Space to Backups!'
+    false
+  end
+end
+
+def tar_backup_path
+  @logger.info 'Creating Tar'
+  run_command("tar -cf \"#{@tmp_tar_fullname}\" \"#{@options['backup_path']}/\"* | tee -a #{@options['log_file']}")
+end
+
+def gzip_tar
+  @logger.info 'Compressing Tar'
+  Zlib::GzipWriter.open(@tmp_tgz_fullname) do |gz|
+    File.open(@tmp_tar_fullname) do |fp|
+      while chunk = fp.read(25600 * 1024) do # rubocop:disable Lint/AssignmentInCondition
+        gz.write chunk
+      end
+    end
+    gz.close
+  end
+end
+
+def s3_upload
+  @logger.info '** Uploading Tar to S3 **'
+  run_command("aws s3 cp #{@tmp_tgz_fullname} s3://#{@options['s3_full_path']} --sse --region #{@options['region']}")
+end
+
+def run
+  init_logger
+  show_header
+  start_time = Time.now
+  create_tmp
+  cleanup_tmp
+  raise unless check_space
+  tar_backup_path
+  gzip_tar
+  s3_upload
+  cleanup_tmp
+  end_time = Time.now
+  run_time = time_diff(start_time, end_time)
+  show_footer(start_time, end_time, run_time)
+end
+
+# Run
+run

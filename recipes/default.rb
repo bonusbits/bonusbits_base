@@ -46,5 +46,11 @@ include_recipe 'bonusbits_base::bash_profile' if node['bonusbits_base']['bash_pr
 # Configure BonusBits Bash Profile
 include_recipe 'bonusbits_base::docker' if node['bonusbits_base']['docker']['deploy_sysconfig_network']
 
+# Setup Backups
+include_recipe 'bonusbits_base::cloudwatch' if node['bonusbits_base']['cloudwatch']['configure']
+
+# Setup Backups
+include_recipe 'bonusbits_base::backups' if node['bonusbits_base']['backups']['configure']
+
 # Run InSpec Tests
 include_recipe 'audit' if node['bonusbits_base']['audit']['configure']
