@@ -11,17 +11,17 @@ require 'zlib'
 
 # # Manual Testing Examples
 # @tmp_dir = '/tmp/backups'
-# @options['backup_path'] = '/'
+# @options['backup_paths'] = '/'
 # @options['s3_full_path'] = 'bucket/backups/instanceid-backup.tar.gz'
 # @options['region'] = 'us-west-2'
 # @options['log_file'] = '/var/log/backups.log'
 # nohup /opt/chef/embedded/bin/ruby /usr/bin/backup_to_s3.rb &
 
 # Global Variables
-@script_version = '2.0.0'
+@script_version = '1.0.0'
 @time_stamp = Time.now.utc.strftime('%Y%m%d-%H%M%S')
 @date_time = Time.now.utc.strftime('%Y%m%d-%H%M')
-@tmp_dir = <%= node['bonusbits_base']['backups']['local_tmp_path'] %>
+@tmp_dir = '<%= node['bonusbits_base']['backups']['local_tmp_path'] %>'
 @tmp_tar_name = "backup-#{@date_time}.tar"
 @tmp_tgz_name = "backup-#{@date_time}.tar.gz"
 @tmp_tar_fullname = "#{@tmp_dir}/#{@tmp_tar_name}"
@@ -29,17 +29,17 @@ require 'zlib'
 
 # Defaults Options
 @options = Hash.new
-@options['backup_path'] = <%= node['bonusbits_base']['backups']['backup_path'] %>
-@options['s3_full_path'] = <%= node['bonusbits_base']['backups']['s3_full_path'] %>
-@options['log_file'] = <%= node['bonusbits_base']['backups']['log_path'] %>
-@options['region'] = <%= node['bonusbits_base']['aws']['region'] %>
+@options['backup_paths'] = <%= node['bonusbits_base']['backups']['backup_paths'] %>
+@options['s3_full_path'] = '<%= node['bonusbits_base']['backups']['s3_full_path'] %>'
+@options['log_file'] = '<%= node['bonusbits_base']['backups']['log_path'] %>'
+@options['region'] = '<%= node['bonusbits_base']['aws']['region'] %>'
 
 options_parser = OptionParser.new do |opts|
   opts.banner = 'Usage: backup_to_s3.rb [OPTIONS]'
   opts.separator ''
   opts.separator 'Options:'
-  opts.on('-b', '--backup-path FULLNAME', 'Backup Full Path') do |opt|
-    @options['backup_path'] = opt
+  opts.on('-b', '--backup-paths FULLNAME', 'Array of Backup Full Paths') do |opt|
+    @options['backup_paths'] = opt
   end
   opts.on('-s', '--s3-fullpath FULLNAME', 'Full S3 Path (Not URL)') do |opt|
     @options['s3_full_path'] = opt
@@ -76,7 +76,7 @@ def show_header
   @logger.info '**** STARTING BACKUP ****'
   @logger.info "Backup to S3 v#{@script_version} | Ruby v#{RUBY_VERSION} | by Levon Becker"
   @logger.info ''
-  @logger.debug "Backup Path:       (#{@options['backup_path']})"
+  @logger.debug "Backup Path:       (#{@options['backup_paths']})"
   @logger.debug "S3 Full Path:      (#{@options['s3_full_path']})"
   @logger.debug "Temp Directory:    (#{@tmp_dir})"
   @logger.debug "Temp Tar Name:     (#{@tmp_tar_name})"
@@ -92,6 +92,7 @@ def show_footer(start_time, end_time, run_time)
   @logger.info "End Time:          #{end_time}"
   @logger.info "Run Time:          #{run_time}"
   @logger.info '**** FINISHED BACKUP ****'
+  @logger.info ''
 end
 
 def cleanup_tmp
@@ -139,7 +140,17 @@ end
 
 def check_space
   @logger.info 'Checking Free Space'
-  source_size_mb = run_command_return_strout("du -sm #{@options['backup_path']} | awk '{print $1}'").strip.to_i
+  @logger.debug "Backup Paths Class #{@options['backup_paths'].class}"
+  @logger.debug "Backup Paths Values #{@options['backup_paths']}"
+  source_size_mb = 0
+  @options['backup_paths'].each do |path|
+    @logger.info "Adding Source Size (#{path})"
+    if path == '/'
+      source_size_mb += run_command_return_strout("df -km --output=avail '#{path}' | tail -n1").strip.to_i
+    else
+      source_size_mb += run_command_return_strout("du -sm '#{path}' | awk '{print $1}'").strip.to_i
+    end
+  end
   target_free_space_mb = run_command_return_strout('df -m / | awk \'{print $4}\' | grep -vE \'^Available\'').strip.to_i
   @logger.info "Source Size in MB (#{source_size_mb})"
   @logger.debug "Source Size x2 for Gzip Space in MB (#{source_size_mb * 2})"
@@ -155,9 +166,21 @@ def check_space
   end
 end
 
-def tar_backup_path
+def tar_backup_paths
   @logger.info 'Creating Tar'
-  run_command("tar -cf \"#{@tmp_tar_fullname}\" \"#{@options['backup_path']}/\"* | tee -a #{@options['log_file']}")
+  count = 0
+  @options['backup_paths'].each do |backup_path|
+    @logger.debug "Count (#{count})"
+    @logger.info "Backing up (#{backup_path})"
+    if count == 0
+      @logger.debug "Creating Tar (#{backup_path})"
+      run_command("tar -cf \"#{@tmp_tar_fullname}\" \"#{backup_path}/\"* | tee -a #{@options['log_file']}")
+    else
+      @logger.debug "Appending to Tar (#{backup_path})"
+      run_command("tar -rf \"#{@tmp_tar_fullname}\" \"#{backup_path}/\"* | tee -a #{@options['log_file']}")
+    end
+    count += 1
+  end
 end
 
 def gzip_tar
@@ -173,7 +196,7 @@ def gzip_tar
 end
 
 def s3_upload
-  @logger.info '** Uploading Tar to S3 **'
+  @logger.info 'Uploading Tar to S3'
   run_command("aws s3 cp #{@tmp_tgz_fullname} s3://#{@options['s3_full_path']} --sse --region #{@options['region']}")
 end
 
@@ -184,7 +207,7 @@ def run
   create_tmp
   cleanup_tmp
   raise unless check_space
-  tar_backup_path
+  tar_backup_paths
   gzip_tar
   s3_upload
   cleanup_tmp

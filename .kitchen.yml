@@ -154,10 +154,12 @@ suites:
       inspec_tests:
         - name: bootstrap
           git: https://github.com/bonusbits/inspec_bootstrap.git
-        - name: bonusbits_base
-          git: https://github.com/bonusbits/inspec_bonusbits_base.git
+#        - name: bonusbits_base
+#          git: https://github.com/bonusbits/inspec_bonusbits_base.git
+        - path: ../inspec_bonusbits_base
       attributes:
         chef_version: '12.19.36'
+        configure_backups: 'true'
     includes: ["amazon-ec2"]
 
   - name: ec2_base_epel_repo
@@ -260,6 +262,7 @@ suites:
           git: https://github.com/bonusbits/inspec_bootstrap.git
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
+#        - path: ../inspec_bonusbits_base
       attributes:
         chef_version: '12.19.36'
     attributes:

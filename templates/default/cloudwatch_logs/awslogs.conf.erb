@@ -65,6 +65,8 @@ log_stream_name = <%= "#{node['ec2']['instance_id']}-cfn-init-cmd" %>
 datetime_format = %Y-%m-%d %H:%M:%S,%f
 file = /var/log/cfn-init-cmd.log
 
+<% unless node['bonusbits_base']['cloudwatch_logs']['additional_logs'].nil? %>
 <% node['bonusbits_base']['cloudwatch_logs']['additional_logs'].each do |content| %>
 <%= content %>
+<% end %>
 <% end %>

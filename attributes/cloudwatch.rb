@@ -1,5 +1,5 @@
 default['bonusbits_base']['cloudwatch'].tap do |cloudwatch|
-  cloudwatch['configure'] = false
+  cloudwatch['configure'] = true
 
   # Monitoring Scripts (AWS Examples Default)
   cloudwatch['zip_filename'] = 'CloudWatchMonitoringScripts-1.2.1.zip'
