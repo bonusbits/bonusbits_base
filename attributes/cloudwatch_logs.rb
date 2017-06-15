@@ -1,6 +1,6 @@
 default['bonusbits_base']['cloudwatch_logs']['configure'] = true
 default['bonusbits_base']['cloudwatch_logs']['logs_group_name'] = 'kitchen-bonusbits-base'
-# default['bonusbits_base']['cloudwatch_logs']['additional_logs'] = nil
+default['bonusbits_base']['cloudwatch_logs']['additional_logs'] = nil
 # additional_logs = node['bonusbits_base']['cloudwatch_logs']['additional_logs'].nil? ? false : true
 
 # Debug

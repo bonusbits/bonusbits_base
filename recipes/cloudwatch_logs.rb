@@ -6,77 +6,101 @@ when 'linux'
   when 'amazon'
     # Install CloudWatch Logs Agent
     package 'awslogs'
-  when 'centos', 'redhat', 'ubuntu' # ~FC024
-    package 'python'
 
-    # TODO: Needed?
-    directory '/etc/awslogs' do
+    # Deploy AWS CLI Config
+    template '/etc/awslogs/awscli.conf' do
+      source 'cloudwatch_logs/awscli.conf.erb'
       owner 'root'
       group 'root'
-      mode '0755'
+      mode '0644'
+    end
+
+    # Deploy AWS CloudWatch Logs Config
+    template '/etc/awslogs/awslogs.conf' do
+      source 'cloudwatch_logs/awslogs.conf.erb'
+      owner 'root'
+      group 'root'
+      mode '0644'
+      variables(
+        state_file: '/var/lib/awslogs/agent-state'
+      )
+      notifies :restart, 'service[awslogs]', :delayed
+      only_if { inside_aws } # Template calls ohai ec2
+    end
+  when 'centos', 'redhat' # ~FC024
+    package %w(python python-setuptools)
+
+    # Create Symlink to configs.
+    ## So if used to looking for the configs where the RPM installs.
+    ## Plus can DRY a little code (proxy template)
+    link '/etc/awslogs' do
+      to '/var/awslogs/etc'
+      owner 'root'
+      group 'root'
     end
 
     local_download_temp = node['bonusbits_base']['local_file_cache']
+    # Deploy AWS CloudWatch Logs Config
+    ## Dumb non-interactive option requires a awslogs.conf.
+    ## Instead of letting you write it after install and restarting service. So, this is the workaround
+    ## This is basically the awslogs.conf put in a temp location and renamed
+    template "#{local_download_temp}/cwlogs.cfg" do
+      source 'cloudwatch_logs/awslogs.conf.erb'
+      owner 'root'
+      group 'root'
+      mode '0644'
+      notifies :restart, 'service[awslogs]', :delayed if inside_aws
+    end
+
     # Install CloudWatch Logs Agent
-    ruby_block 'Install CloudWatch Logs Agent' do
+    ruby_block 'Download CloudWatch Logs Agent Setup Script' do
       block do
         download_url = 'https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py'
-        bash_command = "curl #{download_url} -o #{local_download_temp}/awslogs-agent-setup.py"
-
-        # Run Bash Script and Capture StrOut, StrErr, and Status
-        require 'open3'
-        Chef::Log.warn("Open3: BASH Command (#{bash_command})")
-        out, err, status = Open3.capture3(bash_command)
-        Chef::Log.warn("Open3: Status (#{status})")
-        Chef::Log.warn("Open3: Standard Out (#{out})")
-        unless status.success?
-          Chef::Log.warn("Open3: Error Out (#{err})")
-          raise 'Failed!'
-        end
+        shell_command = "curl -k #{download_url} -o #{local_download_temp}/awslogs-agent-setup.py"
+        successful = BonusBits::Shell.run_command(shell_command)
+        raise 'ERROR: Failed to Download CloudWatch Logs Agent Setup Script!' unless successful
       end
       action :run
       not_if { ::File.exist?("#{local_download_temp}/awslogs-agent-setup.py") }
+      notifies :run, 'ruby_block[run_cloudwatch_logs_agent_setup]', :immediately
     end
 
     # Run Agent Setup
-    ruby_block 'Run CloudWatch Logs Agent Setup' do
+    ruby_block 'run_cloudwatch_logs_agent_setup' do
       block do
-        bash_command = "python #{local_download_temp}/awslogs-agent-setup.py --region #{node['bonusbits_base']['aws']['region']} --non-interactive --configfile=/etc/awslogs/awscli.conf"
-
-        # Run Bash Script and Capture StrOut, StrErr, and Status
-        require 'open3'
-        Chef::Log.warn("Open3: BASH Command (#{bash_command})")
-        out, err, status = Open3.capture3(bash_command)
-        Chef::Log.warn("Open3: Status (#{status})")
-        Chef::Log.warn("Open3: Standard Out (#{out})")
-        unless status.success?
-          Chef::Log.warn("Open3: Error Out (#{err})")
-          raise 'Failed!'
-        end
+        shell_command = "python #{local_download_temp}/awslogs-agent-setup.py -n -r"
+        shell_command += " #{node['c1_jenkins2x']['aws']['region']} -c #{local_download_temp}/cwlogs.cfg"
+        successful = BonusBits::Shell.run_command(shell_command)
+        raise 'ERROR: Failed to Run Cloudwatch Logs Agent Setup!' unless successful
       end
-      action :run
-      # not_if { ::File.exist?(?????) } # TODO: Add Condition or want to blow up if not there?
+      action :nothing
+      not_if { ::File.exist?('/etc/init.d/awslogs') }
     end
 
-    # Deploy AWS CloudWatch Logs Init Script
-    template '/etc/init.d/awslogs' do
-      source 'cloudwatch_logs/awslogs.init.sh.erb'
+    # Deploy AWS Config
+    # Diff aws cli config name then RPM Install
+    template '/var/awslogs/etc/aws.conf' do
+      source 'cloudwatch_logs/awscli.conf.erb'
       owner 'root'
       group 'root'
-      mode '0755'
-      notifies :restart, 'service[awslogs]', :delayed if inside_aws
+      mode '0644'
+    end
+
+    # Deploy AWS CloudWatch Logs Config
+    ## Diff State file path then RPM Install
+    template '/var/awslogs/etc/awslogs.conf' do
+      source 'cloudwatch_logs/awslogs.conf.erb'
+      owner 'root'
+      group 'root'
+      mode '0644'
+      variables(
+        state_file: '/var/awslogs/state/agent-state'
+      )
+      notifies :restart, 'service[awslogs]', :delayed
+      only_if { inside_aws } # Template calls ohai ec2
     end
   else
     return
-  end
-
-  # Deploy AWS CLI Config
-  template '/etc/awslogs/awscli.conf' do
-    source 'cloudwatch_logs/awscli.conf.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
-    notifies :restart, 'service[awslogs]', :delayed if inside_aws
   end
 
   # Deploy AWS CloudWatch Logs Proxy Config
@@ -87,16 +111,6 @@ when 'linux'
     mode '0644'
     notifies :restart, 'service[awslogs]', :delayed if inside_aws
     only_if { node['bonusbits_base']['proxy']['configure'] }
-  end
-
-  # Deploy AWS CloudWatch Logs Config
-  template '/etc/awslogs/awslogs.conf' do
-    source 'cloudwatch_logs/awslogs.conf.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
-    notifies :restart, 'service[awslogs]', :delayed
-    only_if { inside_aws } # Ohai EC2 Plugin Used
   end
 
   # Define Service

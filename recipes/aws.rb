@@ -6,18 +6,9 @@ when 'linux'
   # Run Profile Script
   ruby_block 'source_aws_profile_script' do
     block do
-      bash_command = '. /etc/profile.d/aws.sh'
-
-      # Run Bash Script and Capture StrOut, StrErr, and Status
-      require 'open3'
-      Chef::Log.warn("Open3: BASH Command (#{bash_command})")
-      out, err, status = Open3.capture3(bash_command)
-      Chef::Log.warn("Open3: Status (#{status})")
-      Chef::Log.warn("Open3: Standard Out (#{out})")
-      unless status.success?
-        Chef::Log.warn("Open3: Error Out (#{err})")
-        raise 'Failed!'
-      end
+      shell_command = 'source /etc/profile.d/aws.sh'
+      successful = BonusBits::Shell.run_command(shell_command)
+      raise 'ERROR: Failed to Source AWS Profile Script!' unless successful
     end
     action :nothing
     not_if do
@@ -44,12 +35,22 @@ end
 if node['bonusbits_base']['aws']['install_tools']
   case node['platform']
   when 'redhat'
-    # TODO: WIP
-    # Install Pip (Requires EPEL)
-    package 'python-pip'
-    # Install with curl
-    # 'curl -O https://bootstrap.pypa.io/get-pip.py'
-    # 'python3 get-pip.py --user'
+    package %w(python python-setuptools)
+
+    # Install Latest Pip (~> 9.)
+    ruby_block 'Install Pip' do
+      block do
+        shell_command = 'easy_install pip'
+        successful = BonusBits::Shell.run_command(shell_command)
+        raise 'ERROR: Failed to Install PIP!' unless successful
+      end
+      action :run
+      not_if do
+        shell_command = 'pip --version'
+        out = BonusBits::Shell.run_command_return_strout(shell_command)
+        out =~ /^pip 9\./
+      end
+    end
 
     # Deploy Bash Profile Script for AWS CLI Pip Install Path
     template '/etc/profile.d/awscli.sh' do
@@ -67,20 +68,11 @@ if node['bonusbits_base']['aws']['install_tools']
     # Install AWS CLI
     ruby_block 'Install AWS CLI' do
       block do
-        bash_command = 'pip install --upgrade awscli -t /opt/awscli'
-
-        # Run Bash Script and Capture StrOut, StrErr, and Status
-        require 'open3'
-        Chef::Log.warn("Open3: BASH Command (#{bash_command})")
-        out, err, status = Open3.capture3(bash_command)
-        Chef::Log.warn("Open3: Status (#{status})")
-        Chef::Log.warn("Open3: Standard Out (#{out})")
-        unless status.success?
-          Chef::Log.warn("Open3: Error Out (#{err})")
-          raise 'Failed!'
-        end
+        shell_command = 'pip install --upgrade awscli -t /opt/awscli'
+        successful = BonusBits::Shell.run_command(shell_command)
+        raise 'ERROR: Failed to Install AWS CLI!' unless successful
       end
-      action :run
+      action :nothing
       not_if { `aws --version`.match(%r{^aws-cli/1*}) } # ~FC048
     end
   else

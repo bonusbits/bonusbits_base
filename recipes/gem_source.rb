@@ -10,29 +10,23 @@ when 'linux'
     mode '0644'
   end
 
+  chef_path = node['bonusbits_base']['chef_path']
+
   # Set Chef RubyGem Source # TODO: This needed with above?
   ruby_block 'Set Chef RubyGem Source' do
     block do
       source_url = node['bonusbits_base']['gem_source']['source_url']
-      bash_command = "/opt/chef/embedded/bin/gem sources -r https://rubygems.org/ && /opt/chef/embedded/bin/gem sources -a #{source_url}"
-
-      # Run Bash Script and Capture StrOut, StrErr, and Status
-      require 'open3'
-      Chef::Log.warn("Open3: BASH Command (#{bash_command})")
-      out, err, status = Open3.capture3(bash_command)
-      Chef::Log.warn("Open3: Status (#{status})")
-      Chef::Log.warn("Open3: Standard Out (#{out})")
-      unless status.success?
-        Chef::Log.warn("Open3: Error Out (#{err})")
-        raise 'Failed!'
-      end
+      shell_command = "#{chef_path}/embedded/bin/gem sources -r https://rubygems.org/"
+      shell_command += " && #{chef_path}/embedded/bin/gem sources -a #{source_url}"
+      successful = BonusBits::Shell.run_command(shell_command)
+      raise 'ERROR: Failed to Set Chef RubyGem Source!' unless successful
     end
-    action :run
+    action :nothing
     only_if do
       require 'open3'
-      bash_command = '/opt/chef/embedded/bin/gem sources'
-      out, _err, _status = Open3.capture3(bash_command)
-      out.match(%r{https://rubygems.org/})
+      shell_command = "#{chef_path}/embedded/bin/gem sources"
+      out, _err, _status = Open3.capture3(shell_command)
+      out =~ %r{https://rubygems.org/}
     end
   end
 when 'windows'

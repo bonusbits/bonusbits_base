@@ -4,7 +4,7 @@ verifier:
   name: inspec
   format: <%= ENV['CI'] ? 'junit' : 'cli' %>
   <% if ENV['CI'] %>
-  output: "test-reports/%{platform}_%{suite}_inspec.xml"
+  output: "reports/%{platform}_%{suite}_inspec.xml"
   <% end %>
 
 platforms:
@@ -156,8 +156,10 @@ suites:
           git: https://github.com/bonusbits/inspec_bootstrap.git
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
+#        - path: ../inspec_bonusbits_base
       attributes:
         chef_version: '12.19.36'
+        configure_backups: 'true'
     includes: ["amazon-ec2"]
 
   - name: ec2_base_epel_repo
@@ -241,7 +243,6 @@ suites:
       inspec_tests:
         - name: bootstrap
           git: https://github.com/bonusbits/inspec_bootstrap.git
-#        - path: test/inspec_bonusbits_base
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
@@ -261,6 +262,7 @@ suites:
           git: https://github.com/bonusbits/inspec_bootstrap.git
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
+#        - path: ../inspec_bonusbits_base
       attributes:
         chef_version: '12.19.36'
     attributes:
