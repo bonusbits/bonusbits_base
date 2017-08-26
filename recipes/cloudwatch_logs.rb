@@ -62,7 +62,6 @@ when 'linux'
       end
       action :run
       not_if { ::File.exist?("#{local_download_temp}/awslogs-agent-setup.py") }
-      notifies :run, 'ruby_block[run_cloudwatch_logs_agent_setup]', :immediately
     end
 
     # Run Agent Setup
@@ -73,7 +72,7 @@ when 'linux'
         successful = BonusBits::Shell.run_command(shell_command)
         raise 'ERROR: Failed to Run Cloudwatch Logs Agent Setup!' unless successful
       end
-      action :nothing
+      action :run
       not_if { ::File.exist?('/etc/init.d/awslogs') }
     end
 

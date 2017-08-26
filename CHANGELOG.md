@@ -1,5 +1,11 @@
 ## CHANGE LOG
 
+## 2.2.1 - 06/15/2017 - Levon Becker
+* Small tweak to RHEL Cloudwatch Logs setup logic so if in rare case can't download/run the first attempt. Then problem fixed and an attempt to run again it would get caught in condition hell and never move past step. Like if had a network issue or proxy setting issue. It downloads the setup script, but doesn't complete the setup properly. Before it would not try the setup again to correct and bomb on trying to start the service that was not setup yet.
+* Cleaned up start/end time output in backup script
+* Removed unused variable in backup script
+* Removed UTC from time stamp and start/end times so matches system time
+
 ## 2.2.1 - 06/14/2017 - Levon Becker
 * Added Exclusions to backups
 * Change Backup S3 bucket name to path
