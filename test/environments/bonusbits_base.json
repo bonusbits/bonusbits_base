@@ -11,7 +11,7 @@
             "backups": {
                 "configure": true,
                 "backup_paths": ["/etc", "/opt"],
-                "s3_bucket_name": "bonusbits-us-west-2-backups"
+                "s3_path": "bonusbits-us-west-2-backups"
             }
         }
     }

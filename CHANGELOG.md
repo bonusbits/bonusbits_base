@@ -1,5 +1,10 @@
 ## CHANGE LOG
 
+## 2.2.1 - 06/14/2017 - Levon Becker
+* Added Exclusions to backups
+* Change Backup S3 bucket name to path
+* Added an issues badge to readme
+
 ## 2.2.0 - 06/14/2017 - Levon Becker
 * Updated Cloudwatch Logs logic for CentOS and RHEL support.
 * Switched to using bonusbits_library shell library to DRY up some code
