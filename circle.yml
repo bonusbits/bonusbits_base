@@ -5,7 +5,7 @@ jobs:
     services:
       - docker
     ruby:
-      version: '2.3.1'
+      version: '2.3.4'
     timezone:
       America/Los_Angeles
     working_directory: ~/circulate

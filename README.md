@@ -1,5 +1,5 @@
 # Bonus Bits Base Cookbook
-[![Project Release](https://img.shields.io/badge/release-v2.2.2-blue.svg)](https://github.com/bonusbits/bonusbits_base)
+[![Project Release](https://img.shields.io/badge/release-v2.2.3-blue.svg)](https://github.com/bonusbits/bonusbits_base)
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
 [![Join the chat at https://gitter.im/bonusbits/bonusbits_base](https://badges.gitter.im/bonusbits/bonusbits_base.svg)](https://gitter.im/bonusbits/bonusbits_base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub issues](https://img.shields.io/github/issues/bonusbits/bonusbits_base.svg)](https://github.com/bonusbits/bonusbits_base/issues)
@@ -29,7 +29,7 @@ I plan to work through the other distros over time.
 | Mac OSX | 10.12.4 |
 | Docker | 17.03.1-ce, build c6d412e |
 | Chef Development Kit | 1.3.40 |
-| Chef-client | 12.19.36 |
+| Chef-client | 12.21.4 |
 
 
 # Attributes

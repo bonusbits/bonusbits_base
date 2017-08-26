@@ -1,5 +1,12 @@
 ## CHANGE LOG
 
+## 2.2.3 - 08/26/2017 - Levon Becker
+* Bumped Chef Client version to 12.21.4 (Latest v12 release)
+* Added Berkshelf.lock to git commit to lock down dependent cookbook versions
+* Added Gemfile.lock to again work around CircleCI / Gemfile million entries so the exact gems I've used locally are used in the CI
+* Bumped Ruby version to 2.3.4 that comes with ChefDK 1.6.1 in Circle config
+* Downgraded Rake version since ChefDK 1.6.1 seems to have dropped rake 12 and went to version 10.4/10.5? odd
+
 ## 2.2.2 - 08/26/2017 - Levon Becker
 * Added Exclusions to backups
 * Change Backup S3 bucket name to path

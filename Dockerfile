@@ -6,7 +6,7 @@ LABEL version="2.1.9" \
       website="https://www.bonusbits.com"
 
 # Build Cookbook Args
-#ARG chef_client_version=12.19.36
+#ARG chef_client_version=12.21.4
 ARG chefdk_version=1.3.40
 ARG cookbook_name=bonusbits_base
 ARG chef_role=base
