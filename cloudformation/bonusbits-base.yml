@@ -43,7 +43,7 @@ Parameters:
     Default: latest
   ChefDkVersion:
     Type: String
-    Default: 1.3.40
+    Default: 1.6.1
   DataBagSecret:
     Type: String
     NoEcho: true

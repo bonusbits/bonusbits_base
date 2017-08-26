@@ -1,5 +1,8 @@
 ## CHANGE LOG
 
+## 2.2.4 - 08/26/2017 - Levon Becker
+* Bumped ChefDK Version to 1.6.1 in CloudFormation and Dockerfile
+
 ## 2.2.3 - 08/26/2017 - Levon Becker
 * Bumped Chef Client version to 12.21.4 (Latest v12 release)
 * Added Berkshelf.lock to git commit to lock down dependent cookbook versions

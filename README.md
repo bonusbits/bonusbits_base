@@ -28,7 +28,7 @@ I plan to work through the other distros over time.
 | :--- | :--- |
 | Mac OSX | 10.12.4 |
 | Docker | 17.03.1-ce, build c6d412e |
-| Chef Development Kit | 1.3.40 |
+| Chef Development Kit | 1.6.1 |
 | Chef-client | 12.21.4 |
 
 
