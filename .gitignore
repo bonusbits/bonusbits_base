@@ -20,8 +20,8 @@ pkg/
 
 # Berkshelf
 /cookbooks
-Berksfile.lock
-Gemfile.lock
+#Berksfile.lock
+#Gemfile.lock
 
 # Bundler
 bin/*

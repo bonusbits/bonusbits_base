@@ -35,7 +35,8 @@ platforms:
         ssl_verify_mode: ":verify_none"
     provisioner:
       name: chef_zero
-      require_chef_omnibus: 12.19.36
+      require_chef_omnibus: 12.21.4
+      # always_update_cookbooks: true
       data_bags_path: test/data_bags
       encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
       roles_path: test/roles
@@ -120,8 +121,8 @@ suites:
   - name: ec2_base
     provisioner:
       name: chef_zero
-      always_update_cookbooks: true
-      require_chef_omnibus: 12.19.36
+      # always_update_cookbooks: true
+      require_chef_omnibus: 12.21.4
       data_bags_path: test/data_bags
       encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
       roles_path: test/roles
@@ -158,15 +159,16 @@ suites:
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
 #        - path: ../inspec_bonusbits_base
       attributes:
-        chef_version: '12.19.36'
+        chef_version: '12.21.4'
         configure_backups: 'true'
+        debug: 'true'
     includes: ["amazon-ec2"]
 
   - name: ec2_base_epel_repo
     provisioner:
       name: chef_zero
-      always_update_cookbooks: true
-      require_chef_omnibus: 12.19.36
+      # always_update_cookbooks: true
+      require_chef_omnibus: 12.21.4
       data_bags_path: test/data_bags
       encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
       roles_path: test/roles
@@ -202,7 +204,7 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.19.36'
+        chef_version: '12.21.4'
         configure_epel: 'true'
         install_epel_packages: 'true'
     includes: ["amazon-ec2"]
@@ -210,7 +212,7 @@ suites:
   - name: ec2_base_no_software
     provisioner:
       name: chef_zero
-      require_chef_omnibus: 12.19.36
+      require_chef_omnibus: 12.21.4
       data_bags_path: test/data_bags
       encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
       roles_path: test/roles
@@ -246,7 +248,7 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.19.36'
+        chef_version: '12.21.4'
         install_packages: 'false'
     includes: ["amazon-ec2"]
 
@@ -264,7 +266,7 @@ suites:
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
 #        - path: ../inspec_bonusbits_base
       attributes:
-        chef_version: '12.19.36'
+        chef_version: '12.21.4'
     attributes:
       <% if ENV['CIRCLECI'] %>
       bonusbits_base:
@@ -285,7 +287,7 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.19.36'
+        chef_version: '12.21.4'
         configure_epel: 'true'
         install_epel_packages: 'true'
     attributes:
@@ -308,7 +310,7 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.19.36'
+        chef_version: '12.21.4'
         install_packages: 'false'
     attributes:
       <% if ENV['CIRCLECI'] %>

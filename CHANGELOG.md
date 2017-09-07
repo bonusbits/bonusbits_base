@@ -1,5 +1,26 @@
 ## CHANGE LOG
 
+## 2.2.4 - 08/26/2017 - Levon Becker
+* Bumped ChefDK Version to 1.6.1 in CloudFormation and Dockerfile
+
+## 2.2.3 - 08/26/2017 - Levon Becker
+* Bumped Chef Client version to 12.21.4 (Latest v12 release)
+* Added Berkshelf.lock to git commit to lock down dependent cookbook versions
+* Added Gemfile.lock to again work around CircleCI / Gemfile million entries so the exact gems I've used locally are used in the CI
+* Bumped Ruby version to 2.3.4 that comes with ChefDK 1.6.1 in Circle config
+* Downgraded Rake version since ChefDK 1.6.1 seems to have dropped rake 12 and went to version 10.4/10.5? odd
+
+## 2.2.2 - 08/26/2017 - Levon Becker
+* Added Exclusions to backups
+* Change Backup S3 bucket name to path
+* Added an issues badge to readme
+
+## 2.2.1 - 06/14/2017- Levon Becker
+* Small tweak to RHEL Cloudwatch Logs setup logic so if in rare case can't download/run the first attempt. Then problem fixed and an attempt to run again it would get caught in condition hell and never move past step. Like if had a network issue or proxy setting issue. It downloads the setup script, but doesn't complete the setup properly. Before it would not try the setup again to correct and bomb on trying to start the service that was not setup yet.
+* Cleaned up start/end time output in backup script
+* Removed unused variable in backup script
+* Removed UTC from time stamp and start/end times so matches system time
+
 ## 2.2.0 - 06/14/2017 - Levon Becker
 * Updated Cloudwatch Logs logic for CentOS and RHEL support.
 * Switched to using bonusbits_library shell library to DRY up some code

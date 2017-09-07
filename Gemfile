@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
 gem 'berkshelf', '~> 5.6'
-gem 'rake', '~> 12.0'
+gem 'rake', '~> 10.4'
 
 group :style do
-  gem 'chef', '12.19.36'
+  gem 'chef', '12.21.4'
   gem 'foodcritic', '~> 10.2'
   gem 'rainbow', '~> 2.2.1'
   gem 'rubocop', '~> 0.47.1'
@@ -19,7 +19,7 @@ end
 
 group :integration do
   gem 'chef-zero', '~> 5.3'
-  gem 'inspec', '~> 1.19'
+  gem 'inspec', '~> 1.25'
   gem 'kitchen-docker', '~> 2.6.0'
   gem 'kitchen-ec2', '~> 1.3'
   gem 'kitchen-inspec', '~> 0.17'

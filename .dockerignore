@@ -9,11 +9,12 @@ bin/*
 .bundle/*
 .kitchen
 .kitchen.local.yml
-Berksfile.lock
+#Berksfile.lock
 test/data_bags/bonusbits_mediawiki_nginx/bonusbits_prd_decrypted.json
-Gemfile.lock
+#Gemfile.lock
 vendor/*
 # Mac OS
 .DS_Store
 .localized
 /test/integration/inspec/results/
+/tmp/

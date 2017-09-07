@@ -1,13 +1,13 @@
 FROM amazonlinux:latest
 MAINTAINER Levon Becker "levon.docker@bonusbits.com"
-LABEL version="2.1.9" \
+LABEL version="2.1.10" \
       description="Amazon Linux Image built from bonusbits_base cookbook." \
       github="https://github.com/bonusbits/bonusbits_base" \
       website="https://www.bonusbits.com"
 
 # Build Cookbook Args
-#ARG chef_client_version=12.19.36
-ARG chefdk_version=1.3.40
+#ARG chef_client_version=12.21.4
+ARG chefdk_version=1.6.1
 ARG cookbook_name=bonusbits_base
 ARG chef_role=base
 ARG chef_environment=bonusbits_base

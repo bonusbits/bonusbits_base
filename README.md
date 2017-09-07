@@ -1,7 +1,9 @@
 # Bonus Bits Base Cookbook
+[![Project Release](https://img.shields.io/badge/release-v2.2.3-blue.svg)](https://github.com/bonusbits/bonusbits_base)
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
 [![Chef cookbook](https://img.shields.io/badge/cookbook-v2.2.0-blue.svg)](https://github.com/bonusbits/bonusbits_base)
 [![Join the chat at https://gitter.im/bonusbits/bonusbits_base](https://badges.gitter.im/bonusbits/bonusbits_base.svg)](https://gitter.im/bonusbits/bonusbits_base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![GitHub issues](https://img.shields.io/github/issues/bonusbits/bonusbits_base.svg)](https://github.com/bonusbits/bonusbits_base/issues)
 
 # Purpose
 Chef Cookbook that will setup the basics for various flavors of Linux and Windows Servers.
@@ -27,8 +29,8 @@ I plan to work through the other distros over time.
 | :--- | :--- |
 | Mac OSX | 10.12.4 |
 | Docker | 17.03.1-ce, build c6d412e |
-| Chef Development Kit | 1.3.40 |
-| Chef-client | 12.19.36 |
+| Chef Development Kit | 1.6.1 |
+| Chef-client | 12.21.4 |
 
 
 # Attributes
