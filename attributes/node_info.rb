@@ -43,7 +43,7 @@ default['bonusbits_base']['node_info'].tap do |node_info|
       "Recipes:           (#{node['recipes']})"
     ]
 
-  if node['bonusbits_base']['aws']['inside']
+  if node['bonusbits_base']['deployment_type'] == 'ec2'
     node_info['content'].concat [
       '',
       '-- AWS --',

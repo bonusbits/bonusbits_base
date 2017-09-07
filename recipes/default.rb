@@ -1,5 +1,5 @@
 # Deploy AWS Profile Script & Tools
-include_recipe 'bonusbits_base::aws' if node['bonusbits_base']['aws']['inside']
+include_recipe 'bonusbits_base::aws' if node['bonusbits_base']['deployment_type'] == 'ec2'
 
 # Container Discovery
 case node['platform']

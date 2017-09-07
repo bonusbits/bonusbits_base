@@ -21,7 +21,7 @@ default['bonusbits_base']['backups'].tap do |backups|
 
   # Filename
   backups['filename'] =
-    if node['bonusbits_base']['aws']['inside']
+    if node['bonusbits_base']['deployment_type'] == 'ec2'
       "#{node['ec2']['instance_id']}-backup.tar.gz"
     else
       'backups.tar.gz'

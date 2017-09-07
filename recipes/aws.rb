@@ -22,7 +22,7 @@ when 'linux'
     owner 'root'
     group 'root'
     mode '0644'
-    only_if { node['bonusbits_base']['aws']['inside'] }
+    only_if { node['bonusbits_base']['deployment_type'] == 'ec2' }
     notifies :run, 'ruby_block[source_aws_profile_script]', :immediately
   end
 when 'windows'

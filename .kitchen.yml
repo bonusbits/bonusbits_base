@@ -6,131 +6,27 @@ verifier:
   <% if ENV['CI'] %>
   output: "reports/%{platform}_%{suite}_inspec.xml"
   <% end %>
+  attributes:
+    chef_version: '12.21.4'
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: 12.21.4
+  # always_update_cookbooks: true
+  data_bags_path: test/data_bags
+  encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
+  roles_path: test/roles
+  environments_path: test/environments
 
 platforms:
-  - name: amazon-ec2
+  # AWS AMI/EC2 Platforms
+  - name: amazon-ami
     driver:
+      name: ec2
       image_search:
         owner-id: 137112412989
         name: amzn-ami-hvm-2017.*x86_64-gp2
       instance_initiated_shutdown_behavior: terminate
-      tags:
-        Name: kitchen-bonusbits-base-amazon-<%= ENV['USER'] %>
-        Created-By: Test Kitchen
-        Owner: <%= ENV['USER'] %>
-    transport:
-      username: ec2-user
-      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
-
-  - name: amazon-docker
-    driver:
-      name: docker
-      use_sudo: false # For Native Docker on Mac. Remove/Comment if using Toolbox (docker-machine)
-      image: amazonlinux:latest
-      platform: rhel
-      driver_config:
-        intermediate_instructions:
-          - RUN yum -y install upstart procps util-linux
-        pid_one_command: /sbin/init
-        ssl_verify_mode: ":verify_none"
-    provisioner:
-      name: chef_zero
-      require_chef_omnibus: 12.21.4
-      # always_update_cookbooks: true
-      data_bags_path: test/data_bags
-      encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
-      roles_path: test/roles
-      environments_path: test/environments
-
-  - name: rhel6
-    driver:
-      image_search:
-        owner-id: 309956199498
-        name: RHEL-6.?_HVM_GA-*-x86_64-1-Hourly2-GP2
-      instance_type: t2.micro
-      instance_initiated_shutdown_behavior: terminate
-      tags:
-        Name: kitchen-bonusbits-base-rhel6-<%= ENV['USER'] %>
-        Created-By: Test Kitchen
-        OWNER: <%= ENV['USER'] %>
-    transport:
-      username: ec2-user
-      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
-
-  - name: rhel7
-    driver:
-      image_search:
-        owner-id: 309956199498
-        name: RHEL-7.?_HVM_GA-*-x86_64-1-Hourly2-GP2
-      instance_initiated_shutdown_behavior: terminate
-      tags:
-        Name: kitchen-bonusbits-base-rhel7-<%= ENV['USER'] %>
-        Created-By: Test Kitchen
-        OWNER: <%= ENV['USER'] %>
-    transport:
-      username: ec2-user
-      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
-
-  - name: ubuntu-14.04
-    driver:
-      instance_initiated_shutdown_behavior: terminate
-      tags:
-        Name: kitchen-bonusbits-base-ubuntu14-<%= ENV['USER'] %>
-        Created-By: Test Kitchen
-        OWNER: <%= ENV['USER'] %>
-    transport:
-      username: ubuntu
-      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
-
-  - name: ubuntu-16.04
-    driver:
-      instance_initiated_shutdown_behavior: terminate
-      tags:
-        Name: kitchen-bonusbits-base-ubuntu16-<%= ENV['USER'] %>
-        Created-By: Test Kitchen
-        OWNER: <%= ENV['USER'] %>
-    transport:
-      username: ubuntu
-      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
-
-  - name: windows-2012r2
-    driver:
-      instance_initiated_shutdown_behavior: terminate
-      instance_type: m3.medium
-      tags:
-        Name: kitchen-bonusbits-base-windows-2012r2-<%= ENV['USER'] %>
-        Created-By: Test Kitchen
-        OWNER: <%= ENV['USER'] %>
-    transport:
-      username: administrator
-      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
-
-  - name: windows-2016
-    driver:
-      instance_initiated_shutdown_behavior: terminate
-      instance_type: m3.medium
-      tags:
-        Name: kitchen-bonusbits-base-windows-2012r2-<%= ENV['USER'] %>
-        Created-By: Test Kitchen
-        OWNER: <%= ENV['USER'] %>
-    transport:
-      username: administrator
-      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
-
-suites:
-  - name: ec2_base
-    provisioner:
-      name: chef_zero
-      # always_update_cookbooks: true
-      require_chef_omnibus: 12.21.4
-      data_bags_path: test/data_bags
-      encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
-      roles_path: test/roles
-      environments_path: test/environments
-      client_rb:
-        environment: bonusbits_base
-    driver:
-      name: ec2
       associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
       aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
       security_group_ids:
@@ -139,16 +35,201 @@ suites:
       <% end %>
       subnet_id: <%= ENV['AWS_SUBNET'] %>
       vpc_id: <%= ENV['AWS_VPC_ID'] %>
-      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
       region: <%= ENV['AWS_REGION'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
       instance_type: t2.micro
       tags:
-        Name: kitchen-bonusbits-base-<%= ENV['USER'] %>
         Created-By: Test Kitchen
         Owner: <%= ENV['USER'] %>
+        OS: Amazon 2017
     transport:
       username: ec2-user
       ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
+  - name: rhel6-ami
+    driver:
+      name: ec2
+      image_search:
+        owner-id: 309956199498
+        name: RHEL-6.?_HVM_GA-*-x86_64-1-Hourly2-GP2
+      instance_initiated_shutdown_behavior: terminate
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      security_group_ids:
+      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
+        - <%= secgroup %>
+      <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET'] %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
+      region: <%= ENV['AWS_REGION'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
+      instance_type: t2.micro
+      tags:
+        Created-By: Test Kitchen
+        Owner: <%= ENV['USER'] %>
+        OS: RHEL 6
+    transport:
+      username: ec2-user
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
+  - name: rhel7-ami
+    driver:
+      name: ec2
+      image_search:
+        owner-id: 309956199498
+        name: RHEL-7.?_HVM_GA-*-x86_64-1-Hourly2-GP2
+      instance_initiated_shutdown_behavior: terminate
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      security_group_ids:
+      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
+        - <%= secgroup %>
+      <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET'] %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
+      region: <%= ENV['AWS_REGION'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
+      instance_type: t2.micro
+      tags:
+        Created-By: Test Kitchen
+        Owner: <%= ENV['USER'] %>
+        OS: RHEL 7
+    transport:
+      username: ec2-user
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
+  - name: ubuntu-14.04-ami
+    driver:
+      name: ec2
+      image_search:
+        owner-id: 309956199498
+        name: TODO!
+      instance_initiated_shutdown_behavior: terminate
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      security_group_ids:
+      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
+        - <%= secgroup %>
+      <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET'] %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
+      region: <%= ENV['AWS_REGION'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
+      instance_type: t2.micro
+      tags:
+        Created-By: Test Kitchen
+        Owner: <%= ENV['USER'] %>
+        OS: Ubuntu 14.04
+    transport:
+      username: ubuntu
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
+  - name: ubuntu-16.04-ami
+    driver:
+      name: ec2
+      image_search:
+        owner-id: 309956199498
+        name: TODO!
+      instance_initiated_shutdown_behavior: terminate
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      security_group_ids:
+      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
+        - <%= secgroup %>
+      <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET'] %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
+      region: <%= ENV['AWS_REGION'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
+      instance_type: t2.micro
+      tags:
+        Created-By: Test Kitchen
+        Owner: <%= ENV['USER'] %>
+        OS: Ubuntu 16.04
+    transport:
+      username: ubuntu
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
+  - name: windows-2012r2-ami
+    driver:
+      name: ec2
+      image_search:
+        owner-id: 309956199498
+        name: TODO!
+      instance_initiated_shutdown_behavior: terminate
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      security_group_ids:
+      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
+        - <%= secgroup %>
+      <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET'] %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
+      region: <%= ENV['AWS_REGION'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
+      instance_type: t2.micro
+      tags:
+        Created-By: Test Kitchen
+        Owner: <%= ENV['USER'] %>
+        OS: Windows 2012R2
+    transport:
+      username: administrator
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
+  - name: windows-2016-ami
+    driver:
+      name: ec2
+      image_search:
+        owner-id: 309956199498
+        name: TODO!
+      instance_initiated_shutdown_behavior: terminate
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      security_group_ids:
+      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
+        - <%= secgroup %>
+      <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET'] %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
+      region: <%= ENV['AWS_REGION'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
+      instance_type: t2.micro
+      tags:
+        Created-By: Test Kitchen
+        Owner: <%= ENV['USER'] %>
+        OS: Windows 2016
+    transport:
+      username: administrator
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+
+  # Docker Platforms
+  - name: amazon-docker
+    driver:
+      name: docker
+      use_sudo: false # For Native Docker on Mac. Remove/Comment if using Toolbox (docker-machine)
+      image: amazonlinux:latest
+      platform: rhel
+      provision_command:
+#        - echo "export http_proxy=<%= ENV['http_proxy']%>" > /etc/profile.d/proxy.sh
+#        - echo "export https_proxy=<%= ENV['https_proxy']%>" >> /etc/profile.d/proxy.sh
+#        - echo "export no_proxy=<%= ENV['no_proxy']%>" >> /etc/profile.d/proxy.sh
+#        - export http_proxy="<%= ENV['http_proxy']%>"
+#        - export https_proxy="<%= ENV['https_proxy']%>"
+#        - export no_proxy="<%= ENV['no_proxy']%>"
+        - yum -y install upstart procps util-linux
+      ssl_verify_mode: ":verify_none"
+#      http_proxy: <%= ENV['http_proxy']%>
+#      https_proxy: <%= ENV['https_proxy']%>
+#      no_proxy: <%= ENV['no_proxy']%>
+
+suites:
+  - name: ec2_base
+    provisioner:
+      client_rb:
+        environment: bonusbits_base
+    driver:
+      tags:
+        Name: kitchen-bonusbits-base-<%= ENV['USER'] %>
     run_list:
       - role[base]
     verifier:
@@ -159,24 +240,35 @@ suites:
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
 #        - path: ../inspec_bonusbits_base
       attributes:
-        chef_version: '12.21.4'
         configure_backups: 'true'
         debug: 'true'
-    includes: ["amazon-ec2"]
+    includes: ["amazon-ami"]
+
+  - name: ec2_base_java
+    provisioner:
+      client_rb:
+        environment: bonusbits_base_java
+    driver:
+      tags:
+        Name: kitchen-bonusbits-base-<%= ENV['USER'] %>
+    run_list:
+      - role[base]
+    verifier:
+      inspec_tests:
+        - name: bootstrap
+          git: https://github.com/bonusbits/inspec_bootstrap.git
+        - name: bonusbits_base
+          git: https://github.com/bonusbits/inspec_bonusbits_base.git
+      attributes:
+        configure_backups: 'true'
+        debug: 'true'
+#        install_java: 'true' # TODO
+    includes: ["amazon-ami"]
 
   - name: ec2_base_epel_repo
-    provisioner:
-      name: chef_zero
-      # always_update_cookbooks: true
-      require_chef_omnibus: 12.21.4
-      data_bags_path: test/data_bags
-      encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
-      roles_path: test/roles
-      environments_path: test/environments
       client_rb:
         environment: bonusbits_base_epel_repo
     driver:
-      name: ec2
       associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
       aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
       security_group_ids:
@@ -192,9 +284,6 @@ suites:
         Name: kitchen-bonusbits-base-epel-<%= ENV['USER'] %>
         Created-By: Test Kitchen
         Owner: <%= ENV['USER'] %>
-    transport:
-      username: ec2-user
-      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
     run_list:
       - role[base]
     verifier:
@@ -204,41 +293,19 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.21.4'
         configure_epel: 'true'
         install_epel_packages: 'true'
-    includes: ["amazon-ec2"]
+    includes: ["amazon-ami"]
 
   - name: ec2_base_no_software
     provisioner:
-      name: chef_zero
-      require_chef_omnibus: 12.21.4
-      data_bags_path: test/data_bags
-      encrypted_data_bag_secret_key_path: test/data_bags/encrypted_data_bag_secret
-      roles_path: test/roles
-      environments_path: test/environments
       client_rb:
         environment: bonusbits_base_no_software
     driver:
-      name: ec2
-      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
-      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
-      security_group_ids:
-      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
-        - <%= secgroup %>
-      <% end %>
-      subnet_id: <%= ENV['AWS_SUBNET'] %>
-      vpc_id: <%= ENV['AWS_VPC_ID'] %>
-      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
-      region: <%= ENV['AWS_REGION'] %>
-      instance_type: t2.micro
       tags:
         Name: kitchen-bonusbits-base-no-software<%= ENV['USER'] %>
         Created-By: Test Kitchen
         Owner: <%= ENV['USER'] %>
-    transport:
-      username: ec2-user
-      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
     run_list:
       - role[base]
     verifier:
@@ -248,9 +315,8 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.21.4'
         install_packages: 'false'
-    includes: ["amazon-ec2"]
+    includes: ["amazon-ami"]
 
   - name: docker_base
     run_list:
@@ -265,13 +331,32 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
 #        - path: ../inspec_bonusbits_base
-      attributes:
-        chef_version: '12.21.4'
     attributes:
       <% if ENV['CIRCLECI'] %>
       bonusbits_base:
         deployment_location: 'circleci'
       <% end %>
+    includes: ["amazon-docker"]
+
+  - name: docker_base_java
+    run_list:
+      - role[base]
+    provisioner:
+      client_rb:
+        environment: bonusbits_base_java
+    verifier:
+      inspec_tests:
+        - name: bootstrap
+          git: https://github.com/bonusbits/inspec_bootstrap.git
+        - name: bonusbits_base
+          git: https://github.com/bonusbits/inspec_bonusbits_base.git
+#        - path: ../inspec_bonusbits_base
+    attributes:
+      <% if ENV['CIRCLECI'] %>
+      bonusbits_base:
+        deployment_location: 'circleci'
+      <% end %>
+#        install_java: 'true' # TODO
     includes: ["amazon-docker"]
 
   - name: docker_base_epel_repo
@@ -287,7 +372,6 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.21.4'
         configure_epel: 'true'
         install_epel_packages: 'true'
     attributes:
@@ -310,7 +394,6 @@ suites:
         - name: bonusbits_base
           git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        chef_version: '12.21.4'
         install_packages: 'false'
     attributes:
       <% if ENV['CIRCLECI'] %>

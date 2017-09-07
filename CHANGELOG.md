@@ -1,5 +1,11 @@
 ## CHANGE LOG
 
+## Dev - 09/07/2017 - Levon Becker
+* Switched boolean inside aws to ec2 deployment. Fits the logic better.
+* Added OpenJDK Java Install Option for Linux
+* Cleaned up kitchen config a bit
+* Added kitchen test suite for installing Java
+
 ## 2.2.4 - 08/26/2017 - Levon Becker
 * Bumped ChefDK Version to 1.6.1 in CloudFormation and Dockerfile
 
