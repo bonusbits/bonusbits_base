@@ -1,7 +1,7 @@
 # To save money in-case an EC2 Test Kitchen is forgotten and left on the default to terminate at night.
 deployment_method = node['bonusbits_base']['deployment_method']
 deployment_method_kitchen = deployment_method == 'kitchen'
-ec2_deployment = node['c1_jenkins2x']['deployment_type'] == 'ec2'
+ec2_deployment = node['bonusbits_base']['deployment_type'] == 'ec2'
 default['bonusbits_base']['kitchen_shutdown']['configure'] =
   if deployment_method_kitchen && ec2_deployment
     true

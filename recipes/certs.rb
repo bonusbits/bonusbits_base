@@ -37,7 +37,7 @@ end
 if node['bonusbits_base']['java']['configure']
   ruby_block 'install_aws_ldap_certificate' do
     block do
-      secrets_env = node['c1_jenkins2x']['deployment_environment']
+      secrets_env = node['bonusbits_base']['deployment_environment']
       keystore_password = node.run_state['secrets']['cof_aws_ldap_ca']['keystore_password'][secrets_env]
       # Check if already imported
       check_command = "keytool -list -keystore /etc/pki/ca-trust/extracted/java/cacerts -storepass #{keystore_password} -alias awscofldapca"

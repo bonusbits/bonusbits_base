@@ -69,7 +69,7 @@ when 'linux'
     ruby_block 'run_cloudwatch_logs_agent_setup' do
       block do
         shell_command = "python #{local_download_temp}/awslogs-agent-setup.py -n -r"
-        shell_command += " #{node['c1_jenkins2x']['aws']['region']} -c #{local_download_temp}/cwlogs.cfg"
+        shell_command += " #{node['bonusbits_base']['aws']['region']} -c #{local_download_temp}/cwlogs.cfg"
         successful = BonusBits::Shell.run_command(shell_command)
         raise 'ERROR: Failed to Run Cloudwatch Logs Agent Setup!' unless successful
       end

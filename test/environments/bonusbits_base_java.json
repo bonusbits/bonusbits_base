@@ -15,7 +15,9 @@
             },
             "java": {
                 "install": true,
-                "package": "java-1.8.0-openjdk"
+                "specify_version": true,
+                "package": "java-1.8.0-openjdk",
+                "version": "1.8.0.141-1.b16.el7_3"
             }
         }
     }

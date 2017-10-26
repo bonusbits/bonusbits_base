@@ -1,7 +1,7 @@
 default['bonusbits_base']['aws']['install_tools'] = false
 
 default['bonusbits_base']['aws']['region'] =
-  if node['c1_jenkins2x']['deployment_type'] == 'ec2'
+  if node['bonusbits_base']['deployment_type'] == 'ec2'
     node['ec2']['placement_availability_zone'].slice(0..-2)
   else
     'us-west-2'

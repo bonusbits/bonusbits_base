@@ -181,7 +181,7 @@ platforms:
       name: ec2
       image_search:
         owner-id: 309956199498
-        name: TODO!
+        name: TODO! # :TODO
       instance_initiated_shutdown_behavior: terminate
       associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
       aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
@@ -263,23 +263,14 @@ suites:
         configure_backups: 'true'
         debug: 'true'
 #        install_java: 'true' # TODO
+#        java_version: '1.8.0.141-1.b16.el7_3' # TODO
     includes: ["amazon-ami"]
 
   - name: ec2_base_epel_repo
+    provisioner:
       client_rb:
         environment: bonusbits_base_epel_repo
     driver:
-      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
-      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
-      security_group_ids:
-      <% (1..5).collect { |n| ENV["AWS_SECURITY_GROUP_#{n}"] }.compact.each do |secgroup| %>
-        - <%= secgroup %>
-      <% end %>
-      subnet_id: <%= ENV['AWS_SUBNET'] %>
-      vpc_id: <%= ENV['AWS_VPC_ID'] %>
-      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
-      region: <%= ENV['AWS_REGION'] %>
-      instance_type: t2.micro
       tags:
         Name: kitchen-bonusbits-base-epel-<%= ENV['USER'] %>
         Created-By: Test Kitchen
@@ -348,15 +339,17 @@ suites:
       inspec_tests:
         - name: bootstrap
           git: https://github.com/bonusbits/inspec_bootstrap.git
-        - name: bonusbits_base
-          git: https://github.com/bonusbits/inspec_bonusbits_base.git
-#        - path: ../inspec_bonusbits_base
+#        - name: bonusbits_base
+#          git: https://github.com/bonusbits/inspec_bonusbits_base.git
+        - path: ../inspec_bonusbits_base
     attributes:
       <% if ENV['CIRCLECI'] %>
       bonusbits_base:
         deployment_location: 'circleci'
       <% end %>
 #        install_java: 'true' # TODO
+#        java_package_name: 'java-1.8.0-openjdk' # TODO
+#        java_version: '1.8.0.141-1.b16.el7_3' # TODO
     includes: ["amazon-docker"]
 
   - name: docker_base_epel_repo
