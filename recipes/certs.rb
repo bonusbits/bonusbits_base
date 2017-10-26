@@ -1,3 +1,6 @@
+# !! JUST EXAMPLE CODE - No Real info in Test Data Bag !!
+# TODO: Parameterize Values to make actually work based on overrides
+
 # Fetch Data Bag
 data_bag = node['bonusbits_base']['certs']['data_bag']
 data_bag_item = node['bonusbits_base']['certs']['data_bag_item']
@@ -34,22 +37,19 @@ link "/opt/chef/embedded/ssl/certs/#{node.run_state['certs_data_bag']['hash']}" 
 end
 
 # Java (If Installing Java)
-if node['bonusbits_base']['java']['configure']
-  ruby_block 'install_aws_ldap_certificate' do
-    block do
-      secrets_env = node['bonusbits_base']['deployment_environment']
-      keystore_password = node.run_state['secrets']['cof_aws_ldap_ca']['keystore_password'][secrets_env]
-      # Check if already imported
-      check_command = "keytool -list -keystore /etc/pki/ca-trust/extracted/java/cacerts -storepass #{keystore_password} -alias awscofldapca"
-      cert_found = C1Jenkins2x::Shell.run_command(check_command, true)
+ruby_block 'Install Internal CA Certificate to Java Keystore' do
+  block do
+    deployment_environment = node['bonusbits_base']['deployment_environment']
+    keystore_password = node.run_state['certs_data_bag']['keystore_password'][deployment_environment]
+    # Check if already imported
+    check_command = "keytool -list -keystore /etc/pki/ca-trust/extracted/java/cacerts -storepass #{keystore_password} -alias internalca"
+    cert_found = BonusBits::Shell.run_command(check_command, true)
 
-      unless cert_found
-        import_command = "keytool -importcert -file /etc/pki/tls/certs/cof-aws-ldap-ca.crt -keystore /etc/pki/ca-trust/extracted/java/cacerts -storepass #{keystore_password} -alias awscofldapca"
-        successful = C1Jenkins2x::Shell.run_command(import_command, true)
-        raise 'ERROR: Importing LDAP Certificate to Keystore!' unless successful
-      end
+    unless cert_found
+      import_command = "keytool -importcert -file /etc/pki/tls/certs/internal-ca.crt -keystore /etc/pki/ca-trust/extracted/java/cacerts -storepass #{keystore_password} -alias internalca"
+      successful = BonusBits::Shell.run_command(import_command, true)
+      raise 'ERROR: Importing Internal CA Certificate to Java Keystore!' unless successful
     end
-    action :run
-    only_if { role == 'master' || role == 'joc' }
   end
+  only_if { node['bonusbits_base']['java']['configure'] }
 end
