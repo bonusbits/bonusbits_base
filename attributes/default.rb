@@ -24,12 +24,10 @@ default['bonusbits_base'].tap do |root|
       'vbox'
     elsif node['virtualization']['system'] == 'xen' && BonusBits::Discovery.ec2?(node['fqdn'], node['platform_family'])
       'ec2'
+    elsif File.exist?('/.dockerenv') # Workaround for Ohai Virtualization Plugin Failing on Docker now
+      'docker'
     else
-      if File.exist?('/.dockerenv')
-        'docker'
-      else
-        'other'
-      end
+      'other'
     end
 
   # Determine Deployment Location
