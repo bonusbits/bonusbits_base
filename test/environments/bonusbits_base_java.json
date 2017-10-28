@@ -9,15 +9,15 @@
     "override_attributes": {
         "bonusbits_base": {
             "backups": {
-                "configure": true,
+                "configure": false,
                 "backup_paths": ["/etc", "/opt"],
                 "s3_bucket_name": "bonusbits-us-west-2-backups"
             },
             "java": {
                 "install": true,
-                "specify_version": true,
                 "package": "java-1.8.0-openjdk",
-                "version": "1.8.0.141-1.b16.el7_3"
+                "specify_version": false,
+                "version": "1.8.0.151-1.b12.35.amzn1"
             }
         }
     }

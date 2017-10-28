@@ -28,6 +28,9 @@ include_recipe 'bonusbits_base::security' if node['bonusbits_base']['security'][
 # Install Packages
 include_recipe 'bonusbits_base::packages' if node['bonusbits_base']['packages']['install']
 
+# Install Java
+include_recipe 'bonusbits_base::java' if node['bonusbits_base']['java']['install']
+
 # Configure Sudoers on EC2 Instance
 include_recipe 'bonusbits_base::sudoers' if node['bonusbits_base']['sudoers']['configure']
 

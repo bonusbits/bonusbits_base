@@ -7,6 +7,7 @@ run_state['detected_environment'] =
     'dev'
   end
 
+# TODO: OHAI PLUGIN STOPPED WORKING! Maybe Newer version of Docker causing problem...
 default['bonusbits_base'].tap do |root|
   # Determine Deployment Type
   root['deployment_type'] =
@@ -21,10 +22,14 @@ default['bonusbits_base'].tap do |root|
       'kvm'
     elsif node['virtualization']['system'] == 'vbox'
       'vbox'
-    elsif BonusBits::Discovery.ec2?(node['fqdn'], node['platform_family'])
+    elsif node['virtualization']['system'] == 'xen' && BonusBits::Discovery.ec2?(node['fqdn'], node['platform_family'])
       'ec2'
     else
-      'other'
+      if File.exist?('/.dockerenv')
+        'docker'
+      else
+        'other'
+      end
     end
 
   # Determine Deployment Location

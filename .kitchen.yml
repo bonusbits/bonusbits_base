@@ -6,7 +6,15 @@ verifier:
   <% if ENV['CI'] %>
   output: "reports/%{platform}_%{suite}_inspec.xml"
   <% end %>
+  inspec_tests:
+    - name: bootstrap
+      git: https://github.com/bonusbits/inspec_bootstrap.git
+    - name: bonusbits_base
+      git: https://github.com/bonusbits/inspec_bonusbits_base.git
+      release: 1.0.0
+#        - path: ../inspec_bonusbits_base
   attributes:
+    debug: 'false'
     chef_version: '12.21.4'
 
 provisioner:
@@ -129,7 +137,7 @@ platforms:
       name: ec2
       image_search:
         owner-id: 309956199498
-        name: TODO!
+        name: TODO! # TODO:
       instance_initiated_shutdown_behavior: terminate
       associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
       aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
@@ -155,7 +163,7 @@ platforms:
       name: ec2
       image_search:
         owner-id: 309956199498
-        name: TODO!
+        name: TODO! # TODO:
       instance_initiated_shutdown_behavior: terminate
       associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
       aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
@@ -233,15 +241,8 @@ suites:
     run_list:
       - role[base]
     verifier:
-      inspec_tests:
-        - name: bootstrap
-          git: https://github.com/bonusbits/inspec_bootstrap.git
-        - name: bonusbits_base
-          git: https://github.com/bonusbits/inspec_bonusbits_base.git
-#        - path: ../inspec_bonusbits_base
       attributes:
         configure_backups: 'true'
-        debug: 'true'
     includes: ["amazon-ami"]
 
   - name: ec2_base_java
@@ -254,16 +255,12 @@ suites:
     run_list:
       - role[base]
     verifier:
-      inspec_tests:
-        - name: bootstrap
-          git: https://github.com/bonusbits/inspec_bootstrap.git
-        - name: bonusbits_base
-          git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
-        configure_backups: 'true'
-        debug: 'true'
-#        install_java: 'true' # TODO
-#        java_version: '1.8.0.141-1.b16.el7_3' # TODO
+        configure_backups: 'false'
+        install_java: 'true'
+        java_package_name: 'java-1.8.0-openjdk'
+        specify_version: 'false'
+        java_version: '1.8.0.151-1.b12.35.amzn1'
     includes: ["amazon-ami"]
 
   - name: ec2_base_epel_repo
@@ -278,11 +275,6 @@ suites:
     run_list:
       - role[base]
     verifier:
-      inspec_tests:
-        - name: bootstrap
-          git: https://github.com/bonusbits/inspec_bootstrap.git
-        - name: bonusbits_base
-          git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         configure_epel: 'true'
         install_epel_packages: 'true'
@@ -300,11 +292,6 @@ suites:
     run_list:
       - role[base]
     verifier:
-      inspec_tests:
-        - name: bootstrap
-          git: https://github.com/bonusbits/inspec_bootstrap.git
-        - name: bonusbits_base
-          git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         install_packages: 'false'
     includes: ["amazon-ami"]
@@ -315,13 +302,6 @@ suites:
     provisioner:
       client_rb:
         environment: bonusbits_base
-    verifier:
-      inspec_tests:
-        - name: bootstrap
-          git: https://github.com/bonusbits/inspec_bootstrap.git
-        - name: bonusbits_base
-          git: https://github.com/bonusbits/inspec_bonusbits_base.git
-#        - path: ../inspec_bonusbits_base
     attributes:
       <% if ENV['CIRCLECI'] %>
       bonusbits_base:
@@ -335,21 +315,17 @@ suites:
     provisioner:
       client_rb:
         environment: bonusbits_base_java
-    verifier:
-      inspec_tests:
-        - name: bootstrap
-          git: https://github.com/bonusbits/inspec_bootstrap.git
-#        - name: bonusbits_base
-#          git: https://github.com/bonusbits/inspec_bonusbits_base.git
-        - path: ../inspec_bonusbits_base
     attributes:
       <% if ENV['CIRCLECI'] %>
       bonusbits_base:
         deployment_location: 'circleci'
       <% end %>
-#        install_java: 'true' # TODO
-#        java_package_name: 'java-1.8.0-openjdk' # TODO
-#        java_version: '1.8.0.141-1.b16.el7_3' # TODO
+    verifier:
+      attributes:
+        install_java: 'true'
+        java_package_name: 'java-1.8.0-openjdk'
+        specify_version: 'false'
+        java_version: '1.8.0.151-1.b12.35.amzn1'
     includes: ["amazon-docker"]
 
   - name: docker_base_epel_repo
@@ -359,11 +335,6 @@ suites:
       client_rb:
         environment: bonusbits_base_epel_repo
     verifier:
-      inspec_tests:
-        - name: bootstrap
-          git: https://github.com/bonusbits/inspec_bootstrap.git
-        - name: bonusbits_base
-          git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         configure_epel: 'true'
         install_epel_packages: 'true'
@@ -381,11 +352,6 @@ suites:
       client_rb:
         environment: bonusbits_base_no_software
     verifier:
-      inspec_tests:
-        - name: bootstrap
-          git: https://github.com/bonusbits/inspec_bootstrap.git
-        - name: bonusbits_base
-          git: https://github.com/bonusbits/inspec_bonusbits_base.git
       attributes:
         install_packages: 'false'
     attributes:
