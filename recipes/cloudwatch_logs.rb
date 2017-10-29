@@ -1,4 +1,4 @@
-inside_aws = node['bonusbits_base']['aws']['inside']
+ec2_deployment = node['bonusbits_base']['deployment_type'] == 'ec2'
 
 case node['os']
 when 'linux'
@@ -25,7 +25,7 @@ when 'linux'
         state_file: '/var/lib/awslogs/agent-state'
       )
       notifies :restart, 'service[awslogs]', :delayed
-      only_if { inside_aws } # Template calls ohai ec2
+      only_if { ec2_deployment } # Template calls ohai ec2
     end
   when 'centos', 'redhat' # ~FC024
     package %w(python python-setuptools)
@@ -49,7 +49,7 @@ when 'linux'
       owner 'root'
       group 'root'
       mode '0644'
-      notifies :restart, 'service[awslogs]', :delayed if inside_aws
+      notifies :restart, 'service[awslogs]', :delayed if ec2_deployment
     end
 
     # Install CloudWatch Logs Agent
@@ -62,17 +62,18 @@ when 'linux'
       end
       action :run
       not_if { ::File.exist?("#{local_download_temp}/awslogs-agent-setup.py") }
+      notifies :run, 'ruby_block[run_cloudwatch_logs_agent_setup]', :immediately
     end
 
     # Run Agent Setup
     ruby_block 'run_cloudwatch_logs_agent_setup' do
       block do
         shell_command = "python #{local_download_temp}/awslogs-agent-setup.py -n -r"
-        shell_command += " #{node['c1_jenkins2x']['aws']['region']} -c #{local_download_temp}/cwlogs.cfg"
+        shell_command += " #{node['bonusbits_base']['aws']['region']} -c #{local_download_temp}/cwlogs.cfg"
         successful = BonusBits::Shell.run_command(shell_command)
         raise 'ERROR: Failed to Run Cloudwatch Logs Agent Setup!' unless successful
       end
-      action :run
+      action :nothing
       not_if { ::File.exist?('/etc/init.d/awslogs') }
     end
 
@@ -96,7 +97,7 @@ when 'linux'
         state_file: '/var/awslogs/state/agent-state'
       )
       notifies :restart, 'service[awslogs]', :delayed
-      only_if { inside_aws } # Template calls ohai ec2
+      only_if { ec2_deployment } # Template calls ohai ec2
     end
   else
     return
@@ -108,7 +109,7 @@ when 'linux'
     owner 'root'
     group 'root'
     mode '0644'
-    notifies :restart, 'service[awslogs]', :delayed if inside_aws
+    notifies :restart, 'service[awslogs]', :delayed if ec2_deployment
     only_if { node['bonusbits_base']['proxy']['configure'] }
   end
 
@@ -116,7 +117,7 @@ when 'linux'
   service 'awslogs' do
     service_name 'awslogs'
     action [:enable, :start]
-    only_if { inside_aws }
+    only_if { ec2_deployment }
   end
 when 'windows'
   return

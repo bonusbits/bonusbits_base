@@ -1,5 +1,5 @@
 # Bonus Bits Base Cookbook
-[![Project Release](https://img.shields.io/badge/release-v2.2.4-blue.svg)](https://github.com/bonusbits/bonusbits_base)
+[![Project Release](https://img.shields.io/badge/release-v2.3.0-blue.svg)](https://github.com/bonusbits/bonusbits_base)
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
 [![Join the chat at https://gitter.im/bonusbits/bonusbits_base](https://badges.gitter.im/bonusbits/bonusbits_base.svg)](https://gitter.im/bonusbits/bonusbits_base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub issues](https://img.shields.io/github/issues/bonusbits/bonusbits_base.svg)](https://github.com/bonusbits/bonusbits_base/issues)

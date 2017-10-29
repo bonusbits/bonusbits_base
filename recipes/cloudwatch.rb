@@ -39,7 +39,7 @@ when 'linux'
     not_if { ::File.directory?('/opt/aws-scripts-mon') }
   end
 
-  if node['bonusbits_base']['aws']['inside']
+  if node['bonusbits_base']['deployment_type'] == 'ec2'
     cron_command = node['bonusbits_base']['cloudwatch']['cron_command']
     cron 'Create Cloudwatch Monitoring Cron' do
       minute '*/5'

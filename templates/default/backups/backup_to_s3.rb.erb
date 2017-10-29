@@ -9,7 +9,7 @@ require 'open3'
 require 'rubygems/package'
 require 'zlib'
 
-## Examples
+# # Manual Testing Examples
 # @tmp_dir = '/tmp/backups'
 # @options['backup_paths'] = '/'
 # @options['s3_full_path'] = 'bucket/backups/instanceid-backup.tar.gz'
@@ -19,10 +19,11 @@ require 'zlib'
 
 # Global Variables
 @script_version = '1.0.0'
-@time_stamp = Time.now.strftime('%Y%m%d-%H%M')
-@tmp_tar_name = "backup-#{@time_stamp}.tar"
-@tmp_tgz_name = "backup-#{@time_stamp}.tar.gz"
+@time_stamp = Time.now.utc.strftime('%Y%m%d-%H%M%S')
+@date_time = Time.now.utc.strftime('%Y%m%d-%H%M')
 @tmp_dir = '<%= node['bonusbits_base']['backups']['local_tmp_path'] %>'
+@tmp_tar_name = "backup-#{@date_time}.tar"
+@tmp_tgz_name = "backup-#{@date_time}.tar.gz"
 @tmp_tar_fullname = "#{@tmp_dir}/#{@tmp_tar_name}"
 @tmp_tgz_fullname = "#{@tmp_dir}/#{@tmp_tgz_name}"
 
@@ -87,9 +88,8 @@ def show_header
 end
 
 def show_footer(start_time, end_time, run_time)
-  @logger.info ''
-  @logger.info "Start Time:        #{start_time.utc.strftime('%H:%M:%S')}"
-  @logger.info "End Time:          #{end_time.utc.strftime('%H:%M:%S')}"
+  @logger.info "Start Time:        #{start_time}"
+  @logger.info "End Time:          #{end_time}"
   @logger.info "Run Time:          #{run_time}"
   @logger.info '**** FINISHED BACKUP ****'
   @logger.info ''
@@ -201,10 +201,9 @@ def s3_upload
 end
 
 def run
-  start_time = Time.now
-  start_time.freeze
   init_logger
   show_header
+  start_time = Time.now
   create_tmp
   cleanup_tmp
   raise unless check_space
@@ -213,7 +212,6 @@ def run
   s3_upload
   cleanup_tmp
   end_time = Time.now
-  end_time.freeze
   run_time = time_diff(start_time, end_time)
   show_footer(start_time, end_time, run_time)
 end

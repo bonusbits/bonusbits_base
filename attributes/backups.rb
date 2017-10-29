@@ -21,7 +21,7 @@ default['bonusbits_base']['backups'].tap do |backups|
 
   # Filename
   backups['filename'] =
-    if node['bonusbits_base']['aws']['inside']
+    if node['bonusbits_base']['deployment_type'] == 'ec2'
       "#{node['ec2']['instance_id']}-backup.tar.gz"
     else
       'backups.tar.gz'
@@ -29,11 +29,11 @@ default['bonusbits_base']['backups'].tap do |backups|
 
   # S3
   ## Recommended to turn on Versioning and add Lifecycle to bucket
-  env = run_state['detected_environment']
-  backups['s3_path'] = "backup_bucket/backups/#{env}" # !! Required Override !!
+  backups['s3_bucket_name'] = 'backup_bucket' # !! Required Override !!
   filename = node['bonusbits_base']['backups']['filename']
-  s3_path = node['bonusbits_base']['backups']['s3_path']
-  backups['s3_full_path'] = "#{s3_path}/#{filename}"
+  env = run_state['detected_environment']
+  s3_backup_bucket = node['bonusbits_base']['backups']['s3_bucket_name']
+  backups['s3_full_path'] = "#{s3_backup_bucket}/backups/#{env}/#{filename}"
 
   # Cron
   ## Default is Daily at 11PM Server Time
@@ -57,7 +57,6 @@ message_list = [
   "Script Filename             (#{node['bonusbits_base']['backups']['script_filename']})",
   "Script Fullname             (#{node['bonusbits_base']['backups']['script_fullname']})",
   "Local Temp Path             (#{node['bonusbits_base']['backups']['local_tmp_path']})",
-  "S3 Path                     (#{node['bonusbits_base']['backups']['s3_path']})",
   "S3 Full Path                (#{node['bonusbits_base']['backups']['s3_full_path']})",
   "Config Log Rotate           (#{node['bonusbits_base']['backups']['configure_log_rotate']})",
   "Log Path                    (#{node['bonusbits_base']['backups']['log_path']})"
