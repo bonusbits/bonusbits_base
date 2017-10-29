@@ -1,12 +1,13 @@
 ## CHANGE LOG
 
-## 2.3.0 Dev - 00/00/2017 - Levon Becker
+## 2.3.0 - 10/28/2017 - Levon Becker
 * Added OpenJDK Java Install Option for Linux
 * Switched boolean inside_aws to ec2_deployment. Fits the logic better.
 * Cleaned up kitchen config a bit
 * Added kitchen test suite for installing Java
 * Added more readme badges
 * Updated Berkshelf lock file
+* Workaround for Ohai Virtualization Plugin failing to detect Docker correctly.
 
 ## 2.2.4 - 08/26/2017 - Levon Becker
 * Bumped ChefDK Version to 1.6.1 in CloudFormation and Dockerfile
