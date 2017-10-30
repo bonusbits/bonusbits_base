@@ -1,5 +1,8 @@
 ## CHANGE LOG
 
+## 2.3.1 - 10/30/2017 - Levon Becker
+* Added Logrotate for Backups
+
 ## 2.3.0 - 10/28/2017 - Levon Becker
 * Added OpenJDK Java Install Option for Linux
 * Switched boolean inside_aws to ec2_deployment. Fits the logic better.
