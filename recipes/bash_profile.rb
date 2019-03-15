@@ -1,7 +1,8 @@
 case node['platform']
 when 'amazon'
   # Install Update Message of the Day Package
-  package %w(update-motd lolcat)
+  package %w(update-motd)
+  gem_package 'lolcat'
 
   # '/etc/cron.d/update-motd'
   # 'root /sbin/start --quiet update-motd'

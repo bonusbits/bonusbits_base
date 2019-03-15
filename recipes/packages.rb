@@ -1,4 +1,5 @@
 # Package Lists
+amazon1_packages = node['bonusbits_base']['packages']['amazon1']['packages']
 amazon_packages = node['bonusbits_base']['packages']['amazon']['packages']
 debian_packages = node['bonusbits_base']['packages']['debian']['packages']
 redhat_packages = node['bonusbits_base']['packages']['redhat']['packages']
@@ -27,7 +28,12 @@ when 'debian', 'ubuntu'
 when 'redhat', 'centos'
   package redhat_packages
 when 'amazon'
-  package amazon_packages
+  case node['platform_version']
+  when '2'
+    package amazon_packages
+  when '1'
+    package amazon1_packages
+  end
 when 'suse', 'opensuse'
   package suse_packages
 else

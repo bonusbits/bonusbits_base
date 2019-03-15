@@ -24,4 +24,5 @@ group :integration do
   gem 'kitchen-ec2', '~> 1.3'
   gem 'kitchen-inspec', '~> 0.17'
   gem 'test-kitchen', '~> 1.16'
+  gem 'safe_yaml', '1.0.5'
 end

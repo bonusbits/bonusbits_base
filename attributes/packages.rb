@@ -17,6 +17,25 @@ default['bonusbits_base']['packages'].tap do |packages|
     openssl
     procps
     sudo
+    util-linux
+    vim-enhanced
+    which
+  )
+
+  packages['amazon1']['packages'] = %w(
+    aws-cli
+    ca-certificates
+    curl
+    git
+    gzip
+    htop
+    mlocate
+    net-tools
+    openssh-clients
+    openssh-server
+    openssl
+    procps
+    sudo
     upstart
     util-linux
     vim-enhanced

@@ -228,6 +228,29 @@ platforms:
 #      http_proxy: <%= ENV['http_proxy']%>
 #      https_proxy: <%= ENV['https_proxy']%>
 #      no_proxy: <%= ENV['no_proxy']%>
+      run_command: /usr/sbin/init
+      privileged: true
+      provision_command:
+        - systemctl enable sshd.service
+
+  - name: amazon1-docker
+    driver:
+      name: docker
+      use_sudo: false # For Native Docker on Mac. Remove/Comment if using Toolbox (docker-machine)
+      image: amazonlinux:2018.03
+      platform: rhel
+      provision_command:
+#        - echo "export http_proxy=<%= ENV['http_proxy']%>" > /etc/profile.d/proxy.sh
+#        - echo "export https_proxy=<%= ENV['https_proxy']%>" >> /etc/profile.d/proxy.sh
+#        - echo "export no_proxy=<%= ENV['no_proxy']%>" >> /etc/profile.d/proxy.sh
+#        - export http_proxy="<%= ENV['http_proxy']%>"
+#        - export https_proxy="<%= ENV['https_proxy']%>"
+#        - export no_proxy="<%= ENV['no_proxy']%>"
+        - yum -y install upstart procps util-linux
+      ssl_verify_mode: ":verify_none"
+#      http_proxy: <%= ENV['http_proxy']%>
+#      https_proxy: <%= ENV['https_proxy']%>
+#      no_proxy: <%= ENV['no_proxy']%>
 
 suites:
   - name: ec2_base
@@ -306,7 +329,7 @@ suites:
       bonusbits_base:
         deployment_location: 'circleci'
       <% end %>
-    includes: ["amazon-docker"]
+    includes: ["amazon-docker","amazon1-docker"]
 
   - name: docker_base_java
     run_list:

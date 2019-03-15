@@ -1,4 +1,4 @@
-FROM amazonlinux:latest
+FROM amazonlinux:2018.03
 MAINTAINER Levon Becker "levon.docker@bonusbits.com"
 LABEL version="2.1.10" \
       description="Amazon Linux Image built from bonusbits_base cookbook." \
