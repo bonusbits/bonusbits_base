@@ -1,5 +1,5 @@
 # For CircleCI
-require 'bundler/setup'
+# require 'bundler/setup'
 
 # Style tests. Rubocop and Foodcritic
 namespace :style do
@@ -12,7 +12,7 @@ namespace :style do
   FoodCritic::Rake::LintTask.new(:chef) do |task|
     task.options = {
       fail_tags: ['correctness'],
-      chef_version: '12.21.4',
+      chef_version: '15.2.20',
       tags: %w(~FC001 ~FC019 ~FC016 ~FC039)
     }
   end
@@ -64,12 +64,11 @@ namespace :integration do
   end
 end
 
-desc 'Foodcritic & Rubocop'
-task default: %w(style:chef style:ruby)
+desc 'Style Tests'
+task default: %w(style:chef style:ruby:auto_correct)
 
-desc 'Foodcritic & Rubocop'
-task style_tasks: %w(style:chef style:ruby)
+desc 'Style Tests (Foodcritic & Rubocop)'
+task style_tests: %w(style:chef style:ruby)
 
-desc 'Circle CI Tasks'
-task circleci: %w(style:chef style:ruby integration:docker)
-# task circleci: %w(style:chef style:ruby)
+desc 'Integration Tests (Test Kitchen)'
+task integration_tests: %w(integration:docker)

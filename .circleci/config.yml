@@ -1,0 +1,96 @@
+version: 2
+timezone:
+  America/Los_Angeles
+
+jobs:
+  style_tests:
+    docker:
+      - image: chef/chefdk:4.3.13
+    working_directory: ~/circulate
+    environment:
+      GEM_HOME: /opt/chefdk/embedded/lib/ruby/gems/2.5.0/gems
+      GEM_PATH: /opt/chefdk/embedded/lib/ruby/gems/2.5.0
+      GEM_ROOT: /opt/chefdk/embedded/lib/ruby/gems/2.5.0
+    steps:
+      - checkout
+#      - run:
+#          name: Install Kitchen Docker
+#          command: /opt/chefdk/embedded/bin/gem install kitchen-docker -v 2.8.0
+#      - run:
+#          name: Debug Outputs
+#          command: /opt/chefdk/embedded/bin/gem list | grep -i kitchen && env
+      - run:
+          name: Create Test Directory
+          command: mkdir reports
+      - run:
+          name: Run Rake Task
+          command: /opt/chefdk/embedded/bin/rake style_tests --trace
+      - store_test_results:
+          path: reports/
+
+  integration_tests:
+    machine: true
+    services:
+      - docker
+    ruby:
+      version: '2.5.3'
+    timezone:
+      America/Los_Angeles
+    working_directory: ~/circulate
+    steps:
+      - checkout
+      - run:
+          name: Create Test Directory
+          command: mkdir reports
+      - run:
+          name: Bundle Gems
+          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+      - run:
+          name: Run Rake Task
+          command: bundle exec rake integration_tests --trace
+      - store_test_results:
+          path: reports/
+  build:
+    docker:
+      - image: chef/chefdk:4.3.13
+    working_directory: ~/circulate
+    steps:
+      - checkout
+      - run:
+          name: Message Building
+          command: echo 'INFO - BUILD'
+  deploy:
+    docker:
+      - image: chef/chefdk:4.3.13
+    working_directory: ~/circulate
+    steps:
+      - checkout
+      - run:
+          name: Message Deploying
+          command: echo 'INFO - DEPLOY'
+
+workflows:
+  version: 2
+  # Put in one because not paying for parallel jobs
+  style_and_integration:
+    jobs:
+    - style_tests
+    - integration_tests:
+        requires:
+        - style_tests
+    - build:
+        requires:
+        - integration_tests
+        filters:
+          branches:
+            only: master
+    - deploy:
+        requires:
+        - build
+        filters:
+          branches:
+            only: master
+
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/076791447ffdd7cf8037

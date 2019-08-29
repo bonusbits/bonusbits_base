@@ -1,17 +1,17 @@
-FROM amazonlinux:latest
+FROM amazonlinux:1-with-sources
 MAINTAINER Levon Becker "levon.docker@bonusbits.com"
-LABEL version="2.1.10" \
+LABEL version="2.1.11" \
       description="Amazon Linux Image built from bonusbits_base cookbook." \
       github="https://github.com/bonusbits/bonusbits_base" \
       website="https://www.bonusbits.com"
 
 # Build Cookbook Args
-#ARG chef_client_version=12.21.4
-ARG chefdk_version=1.6.1
+#ARG chef_client_version=15.2.20
+ARG chefdk_version=4.3.13
 ARG cookbook_name=bonusbits_base
 ARG chef_role=base
 ARG chef_environment=bonusbits_base
-ARG chef_config_path=/opt/chef-repo
+ARG chef_config_path=/etc/chef
 
 # Install Basics
 RUN yum clean all
@@ -46,7 +46,7 @@ RUN /opt/chefdk/bin/chef-client -z --config ${chef_config_path}/client.rb -o "ro
 # Run Chef when Container Created
 WORKDIR ${chef_config_path}
 #ENTRYPOINT ["/bin/bash --login"]
-#CMD ["/bin/sh", "-c", "/opt/chefdk/bin/chef-client", "-z", "--config /opt/chef-repo/client.rb", "-o 'role[base]'", "--environment 'bonusbits_base'", "--log_level info", "--force-formatter", "--chef-zero-port 8889"]
-#CMD /opt/chefdk/bin/chef-client -z --config /opt/chef-repo/client.rb -o "role[base]" --environment "bonusbits_base" --log_level info --force-formatter --chef-zero-port 8889
+#CMD ["/bin/sh", "-c", "/opt/chefdk/bin/chef-client", "-z", "--config /etc/chef/client.rb", "-o 'role[base]'", "--environment 'bonusbits_base'", "--log_level info", "--force-formatter", "--chef-zero-port 8889"]
+#CMD /opt/chefdk/bin/chef-client -z --config /etc/chef/client.rb -o "role[base]" --environment "bonusbits_base" --log_level info --force-formatter --chef-zero-port 8889
 
 #EXPOSE 22

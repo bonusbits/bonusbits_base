@@ -1,5 +1,5 @@
 # Bonus Bits Base Cookbook
-[![Project Release](https://img.shields.io/badge/release-v2.3.1-blue.svg)](https://github.com/bonusbits/bonusbits_base)
+[![Project Release](https://img.shields.io/badge/release-v3.0.0-blue.svg)](https://github.com/bonusbits/bonusbits_base)
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
 [![Join the chat at https://gitter.im/bonusbits/bonusbits_base](https://badges.gitter.im/bonusbits/bonusbits_base.svg)](https://gitter.im/bonusbits/bonusbits_base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub issues](https://img.shields.io/github/issues/bonusbits/bonusbits_base.svg)](https://github.com/bonusbits/bonusbits_base/issues)
@@ -16,8 +16,8 @@ At least temporarily I've focused only ona Amazon Linux. I have not tested all t
 I plan to work through the other distros over time.
 * Linux
     * Amazon (EC2 Only)
-    * RHEL 6/7 (EC2 Only) **Not Fully Tested**
     * CentOS 6/7 **Not Fully Tested**
+    * RHEL/CentOS 6/7 (EC2 Only) **Not Fully Tested**
     * Ubuntu 14/16 **Not Fully Tested**
 * Windows (EC2 Only - WIP) **May Never Get Around to Winderz**
     * 2012 R2
@@ -26,10 +26,13 @@ I plan to work through the other distros over time.
 # Successfully Tested Versions
 | Software | Version |
 | :--- | :--- |
-| Mac OSX | 10.12.4 |
-| Docker | 17.03.1-ce, build c6d412e |
-| Chef Development Kit | 1.6.1 |
-| Chef-client | 12.21.4 |
+| Chef Development Kit | 4.3.13 |
+| Chef Client | 15.2.20 |
+| CircleCI | v2.1 |
+| Docker | 18.09.0 |
+| Inspec | 4.10.4 |
+| Test Kitchen | 2.2.5 |
+| Mac OSX | 10.14.6 |
 
 
 # Attributes
@@ -64,7 +67,6 @@ I plan to work through the other distros over time.
 | Packages         | bonusbits_base:packages:amazon:packages            | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Amazon Linux Packages |
 | Packages         | bonusbits_base:packages:debian:packages            | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Debian Linux Packages |
 | Packages         | bonusbits_base:packages:redhat:packages            | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Redhat Linux Packages |
-| Packages         | bonusbits_base:packages:suse:packages              | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Suse Linux Packages |
 | Packages         | bonusbits_base:packages:windows:packages           | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Windows Packages |
 | Proxy            | bonusbits_base:proxy:configure                     | false                                                                                          | Boolean | Configure proxy settings on system |
 | Proxy            | bonusbits_base:proxy:use_ssl                       | false                                                                                          | Boolean | Use SSL will set **https** for the Proxy URL attribute. Otherwise **http** used |
