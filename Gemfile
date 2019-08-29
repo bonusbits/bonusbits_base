@@ -1,27 +1,24 @@
 source 'https://rubygems.org'
 
-gem 'berkshelf', '~> 5.6'
-gem 'rake', '~> 10.5'
+gem 'aws-sdk-core', '3.62.0'
+gem 'berkshelf', '7.0.8'
+gem 'bundler', '1.17.2'
+gem 'chef', '15.2.20'
+gem 'chef-dk', '4.3.13'
+gem 'rake'
 
 group :style do
-  gem 'chef', '12.21.4'
-  gem 'foodcritic', '~> 10.2'
-  gem 'rainbow', '~> 2.2.1'
-  gem 'rubocop', '~> 0.47.1'
+  gem 'foodcritic', '16.1.1'
+  gem 'rubocop', '0.72.0'
 end
 
 group :unit do
-  gem 'chef-sugar', '~> 3.4'
-  gem 'chefspec', '~> 6.2'
-  gem 'fauxhai', '~> 4.1'
-  gem 'rspec_junit_formatter', '~> 0.2.3'
+  gem 'chefspec', '7.4.0'
+  gem 'rspec_junit_formatter', '0.4.1'
 end
 
 group :integration do
-  gem 'chef-zero', '~> 5.3'
-  gem 'inspec', '~> 1.25'
-  gem 'kitchen-docker', '~> 2.6.0'
-  gem 'kitchen-ec2', '~> 1.3'
-  gem 'kitchen-inspec', '~> 0.17'
-  gem 'test-kitchen', '~> 1.16'
+  gem 'inspec', '4.10.4'
+  gem 'kitchen-docker', '2.9.0'
+  gem 'test-kitchen', '2.2.5'
 end

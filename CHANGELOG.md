@@ -1,7 +1,28 @@
 ## CHANGE LOG
 
-## 2.3.1 - 10/30/2017 - Levon Becker
-* Added Logrotate for Backups
+## 3.0.0 - 03/06/2019 - Levon Becker
+* Updated to ChefDK 4.3.13 - Chef Client 15.2.20 - Ruby 2.5.3
+    * metadata.rb
+    * Readme
+    * Gemfile + lock
+    * Dockerfile
+    * circle.yml
+    * kitchen.yml
+* Updated default Amazon Linux from 2017 to 2018 (RHEL 7)
+    * kitchen.yml
+    * cloudformation
+* Refactored CloudFormation root keys to be alphabetical
+* Added YAML anchors to the kitchen config
+* Added environment variables fetch default examples in the kitchen config
+* Updated Berksfile.lock
+* Commented out test/* in chefignore
+* Removed support suse drafts
+* Merged bonusbits_library cookbook to this cookbook
+* Added helpers library to DRY up cookbook code
+* Moved logic from default attributes to discovery and helpers libraries
+* Improved the shell library sensitive output control
+* Moved .circle.yml to .circleci/config.yml
+* Added Circleci Workflow 
 
 ## 2.3.0 - 10/28/2017 - Levon Becker
 * Added OpenJDK Java Install Option for Linux
