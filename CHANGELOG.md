@@ -1,14 +1,14 @@
 ## CHANGE LOG
 
-## 3.0.0 - 03/06/2019 - Levon Becker
-* Updated to ChefDK 4.3.13 - Chef Client 15.2.20 - Ruby 2.5.3
+## 3.0.0 - 09/06/2019 - Levon Becker
+* Updated to ChefDK 4.3.13 - Chef Client 15.2.20 - Ruby 2.6.3
     * metadata.rb
     * Readme
     * Gemfile + lock
     * Dockerfile
     * circle.yml
     * kitchen.yml
-* Updated default Amazon Linux from 2017 to 2018 (RHEL 7)
+* Updated default Amazon Linux to v1 (Pre systemd)
     * kitchen.yml
     * cloudformation
 * Refactored CloudFormation root keys to be alphabetical

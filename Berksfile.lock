@@ -2,26 +2,16 @@ DEPENDENCIES
   bonusbits_base
     path: .
     metadata: true
-  bonusbits_library
-    git: https://github.com/bonusbits/bonusbits_library.git
-    revision: 6a5b1add0feac50f8ddf4a9288117181f3965b28
 
 GRAPH
-  apt (6.1.4)
-  audit (5.0.3)
-    compat_resource (>= 0.0.0)
-  bonusbits_base (2.3.1)
+  apt (7.2.0)
+  audit (8.1.1)
+  bonusbits_base (3.0.0)
     apt (>= 0.0.0)
     audit (>= 0.0.0)
-    bonusbits_library (>= 0.0.0)
     selinux (>= 0.0.0)
     windows (>= 0.0.0)
     yum-epel (>= 0.0.0)
-  bonusbits_library (1.1.1)
-  compat_resource (12.19.0)
-  ohai (5.2.0)
-  selinux (2.1.0)
-  windows (3.2.0)
-    ohai (>= 4.0.0)
-  yum-epel (2.1.2)
-    compat_resource (>= 12.16.3)
+  selinux (3.0.0)
+  windows (6.0.0)
+  yum-epel (3.3.0)

@@ -49,7 +49,7 @@ a.out
 .rspec
 spec/*
 spec/fixtures/*
-test/*
+#test/*
 features/*
 Guardfile
 Procfile
