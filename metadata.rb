@@ -21,8 +21,6 @@ depends 'audit' # Allows Running InSpec as Part of Chef Run including Remote Pro
   ubuntu
   centos
   redhat
-  suse
-  opensuse
   windows
 ).each do |os|
   supports os

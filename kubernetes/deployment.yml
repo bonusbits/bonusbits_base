@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    author: Levon Becker
+  labels:
+    bonusbits.app: base
+  name: base
+  namespace: bonusbits
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      bonusbits.app: base
+  template:
+    metadata:
+      namespace: bonusbits
+      labels:
+        bonusbits.app: base
+    spec:
+      containers:
+      - name: base
+        image: bonusbits/base
+        imagePullPolicy: IfNotPresent
+        ports:
+          - protocol: TCP
+            containerPort: 8081
+            hostPort: 8081
+        env:
+          - name: AWS_DEFAULT_REGION
+            value: us-west-2
+          - name: region
+            value: us-west-2
+          - name: NAMESPACE
+            value: bonusbits
+

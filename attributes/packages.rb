@@ -58,22 +58,6 @@ default['bonusbits_base']['packages'].tap do |packages|
     which
   )
 
-  packages['suse']['packages'] = %w(
-    awscli
-    curl
-    git
-    gzip
-    htop
-    mlocate
-    net-tools
-    openssl
-    procps
-    sudo
-    util-linux
-    vim
-    which
-  )
-
   packages['windows']['packages'] = %w(
     aws-cli
     powershell

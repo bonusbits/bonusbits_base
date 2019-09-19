@@ -1,0 +1,27 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: BonusBits Base ECR Repository
+
+Parameters:
+  RepoName:
+    Type: String
+
+Resources:
+  ECRRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref RepoName
+      RepositoryPolicyText:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - "ecr:*"
+
+Outputs:
+  DemoECRRepository:
+    Value: !Join ["", [!Ref "AWS::AccountId", ".dkr.ecr.", !Ref "AWS::Region", ".amazonaws.com/", !Ref "ECRRepository"]]

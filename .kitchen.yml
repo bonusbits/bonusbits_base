@@ -70,11 +70,11 @@ suites:
     provisioner:
       client_rb:
         environment: bonusbits_base
-#    attributes:
-#      <% if ENV['CIRCLECI'] %>
-#      bonusbits_base:
-#        deployment_location: 'circleci'
-#      <% end %>
+    attributes:
+      <% if ENV['CIRCLECI'] %>
+      bonusbits_base:
+        deployment_location: 'circleci'
+      <% end %>
     includes: ["amazon-docker"]
 
   - name: docker_base_java

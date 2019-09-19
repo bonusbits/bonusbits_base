@@ -2,7 +2,6 @@
 amazon_packages = node['bonusbits_base']['packages']['amazon']['packages']
 debian_packages = node['bonusbits_base']['packages']['debian']['packages']
 redhat_packages = node['bonusbits_base']['packages']['redhat']['packages']
-suse_packages = node['bonusbits_base']['packages']['suse']['packages']
 
 if node['bonusbits_base']['packages']['update']
   # Update System Packages
@@ -28,8 +27,6 @@ when 'redhat', 'centos'
   package redhat_packages
 when 'amazon'
   package amazon_packages
-when 'suse', 'opensuse'
-  package suse_packages
 else
   return
 end

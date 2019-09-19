@@ -41,7 +41,7 @@ RUN /opt/chefdk/bin/berks install
 RUN /opt/chefdk/bin/berks vendor ${chef_config_path}/cookbooks/
 
 # Run Chef
-RUN /opt/chefdk/bin/chef-client -z --config ${chef_config_path}/client.rb -o "role[${chef_role}]" --environment "${chef_environment}" --log_level info --force-formatter --chef-zero-port 8889
+RUN /opt/chefdk/bin/chef-client -z --chef-license accept --config ${chef_config_path}/client.rb -o "role[${chef_role}]" --environment "${chef_environment}" --log_level info --force-formatter --chef-zero-port 8889
 
 # Run Chef when Container Created
 WORKDIR ${chef_config_path}

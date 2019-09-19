@@ -18,11 +18,15 @@
 * Commented out test/* in chefignore
 * Removed support suse drafts
 * Merged bonusbits_library cookbook to this cookbook
-* Added helpers library to DRY up cookbook code
+* >Added helpers library to DRY up cookbook code
 * Moved logic from default attributes to discovery and helpers libraries
 * Improved the shell library sensitive output control
 * Moved .circle.yml to .circleci/config.yml
-* Added Circleci Workflow 
+* Added Circleci Workflow
+* Split Rakefile tasks into separate files under tasks directory
+* Added Kubernetes deployment and service configurations
+* >Added rake task for building Docker image that then can be used to deploy to Kubernetes Cluster locally
+* Updated Inspec attributes ??
 
 ## 2.3.0 - 10/28/2017 - Levon Becker
 * Added OpenJDK Java Install Option for Linux

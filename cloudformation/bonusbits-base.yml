@@ -411,7 +411,7 @@ Resources:
         run_chef_client:
           commands:
             01_run_chef:
-              command: !Sub "/opt/chefdk/bin/chef-client -z -o 'recipe[${CookbookName}]' --environment 'aws' --config /etc/chef/client.rb --log_level info --force-formatter --chef-zero-port 8889"
+              command: !Sub "/opt/chefdk/bin/chef-client -z --chef-license accept -o 'recipe[${CookbookName}]' --environment 'aws' --config /etc/chef/client.rb --log_level info --force-formatter --chef-zero-port 8889"
         warm_ebs:
           commands:
             01_warm_ebs:
