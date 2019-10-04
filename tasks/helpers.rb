@@ -1,5 +1,5 @@
-def load_vars()
-  @env_vars = YAML.load_file(File.join(__dir__,"../vars/envs/#{deploy_env.downcase}.yml"))
+def load_vars
+  @env_vars = YAML.load_file(File.join(__dir__, "../vars/envs/#{deploy_env.downcase}.yml"))
 end
 
 def k8s_deployment_check_command(namespace, deployment_name)
