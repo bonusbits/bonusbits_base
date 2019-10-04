@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 timezone:
   America/Los_Angeles
 
@@ -29,11 +29,11 @@ jobs:
           path: reports/
 
   integration_tests:
-    machine: true
+    machine:
+      image: circleci/ruby:2.6.3
+      docker_layer_caching: true    # default - false
     services:
       - docker
-    ruby:
-      version: '2.6.3'
     timezone:
       America/Los_Angeles
     working_directory: ~/circulate
@@ -50,6 +50,7 @@ jobs:
           command: bundle exec rake integration:docker --trace
       - store_test_results:
           path: reports/
+
   build:
     docker:
       - image: chef/chefdk:4.3.13
@@ -59,6 +60,7 @@ jobs:
       - run:
           name: Message Building
           command: echo 'INFO - BUILD'
+
   deploy:
     docker:
       - image: chef/chefdk:4.3.13
