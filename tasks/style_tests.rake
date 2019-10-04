@@ -15,5 +15,5 @@ namespace :style do
   end
 end
 
-desc 'Style Tests'
-task default: %w(style:chef style:ruby:auto_correct)
+desc 'Style Tests (Foodcritic & Rubocop)'
+task style_tests: %w(style:chef style:ruby)

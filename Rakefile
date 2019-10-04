@@ -5,8 +5,5 @@ Dir.glob('tasks/*.rake').each do |task_file|
   load task_file
 end
 
-desc 'Style Tests (Foodcritic & Rubocop)'
-task style_tests: %w(style:chef style:ruby)
-
-desc 'Integration Tests (Test Kitchen)'
-task integration_tests: %w(integration:docker)
+desc 'Style Tests'
+task default: %w(style:chef style:ruby:auto_correct)
