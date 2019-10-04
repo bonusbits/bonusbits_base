@@ -3,6 +3,7 @@ module BonusBits
   class Discovery
     def self.ec2?(fqdn, platform_family)
       return true if fqdn =~ /^ip-.*\.compute\.internal$/
+
       case platform_family
       when 'rhel'
         ec2_net_script = '/etc/sysconfig/network-scripts/ec2net-functions'

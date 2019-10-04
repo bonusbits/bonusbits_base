@@ -22,6 +22,7 @@ end
 def ec2?
   fqdn = node['fqdn']
   return true if fqdn =~ /^ip-.*\.compute\.internal$/
+
   case node['platform_family']
   when 'rhel'
     ec2_user = '/home/ec2-user'

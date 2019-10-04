@@ -28,7 +28,7 @@ when 'linux'
       only_if { ec2_deployment } # Template calls ohai ec2
     end
   when 'centos', 'redhat' # ~FC024
-    package %w(python python-setuptools)
+    package %w[python python-setuptools]
 
     # Create Symlink to configs.
     ## So if used to looking for the configs where the RPM installs.
@@ -116,7 +116,7 @@ when 'linux'
   # Define Service
   service 'awslogs' do
     service_name 'awslogs'
-    action [:enable, :start]
+    action %i[enable start]
     only_if { ec2_deployment }
   end
 when 'windows'

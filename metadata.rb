@@ -15,13 +15,13 @@ depends 'selinux'
 depends 'windows'
 depends 'audit' # Allows Running InSpec as Part of Chef Run including Remote Profiles
 
-%w(
+%w[
   amazon
   debian
   ubuntu
   centos
   redhat
   windows
-).each do |os|
+].each do |os|
   supports os
 end

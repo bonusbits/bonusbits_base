@@ -6,4 +6,4 @@ Dir.glob('tasks/*.rake').each do |task_file|
 end
 
 desc 'Style Tests'
-task default: %w(style:chef style:ruby:auto_correct)
+task default: %w[style:chef style:ruby:auto_correct]

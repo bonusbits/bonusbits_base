@@ -1,10 +1,6 @@
 # To create /etc/sysconfig/network for init scripts such as Nginx
 default['bonusbits_base']['docker']['deploy_sysconfig_network'] =
-  if node['bonusbits_base']['deployment_type'] == 'docker'
-    true
-  else
-    false
-  end
+  node['bonusbits_base']['deployment_type'] == 'docker'
 
 # Debug
 message_list = [

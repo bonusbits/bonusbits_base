@@ -4,7 +4,7 @@ default['bonusbits_base']['backups'].tap do |backups|
   # Paths
   backups['local_tmp_path'] = '/tmp/backups'
   # Array of Paths to backup
-  backups['backup_paths'] = %w(/etc /opt)
+  backups['backup_paths'] = %w[/etc /opt]
   backups['script_filename'] = 'backup_to_s3.rb'
   backups['script_fullname'] = "/usr/bin/#{node['bonusbits_base']['backups']['script_filename']}"
   script_fullname = node['bonusbits_base']['backups']['script_fullname']

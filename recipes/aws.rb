@@ -35,7 +35,7 @@ end
 if node['bonusbits_base']['aws']['install_tools']
   case node['platform']
   when 'redhat'
-    package %w(python python-setuptools)
+    package %w[python python-setuptools]
 
     # Install Latest Pip (~> 9.)
     ruby_block 'Install Pip' do

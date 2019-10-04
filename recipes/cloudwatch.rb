@@ -3,11 +3,11 @@ when 'linux'
   scripts_local_path = '/opt/aws-scripts-mon'
   case node['platform']
   when 'amazon'
-    package_list = %w(perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https zip unzip)
+    package_list = %w[perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https zip unzip]
   when 'centos', 'redhat' # ~FC024
-    package_list = %w(perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA zip unzip)
+    package_list = %w[perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA zip unzip]
   when 'ubuntu', 'debian'
-    package_list = %w(unzip libwww-perl libdatetime-perl)
+    package_list = %w[unzip libwww-perl libdatetime-perl]
   else
     return
   end

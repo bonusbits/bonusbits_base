@@ -1,5 +1,3 @@
-use_inline_resources
-
 action :display_output do
   ruby_block new_resource.name do
     block do
@@ -14,9 +12,6 @@ action :display_output do
     end
     action :run
   end
-
-  # Notify Observers
-  new_resource.updated_by_last_action(true)
 end
 
 # Used to force Output When intended and not at start of converge
@@ -27,7 +22,4 @@ action :action do
     end
     action :run
   end
-
-  # Notify Observers
-  new_resource.updated_by_last_action(true)
 end

@@ -3,7 +3,7 @@ default['bonusbits_base']['packages'].tap do |packages|
   packages['update'] = true
 
   # Packages Lists
-  packages['amazon']['packages'] = %w(
+  packages['amazon']['packages'] = %w[
     aws-cli
     ca-certificates
     curl
@@ -21,9 +21,9 @@ default['bonusbits_base']['packages'].tap do |packages|
     util-linux
     vim-enhanced
     which
-  )
+  ]
 
-  packages['debian']['packages'] = %w(
+  packages['debian']['packages'] = %w[
     awscli
     curl
     git
@@ -38,9 +38,9 @@ default['bonusbits_base']['packages'].tap do |packages|
     util-linux
     vim
     which
-  )
+  ]
 
-  packages['redhat']['packages'] = %w(
+  packages['redhat']['packages'] = %w[
     ca-certificates
     curl
     git
@@ -56,14 +56,14 @@ default['bonusbits_base']['packages'].tap do |packages|
     util-linux-ng
     vim-enhanced
     which
-  )
+  ]
 
-  packages['windows']['packages'] = %w(
+  packages['windows']['packages'] = %w[
     aws-cli
     powershell
     sysinternals
     git
-  )
+  ]
 end
 
 # Debug

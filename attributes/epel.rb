@@ -3,9 +3,9 @@ default['bonusbits_base']['epel'].tap do |epel|
   epel['configure'] = false
   epel['install_packages'] = false
 
-  epel['packages'] = %w(
+  epel['packages'] = %w[
     htop
-  )
+  ]
 end
 
 # Debug

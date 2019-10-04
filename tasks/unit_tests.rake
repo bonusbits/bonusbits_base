@@ -8,6 +8,6 @@ namespace :unit do
   RSpec::Core::RakeTask.new(:circleci_rspec) do |test|
     # t.fail_on_error = false
     test.rspec_opts =
-        '--no-drb -r rspec_junit_formatter --format RspecJunitFormatter -o reports/rspec.xml'
+      '--no-drb -r rspec_junit_formatter --format RspecJunitFormatter -o reports/rspec.xml'
   end
 end
