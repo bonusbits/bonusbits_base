@@ -1,5 +1,15 @@
-def load_vars
-  @env_vars = YAML.load_file(File.join(__dir__, "../vars/envs/#{deploy_env.downcase}.yml"))
+def load_project_vars
+  require 'yaml'
+  deploy_env = ENV.fetch('DEPLOY_ENV', 'local')
+  @project_vars = YAML.load_file(File.join(__dir__, "../vars/#{deploy_env.downcase}.yml"))
+end
+
+def show_project_vars
+  puts 'Project Variables'
+  puts '------------------'
+  @project_vars.each do |key, value|
+    puts "#{key}: #{value}"
+  end
 end
 
 def k8s_deployment_check_command(namespace, deployment_name)

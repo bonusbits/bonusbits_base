@@ -1,5 +1,3 @@
-require_relative 'helpers.rb'
-
 # Style tests. Rubocop and Foodcritic
 namespace :style do
   require 'rubocop/rake_task'
