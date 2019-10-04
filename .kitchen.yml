@@ -38,9 +38,10 @@ platforms:
     driver:
       name: docker
       use_sudo: false
-      image: amazonlinux:1-with-sources
+      # image: amazonlinux:1-with-sources
+      image: amazonlinux:2018.03.0.20190826-with-sources
       platform: rhel
-      provision_command:provision_command:
+      provision_command:
         # - echo "export http_proxy=<%= ENV['http_proxy']%>" > /etc/profile.d/proxy.sh
         # - echo "export https_proxy=<%= ENV['https_proxy']%>" >> /etc/profile.d/proxy.sh
         # - echo "export no_proxy=<%= ENV['no_proxy']%>" >> /etc/profile.d/proxy.sh
@@ -203,10 +204,10 @@ verifier:
   inspec_tests:
     - name: bootstrap
       git: https://github.com/bonusbits/inspec_bootstrap.git
-    - name: bonusbits_base
-      git: https://github.com/bonusbits/inspec_bonusbits_base.git
-      release: 1.0.0
-    # - path: ../inspec_bonusbits_base
+    #- name: bonusbits_base
+    #  git: https://github.com/bonusbits/inspec_bonusbits_base.git
+    #  release: 1.0.0
+    - path: ../inspec_bonusbits_base
   attributes:
     debug: 'false'
     chef_version: '15.2.20'

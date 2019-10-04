@@ -1,15 +1,6 @@
 # Deploy AWS Profile Script & Tools
 include_recipe 'bonusbits_base::aws' if node['bonusbits_base']['deployment_type'] == 'ec2'
 
-# Container Discovery
-case node['platform']
-when 'amazon'
-  # Install & Configure Yum Cron (Only works on Amazon Linux So Far)
-  include_recipe 'bonusbits_base::yum_cron' if node['bonusbits_base']['yum_cron']['configure']
-else
-  return
-end
-
 # Setup CloudWatch Logs
 include_recipe 'bonusbits_base::cloudwatch_logs' if node['bonusbits_base']['cloudwatch_logs']['configure']
 

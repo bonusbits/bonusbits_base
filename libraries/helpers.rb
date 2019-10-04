@@ -1,5 +1,3 @@
-require 'aws-sdk'
-
 def amazon_linux?
   node['platform'] == 'amazon'
 end

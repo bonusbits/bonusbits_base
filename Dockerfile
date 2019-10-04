@@ -1,6 +1,6 @@
-FROM amazonlinux:1-with-sources
+FROM amazonlinux:2018.03.0.20190826-with-sources
 MAINTAINER Levon Becker "levon.docker@bonusbits.com"
-LABEL version="2.1.11" \
+LABEL version="3.0.0" \
       description="Amazon Linux Image built from bonusbits_base cookbook." \
       github="https://github.com/bonusbits/bonusbits_base" \
       website="https://www.bonusbits.com"
