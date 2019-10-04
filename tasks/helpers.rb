@@ -12,6 +12,18 @@ def show_project_vars
   end
 end
 
+def render_erb_yml_template(template)
+  require 'erb'
+  require 'yaml'
+  require 'json'
+
+  erb_template = ERB.new(File.read(template)).result
+  YAML.safe_load(erb_template).to_json
+  # rendered_service = YAML.safe_load(erb_template)
+  # Write Rendered Config Data to file
+  # File.open(template, 'w') { |file| file.write(rendered_service.to_yaml) }
+end
+
 def k8s_deployment_check_command(namespace, deployment_name)
   require 'open3'
   string_token_count = ENV['LOCAL_DEPLOY'] == 'true' ? '4' : '5'
