@@ -32,10 +32,6 @@ jobs:
     machine:
       image: circleci/ruby:2.6.3
       docker_layer_caching: true
-    services:
-      - docker
-    timezone:
-      America/Los_Angeles
     working_directory: ~/circulate
     steps:
       - checkout
