@@ -43,6 +43,9 @@ jobs:
           name: Create Reports Directory
           command: mkdir reports
       - run:
+          name: Install Ruby 2.6.5
+          command: rvm install ruby 2.6.5
+      - run:
           name: Install ChefDK
           command: wget https://packages.chef.io/files/stable/chefdk/4.3.13/ubuntu/16.04/chefdk_4.3.13-1_amd64.deb && sudo dpkg -i chefdk_4.3.13-1_amd64.deb && eval "$(chef shell-init bash)"
       - run:
