@@ -43,8 +43,11 @@ jobs:
           name: Create Reports Directory
           command: mkdir reports
       - run:
-          name: Upgrade ChefDK
-          command: wget https://packages.chef.io/files/stable/chefdk/4.3.13/ubuntu/18.04/chefdk_4.3.13-1_amd64.deb && sudo dpkg -i chefdk_4.3.13-1_amd64.deb && eval "$(chef shell-init bash)"
+          name: Install ChefDK
+          command: wget https://packages.chef.io/files/stable/chefdk/4.3.13/ubuntu/16.04/chefdk_4.3.13-1_amd64.deb && sudo dpkg -i chefdk_4.3.13-1_amd64.deb && eval "$(chef shell-init bash)"
+      - run:
+          name: Debug
+          command: echo "DEBUG - Ruby Version ($(ruby -v), $(which ruby), $(docker -v))"
       - run:
           name: Bundle Gems
           command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
