@@ -30,7 +30,7 @@ jobs:
 
   integration_tests:
     machine:
-      image: ruby:2.6.5-node
+      image: ubuntu-1604:201903-01
       docker_layer_caching: true
     working_directory: ~/circulate
     steps:
@@ -38,6 +38,9 @@ jobs:
       - run:
           name: Create Reports Directory
           command: mkdir reports
+      - run:
+          name: Upgrade Ruby
+          command: apt install ruby2.5 -y
       - run:
           name: Bundle Gems
           command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
