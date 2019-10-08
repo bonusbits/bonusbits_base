@@ -204,10 +204,10 @@ verifier:
   inspec_tests:
     - name: bootstrap
       git: https://github.com/bonusbits/inspec_bootstrap.git
-    #- name: bonusbits_base
-    #  git: https://github.com/bonusbits/inspec_bonusbits_base.git
-    #  release: 1.0.0
-    - path: ../inspec_bonusbits_base
+    - name: bonusbits_base
+      git: https://github.com/bonusbits/inspec_bonusbits_base.git
+      release: 1.0.0
+    #- path: ../inspec_bonusbits_base
   attributes:
     debug: 'false'
     chef_version: '15.2.20'
