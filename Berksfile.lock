@@ -5,13 +5,9 @@ DEPENDENCIES
 
 GRAPH
   apt (7.2.0)
-  audit (8.1.1)
+  audit (9.0.1)
   bonusbits_base (3.0.0)
     apt (>= 0.0.0)
     audit (>= 0.0.0)
     selinux (>= 0.0.0)
-    windows (>= 0.0.0)
-    yum-epel (>= 0.0.0)
   selinux (3.0.0)
-  windows (6.0.0)
-  yum-epel (3.3.0)

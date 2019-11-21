@@ -1,4 +1,4 @@
-ec2_deployment = node['bonusbits_base']['deployment_type'] == 'ec2'
+ec2_deployment = ec2?
 
 case node['os']
 when 'linux'

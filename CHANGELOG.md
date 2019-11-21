@@ -1,6 +1,11 @@
 ## CHANGE LOG
 
-## 3.0.0 - 09/06/2019 - Levon Becker
+## 3.0.1 - TODO List - Levon Becker
+* Get jUnit test results working for rubocop rake task
+* Replace attributes with helper method calls
+* Added rake task for building Docker image that then can be used to deploy to Kubernetes Cluster locally
+
+## 3.0.0 - 10/11/2019 - Levon Becker
 * Updated to ChefDK 4.3.13 - Chef Client 15.2.20 - Ruby 2.6.3
     * metadata.rb
     * Readme
@@ -18,15 +23,17 @@
 * Commented out test/* in chefignore
 * Removed support suse drafts
 * Merged bonusbits_library cookbook to this cookbook
-* >Added helpers library to DRY up cookbook code
 * Moved logic from default attributes to discovery and helpers libraries
 * Improved the shell library sensitive output control
 * Moved .circle.yml to .circleci/config.yml
 * Added Circleci Workflow
 * Split Rakefile tasks into separate files under tasks directory
 * Added Kubernetes deployment and service configurations
-* >Added rake task for building Docker image that then can be used to deploy to Kubernetes Cluster locally
-* Updated Inspec attributes ??
+* Updated Inspec attributes
+* Removed draft Windows support... not doing this any time soon, so drying up logic and sticking with Amazon Linux and Ubuntu
+* Added Indicator library and resource for creating indicator files
+* Added ec2_status attribute, recipe, library and resource for checking AWS EC2 Instance status
+* Added helpers library to DRY up cookbook code
 
 ## 2.3.0 - 10/28/2017 - Levon Becker
 * Added OpenJDK Java Install Option for Linux

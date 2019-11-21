@@ -21,7 +21,7 @@ default['bonusbits_base']['backups'].tap do |backups|
 
   # Filename
   backups['filename'] =
-    if node['bonusbits_base']['deployment_type'] == 'ec2'
+    if ec2?
       "#{node['ec2']['instance_id']}-backup.tar.gz"
     else
       'backups.tar.gz'
@@ -31,7 +31,7 @@ default['bonusbits_base']['backups'].tap do |backups|
   ## Recommended to turn on Versioning and add Lifecycle to bucket
   backups['s3_bucket_name'] = 'backup_bucket' # !! Required Override !!
   filename = node['bonusbits_base']['backups']['filename']
-  env = run_state['detected_environment']
+  env = node.run_state['detected_environment']
   s3_backup_bucket = node['bonusbits_base']['backups']['s3_bucket_name']
   backups['s3_full_path'] = "#{s3_backup_bucket}/backups/#{env}/#{filename}"
 

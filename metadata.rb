@@ -9,10 +9,8 @@ chef_version '~> 15.2' if respond_to?(:chef_version)
 source_url 'https://github.com/bonusbits/bonusbits_base'
 issues_url 'https://github.com/bonusbits/bonusbits_base/issues'
 
-depends 'yum-epel'
 depends 'apt'
 depends 'selinux'
-depends 'windows'
 depends 'audit' # Allows Running InSpec as Part of Chef Run including Remote Profiles
 
 %w[
@@ -21,7 +19,6 @@ depends 'audit' # Allows Running InSpec as Part of Chef Run including Remote Pro
   ubuntu
   centos
   redhat
-  windows
 ].each do |os|
   supports os
 end

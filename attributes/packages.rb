@@ -23,8 +23,9 @@ default['bonusbits_base']['packages'].tap do |packages|
     which
   ]
 
-  packages['debian']['packages'] = %w[
+  packages['ubuntu']['packages'] = %w[
     awscli
+    bash-completion
     curl
     git
     gzip
@@ -37,6 +38,7 @@ default['bonusbits_base']['packages'].tap do |packages|
     upstart
     util-linux
     vim
+    wget
     which
   ]
 
@@ -55,14 +57,8 @@ default['bonusbits_base']['packages'].tap do |packages|
     upstart
     util-linux-ng
     vim-enhanced
+    wget
     which
-  ]
-
-  packages['windows']['packages'] = %w[
-    aws-cli
-    powershell
-    sysinternals
-    git
   ]
 end
 

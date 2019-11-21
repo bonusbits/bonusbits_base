@@ -66,69 +66,52 @@ provisioner:
 
 suites:
   - name: docker_base
-    run_list:
-      - role[base]
+    attributes:
+      <% if ENV['CIRCLECI'] %>
+      bonusbits_base:
+        deployment_location: 'circleci'
+      <% end %>
+    includes: ["amazon-docker"]
     provisioner:
       client_rb:
         environment: bonusbits_base
+    run_list:
+      - role[base]
+
+  - name: docker_base_java
     attributes:
       <% if ENV['CIRCLECI'] %>
       bonusbits_base:
         deployment_location: 'circleci'
       <% end %>
     includes: ["amazon-docker"]
-
-  - name: docker_base_java
-    run_list:
-      - role[base]
     provisioner:
       client_rb:
         environment: bonusbits_base_java
-    attributes:
-      <% if ENV['CIRCLECI'] %>
-      bonusbits_base:
-        deployment_location: 'circleci'
-      <% end %>
-    verifier:
-      attributes:
-        install_java: 'true'
-        java_package_name: 'java-1.8.0-openjdk'
-        specify_version: 'false'
-        java_version: '1.8.0.151-1.b12.35.amzn1'
-    includes: ["amazon-docker"]
-
-  - name: docker_base_epel_repo
     run_list:
       - role[base]
-    provisioner:
-      client_rb:
-        environment: bonusbits_base_epel_repo
     verifier:
       attributes:
-        configure_epel: 'true'
-        install_epel_packages: 'true'
-    attributes:
-      <% if ENV['CIRCLECI'] %>
-      bonusbits_base:
-        deployment_location: 'circleci'
-      <% end %>
-    includes: ["amazon-docker"]
+        test_java: 'true'
+        java_package_name: 'java-1.8.0-openjdk'
+        java_specify_version: 'false'
+        java_version: '1.8.0.151-1.b12.35.amzn1'
 
   - name: docker_base_no_software
-    run_list:
-      - role[base]
+    attributes:
+      <% if ENV['CIRCLECI'] %>
+      bonusbits_base:
+        deployment_location: 'circleci'
+      <% end %>
+    includes: ["amazon-docker"]
     provisioner:
       client_rb:
         environment: bonusbits_base_no_software
+    run_list:
+      - role[base]
     verifier:
       attributes:
-        install_packages: 'false'
-    attributes:
-      <% if ENV['CIRCLECI'] %>
-      bonusbits_base:
-        deployment_location: 'circleci'
-      <% end %>
-    includes: ["amazon-docker"]
+        test_packages: 'false'
 
   - name: ec2_base
     provisioner:
@@ -141,7 +124,7 @@ suites:
       - role[base]
     verifier:
       attributes:
-        configure_backups: 'true'
+        test_backups: 'true'
     includes: ["amazon-ami"]
 
   - name: ec2_base_java
@@ -155,28 +138,11 @@ suites:
       - role[base]
     verifier:
       attributes:
-        configure_backups: 'false'
-        install_java: 'true'
+        test_backups: 'false'
+        test_java: 'true'
         java_package_name: 'java-1.8.0-openjdk'
-        specify_version: 'false'
+        java_specify_version: 'false'
         java_version: '1.8.0.151-1.b12.35.amzn1'
-    includes: ["amazon-ami"]
-
-  - name: ec2_base_epel_repo
-    provisioner:
-      client_rb:
-        environment: bonusbits_base_epel_repo
-    driver:
-      tags:
-        Name: kitchen-bonusbits-base-epel-<%= ENV['USER'] %>
-        Created-By: Test Kitchen
-        Owner: *aws_tag_owner
-    run_list:
-      - role[base]
-    verifier:
-      attributes:
-        configure_epel: 'true'
-        install_epel_packages: 'true'
     includes: ["amazon-ami"]
 
   - name: ec2_base_no_software
@@ -192,22 +158,23 @@ suites:
       - role[base]
     verifier:
       attributes:
-        install_packages: 'false'
+        test_packages: 'false'
     includes: ["amazon-ami"]
 
 verifier:
-  name: inspec
-  format: <%= ENV['CI'] ? 'junit' : 'cli' %>
-  <% if ENV['CI'] %>
-  output: "reports/%{platform}_%{suite}_inspec.xml"
-  <% end %>
-  inspec_tests:
-    - name: bootstrap
-      git: https://github.com/bonusbits/inspec_bootstrap.git
-    - name: bonusbits_base
-      git: https://github.com/bonusbits/inspec_bonusbits_base.git
-      release: 1.0.0
-    #- path: ../inspec_bonusbits_base
   attributes:
-    debug: 'false'
-    chef_version: '15.2.20'
+    debug: 'true'
+    test_chef: 'true'
+    chef_client_version: '15.2.20'
+    chef_dk_version: '4.3.13'
+  inspec_tests:
+    #- name: bonusbits_base
+    #  git: https://github.com/bonusbits/inspec_bonusbits_base.git
+    #  release: 2.0.0
+    - path: ../inspec_bonusbits_base
+  name: inspec
+  reporter:
+    - cli
+  <% if ENV['CI'] %>
+    - junit:reports/integration/%{platform}_%{suite}_inspec.xml
+  <% end %>

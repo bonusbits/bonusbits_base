@@ -1,4 +1,9 @@
+AlignParameters:
+  Enabled: false
+
 AllCops:
+  # Version on /opt/chefdk/embedded/bin/ruby --version
+  TargetRubyVersion: 2.6.3
   Exclude:
     - 'berks-cookbooks/**/*'
     - '.idea/**/*'
@@ -7,8 +12,17 @@ AllCops:
     - '*.lock'
     - 'vendor/**/*'
 
+CaseIndentation:
+  IndentOneStep: false
+
+CyclomaticComplexity:
+  Enabled: false
+
 Documentation:
   Enabled: false
+
+Metrics/AbcSize:
+  Max: 28
 
 Metrics/LineLength:
   Max: 256
@@ -17,9 +31,11 @@ Metrics/BlockLength:
   Enabled: false
 
 Metrics/MethodLength:
-  Max: 60
+  Max: 128
   CountComments: false
-  Enabled: true
+
+Metrics/PerceivedComplexity:
+  Max: 10
 
 Style/Encoding:
   Enabled: false
@@ -28,12 +44,6 @@ Style/SignalException:
   EnforcedStyle: only_raise
 
 Style/EmptyLiteral:
-  Enabled: false
-
-CyclomaticComplexity:
-  Enabled: false
-
-AlignParameters:
   Enabled: false
 
 Encoding:

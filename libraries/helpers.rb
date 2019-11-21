@@ -1,10 +1,11 @@
+# Boolean return methods used in cookbook to reduced syntax to call node information
+
 def amazon_linux?
   node['platform'] == 'amazon'
 end
 
 def aws?
-  # TODO: Need more magic for ECS Docker container
-  ec2?
+  node['bonusbits_base']['deployment_location'] == 'aws'
 end
 
 def cloudformation?
@@ -16,23 +17,11 @@ def dev?
 end
 
 def docker?
-  File.exist?('/.dockerenv')
+  node['bonusbits_base']['deployment_type'] == 'docker'
 end
 
 def ec2?
-  fqdn = node['fqdn']
-  return true if fqdn =~ /^ip-.*\.compute\.internal$/
-
-  case node['platform_family']
-  when 'rhel'
-    ec2_user = '/home/ec2-user'
-    ec2_net_script = '/etc/sysconfig/network-scripts/ec2net-functions'
-    ::File.directory?(ec2_user) || ::File.exist?(ec2_net_script)
-  when 'windows'
-    ::File.directory?('C:/Users/ec2-user')
-  else
-    false
-  end
+  node['bonusbits_base']['deployment_type'] == 'ec2'
 end
 
 def kitchen?

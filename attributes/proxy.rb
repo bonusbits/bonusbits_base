@@ -50,6 +50,7 @@ message_list = [
   "Configure                   (#{node['bonusbits_base']['proxy']['configure']})",
   "Host Address                (#{node['bonusbits_base']['proxy']['host']})",
   "Host Port                   (#{node['bonusbits_base']['proxy']['port']})",
+  "URL                         (#{node['bonusbits_base']['proxy']['url']})",
   "Use SSL                     (#{node['bonusbits_base']['proxy']['use_ssl']})"
 ]
 message_list.each do |message|

@@ -39,5 +39,29 @@ module BonusBits
         response.body
       end
     end
+
+    def self.check_ec2_status(region, instance_id, indicator_file)
+      require 'aws-sdk'
+      return if ::File.exist?(indicator_file)
+
+      loop_count = 0
+      ec2_instance_status = nil
+      ec2_system_status = nil
+      until loop_count >= 180 || ec2_instance_status == 'ok' && ec2_system_status == 'ok'
+        ec2 = ::Aws::EC2::Client.new(region: region)
+        ec2_status_response = ec2.describe_instance_status(instance_ids: [instance_id])
+        ec2_instance_status = ec2_status_response.instance_statuses[0].instance_status.status
+        ec2_system_status = ec2_status_response.instance_statuses[0].system_status.status
+        loop_count += 1
+        puts ''
+        puts "INFO: EC2 Instance Status (#{ec2_instance_status})"
+        puts "INFO: EC2 System Status   (#{ec2_system_status})"
+        puts ''
+        sleep 5 unless ec2_instance_status == 'ok' && ec2_system_status == 'ok'
+      end
+      raise 'ERROR: ECS Instance has not returned (ok)!' unless ec2_instance_status == 'ok' && ec2_system_status == 'ok'
+
+      GheBase::Indicator.create_indicator_file(indicator_file)
+    end
   end
 end

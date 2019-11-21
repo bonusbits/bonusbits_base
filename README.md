@@ -5,23 +5,16 @@
 [![GitHub issues](https://img.shields.io/github/issues/bonusbits/bonusbits_base.svg)](https://github.com/bonusbits/bonusbits_base/issues)
 
 # Purpose
-Chef Cookbook that will setup the basics for various flavors of Linux and Windows Servers.
+Chef Cookbook that will setup the basics for Amazon Linux or Ubuntu systems.
 Be sure to set appropriate overrides for what you do and don't want to be setup in your environment files.
 This is a great starting point for all your nodes. It's also a great example for writing wrapper cookbooks.
 
 The secondary purpose of this cookbook is to give various examples that can be replicated in other cookbooks. I did my best to include all the major coding and testing scenarios.
 
 # Supported Platforms
-At least temporarily I've focused only ona Amazon Linux. I have not tested all the other flavors since v2.0.0 release.
-I plan to work through the other distros over time.
-* Linux
-    * Amazon (EC2 Only)
-    * CentOS 6/7 **Not Fully Tested**
-    * RHEL/CentOS 6/7 (EC2 Only) **Not Fully Tested**
-    * Ubuntu 14/16 **Not Fully Tested**
-* Windows (EC2 Only - WIP) **May Never Get Around to Winderz**
-    * 2012 R2
-    * 2016
+Primary Focus is on Amazon Linux then Ubuntu. RHEL and CentOS not tested but should work.
+* Amazon Linux v1 (2018.3)
+* Ubuntu 16/18 **Not Fully Tested**
 
 # Successfully Tested Versions
 | Software | Version |

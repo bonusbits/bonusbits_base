@@ -1,13 +1,12 @@
 # Determine Environment
-run_state['detected_environment'] =
-  if /dev|qa|stg|prd/ =~ node.environment
-    /dev|qa|stg|prd/.match(node.environment).to_s.downcase
-  else
-    # Consider _default as 'Dev'
-    'dev'
-  end
+node.run_state['detected_environment'] =
+    if /dev|qa|stg|prd/ =~ node.environment
+      /dev|qa|stg|prd/.match(node.environment).to_s.downcase
+    else
+      # Consider _default as 'Dev'
+      'dev'
+    end
 
-# TODO: OHAI PLUGIN STOPPED WORKING! Maybe Newer version of Docker causing problem...
 default['bonusbits_base'].tap do |root|
   # Determine Deployment Type
   root['deployment_type'] =
@@ -24,10 +23,11 @@ default['bonusbits_base'].tap do |root|
       'vbox'
     elsif node['virtualization']['system'] == 'xen' && BonusBits::Discovery.ec2?(node['fqdn'], node['platform_family'])
       'ec2'
-    elsif File.exist?('/.dockerenv') # Workaround for Ohai Virtualization Plugin Failing on Docker now
+    elsif node['virtualization']['system'] == 'docker'
       'docker'
     else
       'other'
+      # TODO: Add Pod (Kubernetes) Discovery
     end
 
   # Determine Deployment Location
@@ -81,13 +81,17 @@ end
 message_list = [
   '',
   '** Default **',
-  "Detected Environment        (#{run_state['detected_environment']})",
+  "Detected Environment        (#{node.run_state['detected_environment']})",
   "Deployment Type             (#{node['bonusbits_base']['deployment_type']})",
   "Deployment Location         (#{node['bonusbits_base']['deployment_location']})",
   "Deployment Method           (#{node['bonusbits_base']['deployment_method']})",
   "Local File Cache            (#{node['bonusbits_base']['local_file_cache']})",
-  "Chef Install Path           (#{node['bonusbits_base']['chef_path']})"
+  "Chef Install Path           (#{node['bonusbits_base']['chef_path']})",
+  "Virtualization System       (#{node['virtualization']['system']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)
 end
+
+# Proxy needed for AWS CLI Calls in Attributes (aws.rb) and since alphabetically loaded by default. This is a workaround to load out of default order.
+include_attribute 'bonusbits_base::proxy'

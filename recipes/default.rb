@@ -1,11 +1,20 @@
-# Deploy AWS Profile Script & Tools
-include_recipe 'bonusbits_base::aws' if node['bonusbits_base']['deployment_type'] == 'ec2'
-
-# Setup CloudWatch Logs
-include_recipe 'bonusbits_base::cloudwatch_logs' if node['bonusbits_base']['cloudwatch_logs']['configure']
+# Ensure Chef config directory exists
+directory '/etc/chef'
 
 # Configure Proxy
 include_recipe 'bonusbits_base::proxy' if node['bonusbits_base']['proxy']['configure']
+
+# Wait for EC2 Instance Status 'ok' (Custom Resource)
+## This is to deal with running code before the Appliance AMI has had time to initialize.
+## In a little more intelligent way than just sleeping ever single time Chef runs. -=Levon
+## Requires aws-sdk (included in chefdk)
+ec2_status 'check ec2 status' if node['bonusbits_base']['ec2_status']['check']
+
+# Deploy AWS Profile Script & Tools
+include_recipe 'bonusbits_base::aws' if aws?
+
+# Setup CloudWatch Logs
+include_recipe 'bonusbits_base::cloudwatch_logs' if node['bonusbits_base']['cloudwatch_logs']['configure']
 
 # Configure Certs
 include_recipe 'bonusbits_base::certs' if node['bonusbits_base']['certs']['configure']
@@ -25,9 +34,6 @@ include_recipe 'bonusbits_base::java' if node['bonusbits_base']['java']['install
 # Configure Sudoers on EC2 Instance
 include_recipe 'bonusbits_base::sudoers' if node['bonusbits_base']['sudoers']['configure']
 
-# Epel
-include_recipe 'bonusbits_base::epel' if node['bonusbits_base']['epel']['configure']
-
 # Configure Node Info
 include_recipe 'bonusbits_base::node_info' if node['bonusbits_base']['node_info']['configure']
 
@@ -40,7 +46,7 @@ include_recipe 'bonusbits_base::bash_profile' if node['bonusbits_base']['bash_pr
 # Configure BonusBits Bash Profile
 include_recipe 'bonusbits_base::docker' if node['bonusbits_base']['docker']['deploy_sysconfig_network']
 
-# Setup Backups
+# Setup Cloudwatch
 include_recipe 'bonusbits_base::cloudwatch' if node['bonusbits_base']['cloudwatch']['configure']
 
 # Setup Backups

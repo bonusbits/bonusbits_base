@@ -1,5 +1,5 @@
 # For CircleCI
-# require 'bundler/setup'
+require 'bundler/setup'
 
 # Load Rake Task Helper Methods
 require_relative 'tasks/helpers'

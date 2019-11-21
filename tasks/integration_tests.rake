@@ -16,7 +16,6 @@ namespace :integration do
       # puts "Instance Suite Name: (#{instance.suite.name})"
       next unless instance.suite.name =~ /^docker.*/
 
-      # puts 'It made it Next...'
       instance.test(:always)
     end
   end
