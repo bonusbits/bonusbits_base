@@ -10,4 +10,4 @@ GRAPH
     apt (>= 0.0.0)
     audit (>= 0.0.0)
     selinux (>= 0.0.0)
-  selinux (3.0.0)
+  selinux (3.0.1)

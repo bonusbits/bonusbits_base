@@ -1,3 +1,8 @@
+# OS:                (linux)   node['os']
+# Platform:          (amazon)  node['platform']
+# Platform Version:  (2018.03) node['platform_version']
+# Platform Family:   (amazon)  node['platform_family']
+
 ec2_deployment = ec2?
 
 case node['os']
@@ -119,8 +124,6 @@ when 'linux'
     action %i[enable start]
     only_if { ec2_deployment }
   end
-when 'windows'
-  return
 else
   return
 end

@@ -6,7 +6,7 @@ default['bonusbits_base']['docker']['deploy_sysconfig_network'] =
 message_list = [
   '',
   '** Docker **',
-  "INFO: Deploy Sysconfig Network (#{node['bonusbits_base']['docker']['deploy_sysconfig_network']})"
+  "Deploy Sysconfig Network    (#{node['bonusbits_base']['docker']['deploy_sysconfig_network']})"
 ]
 message_list.each do |message|
   Chef::Log.warn(message)

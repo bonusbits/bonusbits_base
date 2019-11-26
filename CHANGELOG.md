@@ -6,7 +6,7 @@
 * Added rake task for building Docker image that then can be used to deploy to Kubernetes Cluster locally
 
 ## 3.0.0 - 10/11/2019 - Levon Becker
-* Updated to ChefDK 4.3.13 - Chef Client 15.2.20 - Ruby 2.6.3
+* Updated to ChefDK 4.4.27 - Chef Client 15.2.20 - Ruby 2.6.5
     * metadata.rb
     * Readme
     * Gemfile + lock

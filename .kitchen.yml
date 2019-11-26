@@ -38,6 +38,8 @@ platforms:
     driver:
       name: docker
       use_sudo: false
+      # Amazon Linux AMI 2018.03 (v1 - el6)
+      # https://hub.docker.com/_/amazonlinux
       # image: amazonlinux:1-with-sources
       image: amazonlinux:2018.03.0.20190826-with-sources
       platform: rhel
@@ -56,12 +58,12 @@ platforms:
 
 provisioner:
   data_bags_path: "test/data_bags"
-  download_url: https://packages.chef.io/files/current/chefdk/4.3.13/el/7/chefdk-4.3.13-1.el7.x86_64.rpm
+  # download_url: https://packages.chef.io/files/current/chefdk/4.4.27/el/7/chefdk-4.4.27-1.el7.x86_64.rpm
   encrypted_data_bag_secret_key_path: "test/data_bags/encrypted_data_bag_secret"
   environments_path: "test/environments"
   name: chef_zero
   product_name: chefdk
-  product_version: 4.3.13
+  product_version: 4.4.27
   roles_path: "test/roles"
 
 suites:
@@ -91,7 +93,7 @@ suites:
     run_list:
       - role[base]
     verifier:
-      attributes:
+      inputs:
         test_java: 'true'
         java_package_name: 'java-1.8.0-openjdk'
         java_specify_version: 'false'
@@ -110,7 +112,7 @@ suites:
     run_list:
       - role[base]
     verifier:
-      attributes:
+      inputs:
         test_packages: 'false'
 
   - name: ec2_base
@@ -123,7 +125,7 @@ suites:
     run_list:
       - role[base]
     verifier:
-      attributes:
+      inputs:
         test_backups: 'true'
     includes: ["amazon-ami"]
 
@@ -137,7 +139,7 @@ suites:
     run_list:
       - role[base]
     verifier:
-      attributes:
+      inputs:
         test_backups: 'false'
         test_java: 'true'
         java_package_name: 'java-1.8.0-openjdk'
@@ -157,16 +159,16 @@ suites:
     run_list:
       - role[base]
     verifier:
-      attributes:
+      inputs:
         test_packages: 'false'
     includes: ["amazon-ami"]
 
 verifier:
-  attributes:
-    debug: 'true'
+  inputs:
+    debug: 'false'
     test_chef: 'true'
-    chef_client_version: '15.2.20'
-    chef_dk_version: '4.3.13'
+    chef_client_version: '15.3.14'
+    chef_dk_version: '4.4.27'
   inspec_tests:
     #- name: bonusbits_base
     #  git: https://github.com/bonusbits/inspec_bonusbits_base.git

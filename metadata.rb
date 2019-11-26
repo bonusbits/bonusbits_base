@@ -5,7 +5,7 @@ license 'MIT'
 description 'Foundation Wrapper Cookbook for all Nodes'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '3.0.0'
-chef_version '~> 15.2' if respond_to?(:chef_version)
+chef_version '~> 15.3' if respond_to?(:chef_version)
 source_url 'https://github.com/bonusbits/bonusbits_base'
 issues_url 'https://github.com/bonusbits/bonusbits_base/issues'
 

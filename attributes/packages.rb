@@ -10,7 +10,6 @@ default['bonusbits_base']['packages'].tap do |packages|
     git
     gzip
     htop
-    mlocate
     net-tools
     openssh-clients
     openssh-server
@@ -30,7 +29,6 @@ default['bonusbits_base']['packages'].tap do |packages|
     git
     gzip
     htop
-    mlocate
     net-tools
     openssl
     procps
@@ -47,7 +45,6 @@ default['bonusbits_base']['packages'].tap do |packages|
     curl
     git
     gzip
-    mlocate
     net-tools
     openssh-clients
     openssh-server

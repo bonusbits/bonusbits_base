@@ -1,11 +1,11 @@
 # Determine Environment
 node.run_state['detected_environment'] =
-    if /dev|qa|stg|prd/ =~ node.environment
-      /dev|qa|stg|prd/.match(node.environment).to_s.downcase
-    else
-      # Consider _default as 'Dev'
-      'dev'
-    end
+  if /dev|qa|stg|prd/ =~ node.environment
+    /dev|qa|stg|prd/.match(node.environment).to_s.downcase
+  else
+    # Consider _default as 'Dev'
+    'dev'
+  end
 
 default['bonusbits_base'].tap do |root|
   # Determine Deployment Type
@@ -23,8 +23,6 @@ default['bonusbits_base'].tap do |root|
       'vbox'
     elsif node['virtualization']['system'] == 'xen' && BonusBits::Discovery.ec2?(node['fqdn'], node['platform_family'])
       'ec2'
-    elsif node['virtualization']['system'] == 'docker'
-      'docker'
     else
       'other'
       # TODO: Add Pod (Kubernetes) Discovery

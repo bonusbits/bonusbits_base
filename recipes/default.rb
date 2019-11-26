@@ -10,6 +10,9 @@ include_recipe 'bonusbits_base::proxy' if node['bonusbits_base']['proxy']['confi
 ## Requires aws-sdk (included in chefdk)
 ec2_status 'check ec2 status' if node['bonusbits_base']['ec2_status']['check']
 
+# Install Packages
+include_recipe 'bonusbits_base::packages' if node['bonusbits_base']['packages']['install']
+
 # Deploy AWS Profile Script & Tools
 include_recipe 'bonusbits_base::aws' if aws?
 
@@ -25,8 +28,8 @@ include_recipe 'bonusbits_base::gem_source' if node['bonusbits_base']['gem_sourc
 # Configure Security
 include_recipe 'bonusbits_base::security' if node['bonusbits_base']['security']['configure']
 
-# Install Packages
-include_recipe 'bonusbits_base::packages' if node['bonusbits_base']['packages']['install']
+# Install Packages (moved up - place holder in case order breaks something)
+# include_recipe 'bonusbits_base::packages' if node['bonusbits_base']['packages']['install']
 
 # Install Java
 include_recipe 'bonusbits_base::java' if node['bonusbits_base']['java']['install']

@@ -1,3 +1,8 @@
+# OS:                (linux)   node['os']
+# Platform:          (amazon)  node['platform']
+# Platform Version:  (2018.03) node['platform_version']
+# Platform Family:   (amazon)  node['platform_family']
+
 # Package Lists
 amazon_packages = node['bonusbits_base']['packages']['amazon']['packages']
 ubuntu_packages = node['bonusbits_base']['packages']['ubuntu']['packages']

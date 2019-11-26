@@ -40,7 +40,7 @@ if node['bonusbits_base']['aws']['install_tools']
       action :run
       not_if do
         shell_command = 'pip --version'
-        out = BonusBits::Shell.run_command_return_strout(shell_command)
+        out = BonusBits::Shell.run_command_strout(shell_command)
         out =~ /^pip 9\./
       end
     end

@@ -19,13 +19,16 @@ Primary Focus is on Amazon Linux then Ubuntu. RHEL and CentOS not tested but sho
 # Successfully Tested Versions
 | Software | Version |
 | :--- | :--- |
-| Chef Development Kit | 4.3.13 |
-| Chef Client | 15.2.20 |
+| Chef Development Kit | 4.4.27 |
+| Chef Client | 15.3.14 |
 | CircleCI | v2.1 |
-| Docker | 18.09.0 |
-| Inspec | 4.10.4 |
-| Test Kitchen | 2.2.5 |
-| Mac OSX | 10.14.6 |
+| Docker Desktop | 2.1.6.0 (edge) |
+| Docker | 19.03.5 |
+| Foodcritic | 16.1.1 |
+| Inspec | 4.16.0 |
+| Kubernetes | 1.15.5 |
+| Test Kitchen | 2.3.3 |
+| MacOS | 10.15.1 (Catalina) |
 
 
 # Attributes
