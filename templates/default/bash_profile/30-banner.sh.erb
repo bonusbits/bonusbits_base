@@ -1,6 +1,13 @@
 #!/bin/sh
+# Bonus Bits Banner
+<% if amazon_linux1? %>
 lolcat /var/lib/update-motd/bonusbits_banner
+<% else %>
+/opt/chefdk/embedded/bin/lolcat /var/lib/update-motd/bonusbits_banner
+<% end %>
 echo "https://www.bonusbits.com"
 echo ''
+
+# Version URL
 version=$(rpm -q --qf '%{version}' system-release)
 echo "https://aws.amazon.com/amazon-linux-ami/$version-release-notes/"

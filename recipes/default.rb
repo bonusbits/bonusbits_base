@@ -29,7 +29,6 @@ include_recipe 'bonusbits_base::gem_source' if node['bonusbits_base']['gem_sourc
 include_recipe 'bonusbits_base::security' if node['bonusbits_base']['security']['configure']
 
 # Install Packages (moved up - place holder in case order breaks something)
-# include_recipe 'bonusbits_base::packages' if node['bonusbits_base']['packages']['install']
 
 # Install Java
 include_recipe 'bonusbits_base::java' if node['bonusbits_base']['java']['install']

@@ -21,8 +21,6 @@ when 'linux'
     # TODO: NOT WORKING
     not_if { ::File.readlines('/etc/sudoers').grep(%r{^secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin$}).any? }
   end
-when 'windows'
-  return
 else
   return
 end

@@ -29,11 +29,6 @@ when 'linux'
       out =~ %r{https://rubygems.org/}
     end
   end
-when 'windows'
-  gemrc_path = "#{ENV['USERPROFILE']}/.gemrc"
-  template gemrc_path do
-    source 'gem_source/gemrc.erb'
-  end
 else
   raise 'OS Family = Unknown'
 end

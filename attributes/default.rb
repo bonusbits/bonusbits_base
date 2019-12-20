@@ -21,6 +21,7 @@ default['bonusbits_base'].tap do |root|
       'kvm'
     elsif node['virtualization']['system'] == 'vbox'
       'vbox'
+    # TODO: Improve this logic for EC2 Discovery
     elsif node['virtualization']['system'] == 'xen' && BonusBits::Discovery.ec2?(node['fqdn'], node['platform_family'])
       'ec2'
     else

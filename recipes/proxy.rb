@@ -54,8 +54,6 @@ when 'linux'
     end
 
   end
-when 'windows'
-  return
 else
   return
 end

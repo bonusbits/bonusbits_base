@@ -1,10 +1,6 @@
-# OS:                (linux)   node['os']
-# Platform:          (amazon)  node['platform']
-# Platform Version:  (2018.03) node['platform_version']
-# Platform Family:   (amazon)  node['platform_family']
-
 # Package Lists
-amazon_packages = node['bonusbits_base']['packages']['amazon']['packages']
+amazon_linux1_packages = node['bonusbits_base']['packages']['amazon_linux1']['packages']
+amazon_linux2_packages = node['bonusbits_base']['packages']['amazon_linux2']['packages']
 ubuntu_packages = node['bonusbits_base']['packages']['ubuntu']['packages']
 redhat_packages = node['bonusbits_base']['packages']['redhat']['packages']
 
@@ -31,7 +27,7 @@ when 'debian', 'ubuntu'
 when 'redhat', 'centos'
   package redhat_packages
 when 'amazon'
-  package amazon_packages
+  package amazon_linux2? ? amazon_linux2_packages : amazon_linux1_packages
 else
   return
 end

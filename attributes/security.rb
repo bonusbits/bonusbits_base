@@ -1,6 +1,8 @@
-# Selinux
-default['bonusbits_base']['security']['selinux']['configure'] = true
-default['bonusbits_base']['security']['selinux']['action'] = 'disabled'
+default['bonusbits_base']['security']['selinux'].tap do |selinux|
+  # Selinux
+  selinux['configure'] = true
+  selinux['action'] = 'disabled'
+end
 
 # Debug
 message_list = [

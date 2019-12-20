@@ -1,6 +1,6 @@
-amazonlinux_tag: 2018.03.0.20190826-with-sources
-chef_client_version: 15.3.14
-chefdk_version: 4.4.27
+amazonlinux_tag: 2.0.20190823.1-with-sources
+chef_client_version: 15.4.45
+chefdk_version: 4.5.0
 cookbook_version: 3.0.0
 docker_name: base
 docker_repo: bonusbits

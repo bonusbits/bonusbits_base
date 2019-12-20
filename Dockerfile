@@ -1,4 +1,6 @@
-FROM amazonlinux:2018.03.0.20190826-with-sources
+#ARG docker_image=amazonlinux:2018.03.0.20190826-with-sources
+ARG docker_image=amazonlinux:2.0.20190823.1-with-sources
+FROM ${docker_image}
 # Amazon Linux AMI 2018.03 (v1 - el6)
 # https://hub.docker.com/_/amazonlinux
 MAINTAINER Levon Becker "levon.docker@bonusbits.com"
@@ -9,7 +11,7 @@ LABEL version="3.0.0" \
 
 # Build Cookbook Args
 #ARG chef_client_version=15.2.20
-ARG chefdk_version=4.4.27
+ARG chefdk_version=4.5.0
 ARG cookbook_name=bonusbits_base
 ARG chef_role=base
 ARG chef_environment=bonusbits_base
@@ -25,7 +27,7 @@ RUN yum clean all \
 #RUN curl -L https://omnitruck.chef.io/install.sh | bash -s -- -v ${chef_client_version}
 # Install ChefDK
 ## Less work then chef-client install because everything for testing and berkshelf is included.
-## https://packages.chef.io/files/stable/chefdk/4.4.27/el/6/chefdk-4.4.27-1.el6.x86_64.rpm
+## https://packages.chef.io/files/stable/chefdk/4.5.0/el/7/chefdk-4.5.0-1.el7.x86_64.rpm
 RUN curl -L https://omnitruck.chef.io/install.sh | bash -s -- -P chefdk -v ${chefdk_version}
 
 # Setup Chef Client

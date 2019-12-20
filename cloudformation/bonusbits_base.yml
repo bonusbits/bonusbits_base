@@ -10,19 +10,32 @@ Description: DR Autoscaling Amazon Linux EC2 Instance Configured with Chef Zero 
 
 Mappings:
   RegionMap:
-      # Amazon Linux AMI 2018.03 (v1 - el6)
-      # https://aws.amazon.com/amazon-linux-ami/
-      # amzn-ami-hvm-2018.03.0.20190826-x86_64-gp2
+    # Amazon Linux AMI 2018.03 (v1 - el6)
+    # https://aws.amazon.com/amazon-linux-ami/
+    # amzn-ami-hvm-2018.03.0.20190826-x86_64-gp2
 
-      # N. Virginia
-      us-east-1:
-        amazon: ami-00eb20669e0990cb4
-      # Oregon
-      us-west-2:
-        amazon: ami-08d489468314a58df
-      # N. California
-      us-west-1:
-        amazon: ami-0bce08e823ed38bdd
+    # Amazon Linux AMI (v2 - el7)
+    # https://aws.amazon.com/amazon-linux-2/release-notes/
+    # amzn2-ami-hvm-2.0.20190823.1-x86_64-gp2
+
+    # N. Virginia
+    us-east-1:
+      amazonlinux1: ami-00eb20669e0990cb4
+      amazonlinux2: ami-0b69ea66ff7391e80
+      ubuntu1604: ami-04763b3055de4860b
+      ubuntu1804: ami-04b9e92b5572fa0d1
+    # Oregon
+    us-west-2:
+      amazonlinux1: ami-08d489468314a58df
+      amazonlinux2: ami-04b762b4289fba92b
+      ubuntu1604: ami-0994c095691a46fb5
+      ubuntu1804: ami-06d51e91cea0dac8d
+    # N. California
+    us-west-1:
+      amazonlinux1: ami-0bce08e823ed38bdd
+      amazonlinux2: ami-0245d318c6788de52
+      ubuntu1604: ami-0dbf5ea29a7fc7e05
+      ubuntu1804: ami-0dd655843c87b6930
 
 Metadata:
   TemplateAuthor: Levon Becker
@@ -33,6 +46,7 @@ Metadata:
           default: Ownership
         Parameters:
           - Owner
+          - Project
           - DeleteAfter
 
       # Network
@@ -49,6 +63,7 @@ Metadata:
         Parameters:
           - KeyPairName
           - InstanceType
+          - OsSelection
 
       # Deployment
       - Label:
@@ -57,7 +72,7 @@ Metadata:
           - CookbookName
           - CookbookVersion
           - ChefDkVersion
-          - DataBagSecret
+          - ChefDataBagSecret
 
     ParameterLabels:
       # Ownership
@@ -65,6 +80,8 @@ Metadata:
         default: Team or Individual Owner
       DeleteAfter:
         default: Delete After Date
+      Project:
+        default: Project Name
 
       # Network
       VPC:
@@ -79,6 +96,8 @@ Metadata:
         default: EC2 Key Pair Name
       InstanceType:
         default: Instance Type
+      OsSelection:
+        default: OS Selection
 
       # Deployment
       CookbookName:
@@ -87,8 +106,8 @@ Metadata:
         default: Cookbook Version
       ChefDkVersion:
         default: ChefDK Version
-      DataBagSecret:
-        default: Data Bag Secret
+      ChefDataBagSecret:
+        default: Chef Data Bag Secret
 
 Outputs:
   # Ownership
@@ -98,6 +117,9 @@ Outputs:
   DeleteAfter:
     Description: It is ok to delete the Formation after this date.
     Value: !Ref DeleteAfter
+  Project:
+    Description: Name of associated project.
+    Value: !Ref Project
 
   # Network
   VPC:
@@ -114,6 +136,9 @@ Outputs:
   InstanceType:
     Description: Instance Type Used.
     Value: !Ref InstanceType
+  OsSelection:
+    Description: Operating System.
+    Value: !Ref OsSelection
 
   # Deployment
   CookbookName:
@@ -126,7 +151,7 @@ Outputs:
   # Generated
   AMI:
     Description: AMI Used.
-    Value: !FindInMap [ RegionMap, !Ref "AWS::Region", amazon ]
+    Value: !FindInMap [ RegionMap, !Ref "AWS::Region", !Ref "OsSelection" ]
   IAMRole:
     Description: IAM Instance Profile Role Created.
     Value: !Ref IamRole
@@ -136,9 +161,12 @@ Parameters:
   Owner:
     Type: String
     Default: FirstName LastName
+  Project:
+    Type: String
+    Default: BonusBits Base Cookbook Deploy Testing
   DeleteAfter:
     Type: String
-    Default: 00/00/201x
+    Default: 00/00/202x
 
   # Network
   VPC:
@@ -164,6 +192,12 @@ Parameters:
     - t3.medium
     - t3.large
     Default: t3.micro
+  OsSelection:
+    Type: String
+    AllowedValues:
+      - amazonlinux1
+      - amazonlinux2
+    Default: amazonlinux2
 
   # Deployment
   CookbookName:
@@ -174,8 +208,8 @@ Parameters:
     Default: latest
   ChefDkVersion:
     Type: String
-    Default: 4.4.27
-  DataBagSecret:
+    Default: 4.5.0
+  ChefDataBagSecret:
     Type: String
     NoEcho: true
     MinLength: 684
@@ -374,7 +408,7 @@ Resources:
               command: !Sub "export HOME=/root && /opt/chefdk/embedded/bin/berks vendor /etc/chef/cookbooks/"
           files:
             "/etc/chef/encrypted_data_bag_secret":
-              content: !Sub ${DataBagSecret}
+              content: !Sub ${ChefDataBagSecret}
             "/etc/chef/client.rb":
               content: !Sub |
                 node_name 'ec2_node'

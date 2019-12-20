@@ -2,8 +2,12 @@ default['bonusbits_base']['packages'].tap do |packages|
   packages['install'] = true
   packages['update'] = true
 
+  # procps = ps, top, vmstat, kill, free, slabtop, and skill
+  # util-linux = https://en.wikipedia.org/wiki/Util-linux ton of tools (i.e. fdisk, findfs, kill, last, lsblk, more, mount, su, and umount)
+  # net-tools = arp, netstat, ifconfig, route, etc.
+
   # Packages Lists
-  packages['amazon']['packages'] = %w[
+  packages['amazon_linux1']['packages'] = %w[
     aws-cli
     ca-certificates
     curl
@@ -17,6 +21,24 @@ default['bonusbits_base']['packages'].tap do |packages|
     procps
     sudo
     upstart
+    util-linux
+    vim-enhanced
+    which
+  ]
+
+  packages['amazon_linux2']['packages'] = %w[
+    awscli
+    ca-certificates
+    curl
+    git
+    gzip
+    htop
+    net-tools
+    openssh-clients
+    openssh-server
+    openssl
+    procps-ng
+    sudo
     util-linux
     vim-enhanced
     which
