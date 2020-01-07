@@ -16,10 +16,10 @@ jobs:
       - checkout
       - run:
           name: Install Kitchen Docker
-          command: chef gem install kitchen-docker -v 2.9.0
+          command: chef exec gem install kitchen-docker -v 2.9.0 --no-user-install
       - run:
           name: Install Junit Formatter
-          command: chef gem install rspec_junit_formatter -v 0.4.1
+          command: chef exec gem install rspec_junit_formatter -v 0.4.1 --no-user-install
       - run:
           name: Debug Outputs
           command: /opt/chefdk/embedded/bin/gem list | grep -i kitchen && env
