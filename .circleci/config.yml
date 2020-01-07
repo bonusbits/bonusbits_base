@@ -15,7 +15,7 @@ jobs:
       - checkout
       - run:
           name: Accept Chef License Agreement
-          command: chef --chef-license accept
+          command: chef -v --chef-license accept
       - run:
           name: Install Kitchen Docker
           command: chef gem install kitchen-docker -v 2.9.0
