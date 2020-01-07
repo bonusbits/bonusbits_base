@@ -1,6 +1,8 @@
 default['bonusbits_base']['security']['selinux'].tap do |selinux|
   # Selinux
-  selinux['configure'] = true
+  deployment_type = node['bonusbits_base']['deployment_type']
+  deployment_type_docker = deployment_type == 'docker'
+  selinux['configure'] = deployment_type_docker ? false : true
   selinux['action'] = 'disabled'
 end
 

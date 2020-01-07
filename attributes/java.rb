@@ -12,7 +12,8 @@ default['bonusbits_base']['java'].tap do |java|
       '1.8.0.151-1.b12.35.amzn1'
     elsif amazon_linux2?
       '1.8.0.222.b10-0.amzn2.0.1'
-    end # Examples
+    end
+  # Examples
   # RHEL7 '1.8.0.141-1.b16.el7_3'
 end
 
