@@ -13,7 +13,7 @@ namespace :integration do
   desc 'kitchen - docker - tests'
   task :docker do
     load_kitchen_config('.kitchen.yml').instances.each do |instance|
-      # puts "Instance Suite Name: (#{instance.suite.name})"
+      puts "INFO: Instance Suite Name: (#{instance.suite.name})"
       next unless instance.suite.name =~ /^docker.*/
 
       instance.test(:always)
