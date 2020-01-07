@@ -60,7 +60,7 @@ jobs:
           command: eval "$(chef shell-init bash)"
       - run:
           name: Install Kitchen Docker
-          command: sudo chef gem install kitchen-docker -v 2.9.0 --no-user-install --no-document
+          command: sudo export CHEF_LICENSE="accept" && sudo chef gem install kitchen-docker -v 2.9.0 --no-user-install --no-document
       - run:
           name: Install Junit Formatter
           command: sudo chef gem install rspec_junit_formatter -v 0.4.1 --no-user-install --no-document
