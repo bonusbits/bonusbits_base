@@ -17,9 +17,9 @@ jobs:
       - run:
           name: Create Reports Directory
           command: mkdir reports
-      #- run:
-      #    name: Install Kitchen Docker
-      #    command: chef gem install kitchen-docker -v 2.9.0 --no-user-install --no-document
+      - run:
+          name: Install Kitchen Docker
+          command: chef gem install kitchen-docker -v 2.9.0 --no-user-install --no-document
       - run:
           name: Install Junit Formatter
           command: chef gem install rspec_junit_formatter -v 0.4.1 --no-user-install --no-document
