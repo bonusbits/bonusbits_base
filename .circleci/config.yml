@@ -11,11 +11,9 @@ jobs:
       GEM_HOME: /opt/chefdk/embedded/lib/ruby/gems/2.6.0/gems
       GEM_PATH: /opt/chefdk/embedded/lib/ruby/gems/2.6.0
       GEM_ROOT: /opt/chefdk/embedded/lib/ruby/gems/2.6.0
+      CHEF_LICENSE: accept
     steps:
       - checkout
-      - run:
-          name: Accept Chef License Agreement
-          command: chef -v --chef-license accept
       - run:
           name: Install Kitchen Docker
           command: chef gem install kitchen-docker -v 2.9.0
