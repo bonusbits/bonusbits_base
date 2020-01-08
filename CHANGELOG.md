@@ -7,12 +7,12 @@
 * Replace attributes with helper method calls
 * Added rake task for building Docker image that then can be used to deploy to Kubernetes Cluster locally
 * Finish Rake Tasks I've stubbed out
+* Finish Kubernetes configs with CI testing?
 
-## 3.0.0 - 12/09/2019 - Levon Becker
-* Updated to ChefDK 4.5.0 - Chef Client 15.2.20 - Ruby 2.6.5
+## 3.0.0 - 01/07/2019 - Levon Becker
+* Updated to ChefDK 4.5.0 - Chef Client 15.4.45 - Ruby 2.6.5
     * metadata.rb
     * Readme
-    * Gemfile + lock
     * Dockerfile
     * circle.yml
     * kitchen.yml
@@ -39,6 +39,8 @@
 * Added option to select between Amazon Linux 1 or 2 in Kitchen, CloudFormation and Dockerfile
 * Added logic to use lolcat gem if Amazon Linux 2 and package if v1
 * Updated Java install / Inspec for Amazon Linux 1 & 2
+* Removed Gemfile since not using bundler in CI anymore
+* Switch boolean inputs in kitchen config for inspec profile to no have quotes since looks like they've finally fixed that issue of strings coming through to the inspec control inputs
 
 ## 2.3.0 - 10/28/2017 - Levon Becker
 * Added OpenJDK Java Install Option for Linux
