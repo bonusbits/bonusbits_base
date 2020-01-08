@@ -1,0 +1,8 @@
+ec2_type: t3.small
+expose_port: 8081
+internal_only: false
+k8s_namespace: bonusbits
+k8s_replica_count: 2
+local_deploy: false
+pod_port: 80
+project_name: bonusbits_base

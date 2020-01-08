@@ -13,8 +13,6 @@ when 'linux'
   else
     return
   end
-when 'windows'
-  return
 else
   return
 end

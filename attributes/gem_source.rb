@@ -1,6 +1,8 @@
-default['bonusbits_base']['gem_source']['configure'] = false
-default['bonusbits_base']['gem_source']['source_url'] =
-  'https://artifactory.localdomain.com/artifactory/api/rubygems/'
+default['bonusbits_base']['gem_source'].tap do |gem_source|
+  gem_source['configure'] = false
+  gem_source['source_url'] =
+    'https://artifactory.localdomain.com/artifactory/api/rubygems/'
+end
 
 # Debug
 message_list = [

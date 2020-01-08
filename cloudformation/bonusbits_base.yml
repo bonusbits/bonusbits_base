@@ -1,54 +1,41 @@
 ---
+
 AWSTemplateFormatVersion: '2010-09-09'
-Description: DR Autoscaling Amazon Linux EC2 Instance Configured with Chef Zero
-Parameters:
-  # Ownership
-  Owner:
-    Type: String
-    Default: FirstName LastName
-  DeleteAfter:
-    Type: String
-    Default: 00/00/201x
 
-  # Network
-  VPC:
-    Type: AWS::EC2::VPC::Id
-  Subnets:
-    Type: List<AWS::EC2::Subnet::Id>
-  SecurityGroups:
-    Type: List<AWS::EC2::SecurityGroup::Id>
+Conditions:
+  # Condition for if SSH access not wanted for maybe a prd env
+  HasKeyPair: !Not [!Equals [ !Ref KeyPairName, '' ]]
 
-  # Instance
-  KeyPairName:
-    Type: AWS::EC2::KeyPair::KeyName
-  InstanceType:
-    Type: String
-    AllowedValues:
-    - t2.nano
-    - t2.micro
-    - t2.small
-    - t2.medium
-    - m3.medium
-    - m4.large
-    - c3.medium
-    - c4.medium
-    Default: t2.micro
+Description: DR Autoscaling Amazon Linux EC2 Instance Configured with Chef Zero (Single Instance - Sophos LB)
 
-  # Deployment
-  CookbookName:
-    Type: String
-    Default: bonusbits_base
-  CookbookVersion:
-    Type: String
-    Default: latest
-  ChefDkVersion:
-    Type: String
-    Default: 1.6.1
-  DataBagSecret:
-    Type: String
-    NoEcho: true
-    MinLength: 684
-    Default: "CYEh1mnfH+TrzeVa8cyDAHWicV8hKni7P40xVPUn2Cm8638QvFS24iK7DRtP5VlDpogSaxDm050riKcAZ++rwUsJdUcQyx6KdXIMKEVml+ZjYW9BC3c4fMWPYbBkdWHBTpUP6OpMl9eNdPoa36vKRuxBrYGAKzLLDlTTqvoRlKEpAKpdSdgp3zZnGeymEeYYyG2Lv9p6ZbmlcDqRdB2hPu+grNkDWNrwDfV/UxF3QOtLQQB7c5edDHa1rmegNbP1Gb/h2Gu+HFf2sQnCFnjG20rxwJaL5lSdUs2AOdR+B+fDL+y7o6LxIN3n3EQWfdzzDsJXFjKhF0b+mAAmgJy9q2R1Sqr0f0X078icvu9zlUMjgJxSAShsXW00y9swcItQXFpJTFXnaswbd7YtJBsrNvfcOuSF9GhO6y1vCTbeOUMet+G6KbDIO0YxKF+fi07VPSTkAoXznC0t9o8s7Kqdd1pgx3xxVr80r9v3uKZcM+wMBk7TrpswKr6A4sIT0kBaJTgr37uDH8uIoiqEpxHfHEge6vVWfJyRaXjdyG7aJ3VwuJvSrIkuVJCam3ie2Dr09KBUWNYHXOmPb3eM0ByudcXNS0IXNAWqQJ5leNTINcqq4OZmAJHHOUo7qJhtqLVtr+Zwcady+WQ0ta1kmhQuWJ8RAhCCBUCUTISKEtXuF8E="
+Mappings:
+  RegionMap:
+    # Amazon Linux AMI 2018.03 (v1 - el6)
+    # https://aws.amazon.com/amazon-linux-ami/
+    # amzn-ami-hvm-2018.03.0.20190826-x86_64-gp2
+
+    # Amazon Linux AMI (v2 - el7)
+    # https://aws.amazon.com/amazon-linux-2/release-notes/
+    # amzn2-ami-hvm-2.0.20190823.1-x86_64-gp2
+
+    # N. Virginia
+    us-east-1:
+      amazonlinux1: ami-00eb20669e0990cb4
+      amazonlinux2: ami-0b69ea66ff7391e80
+      ubuntu1604: ami-04763b3055de4860b
+      ubuntu1804: ami-04b9e92b5572fa0d1
+    # Oregon
+    us-west-2:
+      amazonlinux1: ami-08d489468314a58df
+      amazonlinux2: ami-04b762b4289fba92b
+      ubuntu1604: ami-0994c095691a46fb5
+      ubuntu1804: ami-06d51e91cea0dac8d
+    # N. California
+    us-west-1:
+      amazonlinux1: ami-0bce08e823ed38bdd
+      amazonlinux2: ami-0245d318c6788de52
+      ubuntu1604: ami-0dbf5ea29a7fc7e05
+      ubuntu1804: ami-0dd655843c87b6930
 
 Metadata:
   TemplateAuthor: Levon Becker
@@ -59,6 +46,7 @@ Metadata:
           default: Ownership
         Parameters:
           - Owner
+          - Project
           - DeleteAfter
 
       # Network
@@ -75,6 +63,7 @@ Metadata:
         Parameters:
           - KeyPairName
           - InstanceType
+          - OsSelection
 
       # Deployment
       - Label:
@@ -83,7 +72,7 @@ Metadata:
           - CookbookName
           - CookbookVersion
           - ChefDkVersion
-          - DataBagSecret
+          - ChefDataBagSecret
 
     ParameterLabels:
       # Ownership
@@ -91,6 +80,8 @@ Metadata:
         default: Team or Individual Owner
       DeleteAfter:
         default: Delete After Date
+      Project:
+        default: Project Name
 
       # Network
       VPC:
@@ -105,6 +96,8 @@ Metadata:
         default: EC2 Key Pair Name
       InstanceType:
         default: Instance Type
+      OsSelection:
+        default: OS Selection
 
       # Deployment
       CookbookName:
@@ -113,8 +106,8 @@ Metadata:
         default: Cookbook Version
       ChefDkVersion:
         default: ChefDK Version
-      DataBagSecret:
-        default: Data Bag Secret
+      ChefDataBagSecret:
+        default: Chef Data Bag Secret
 
 Outputs:
   # Ownership
@@ -124,6 +117,9 @@ Outputs:
   DeleteAfter:
     Description: It is ok to delete the Formation after this date.
     Value: !Ref DeleteAfter
+  Project:
+    Description: Name of associated project.
+    Value: !Ref Project
 
   # Network
   VPC:
@@ -140,6 +136,9 @@ Outputs:
   InstanceType:
     Description: Instance Type Used.
     Value: !Ref InstanceType
+  OsSelection:
+    Description: Operating System.
+    Value: !Ref OsSelection
 
   # Deployment
   CookbookName:
@@ -152,66 +151,69 @@ Outputs:
   # Generated
   AMI:
     Description: AMI Used.
-    Value: !FindInMap [ RegionMap, !Ref "AWS::Region", amazon ]
+    Value: !FindInMap [ RegionMap, !Ref "AWS::Region", !Ref "OsSelection" ]
   IAMRole:
     Description: IAM Instance Profile Role Created.
     Value: !Ref IamRole
 
-Mappings:
-  RegionMap:
-      # Amazon Linux AMI 2017.03 was released on 2017-04-04
-      # N. Virginia
-      us-east-1:
-        amazon: ami-22ce4934
-      # Ohio
-      us-east-2:
-        amazon: ami-7bfcd81e
-      # Oregon
-      us-west-2:
-        amazon: ami-8ca83fec
-      # N. California
-      us-west-1:
-        amazon: ami-9e247efe
-      # Canada
-      ca-central-1:
-        amazon: ami-8601bce2
-      # Ireland
-      eu-west-1:
-        amazon: ami-e5083683
-      # London
-      eu-west-2:
-        amazon: ami-11130775
-      # Frankfurt
-      eu-central-1:
-        amazon: ami-5b06d634
-      # Singapore
-      ap-southeast-1:
-        amazon: ami-a2bc03c1
-      # Seoul
-      ap-northeast-1:
-        amazon: ami-8369baed
-      # Tokyo
-      ap-northeast-2:
-        amazon: ami-859bbfe2
-      # Sydney
-      ap-southeast-2:
-        amazon: ami-8bf2fde8
-      # Mumbai
-      ap-south-1:
-        amazon: ami-815625ee
-      # Sao Paulo
-      sa-east-1:
-        amazon: ami-a97013c5
-      # Beijing
-      cn-north-1:
-        amazon: ami-b3d80ede
-      # GovCloud
-      us-gov-west-1:
-        amazon: ami-700a8f11
+Parameters:
+  # Ownership
+  Owner:
+    Type: String
+    Default: FirstName LastName
+  Project:
+    Type: String
+    Default: BonusBits Base Cookbook Deploy Testing
+  DeleteAfter:
+    Type: String
+    Default: 00/00/202x
 
-Conditions:
-  # Condition for if SSH access not wanted for maybe a prd env
-  HasKeyPair: !Not [!Equals [ !Ref KeyPairName, '' ]]
+  # Network
+  VPC:
+    Type: AWS::EC2::VPC::Id
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+  SecurityGroups:
+    Type: List<AWS::EC2::SecurityGroup::Id>
+
+  # Instance
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+  InstanceType:
+    Type: String
+    AllowedValues:
+    - c5.large
+    - m3.medium
+    - m5.large
+    - r5.large
+    - t3.nano
+    - t3.micro
+    - t3.small
+    - t3.medium
+    - t3.large
+    Default: t3.micro
+  OsSelection:
+    Type: String
+    AllowedValues:
+      - amazonlinux1
+      - amazonlinux2
+    Default: amazonlinux2
+
+  # Deployment
+  CookbookName:
+    Type: String
+    Default: bonusbits_base
+  CookbookVersion:
+    Type: String
+    Default: latest
+  ChefDkVersion:
+    Type: String
+    Default: 4.5.0
+  ChefDataBagSecret:
+    Type: String
+    NoEcho: true
+    MinLength: 684
+    Default: "CYEh1mnfH+TrzeVa8cyDAHWicV8hKni7P40xVPUn2Cm8638QvFS24iK7DRtP5VlDpogSaxDm050riKcAZ++rwUsJdUcQyx6KdXIMKEVml+ZjYW9BC3c4fMWPYbBkdWHBTpUP6OpMl9eNdPoa36vKRuxBrYGAKzLLDlTTqvoRlKEpAKpdSdgp3zZnGeymEeYYyG2Lv9p6ZbmlcDqRdB2hPu+grNkDWNrwDfV/UxF3QOtLQQB7c5edDHa1rmegNbP1Gb/h2Gu+HFf2sQnCFnjG20rxwJaL5lSdUs2AOdR+B+fDL+y7o6LxIN3n3EQWfdzzDsJXFjKhF0b+mAAmgJy9q2R1Sqr0f0X078icvu9zlUMjgJxSAShsXW00y9swcItQXFpJTFXnaswbd7YtJBsrNvfcOuSF9GhO6y1vCTbeOUMet+G6KbDIO0YxKF+fi07VPSTkAoXznC0t9o8s7Kqdd1pgx3xxVr80r9v3uKZcM+wMBk7TrpswKr6A4sIT0kBaJTgr37uDH8uIoiqEpxHfHEge6vVWfJyRaXjdyG7aJ3VwuJvSrIkuVJCam3ie2Dr09KBUWNYHXOmPb3eM0ByudcXNS0IXNAWqQJ5leNTINcqq4OZmAJHHOUo7qJhtqLVtr+Zwcady+WQ0ta1kmhQuWJ8RAhCCBUCUTISKEtXuF8E="
 
 Resources:
   # CloudWatch
@@ -388,41 +390,41 @@ Resources:
         setup_chef_client:
           commands:
             01_mkdir_chef_repo:
-              command: "mkdir -p /opt/chef-repo"
+              command: "mkdir -p /etc/chef"
             02_mkdir_chef_repo_subdirs:
-              cwd: /opt/chef-repo
+              cwd: /etc/chef
               command: "mkdir -p cookbooks checksums environments cache backup data_bags roles"
             03_download_cookbook:
-              cwd: /opt/chef-repo/cookbooks
+              cwd: /etc/chef/cookbooks
               command: !Sub "git clone --branch ${CookbookVersion} https://github.com/bonusbits/${CookbookName}.git"
             04_deploy_databags:
-              cwd: /opt/chef-repo
+              cwd: /etc/chef
               command: !Sub "cp -R cookbooks/${CookbookName}/test/data_bags/${CookbookName} data_bags/"
             05_download_dependent_cookbook:
-              cwd: !Sub "/opt/chef-repo/cookbooks/${CookbookName}"
+              cwd: !Sub "/etc/chef/cookbooks/${CookbookName}"
               command: !Sub "/opt/chefdk/embedded/bin/berks install"
             06_vendor_dependent_cookbook:
-              cwd: !Sub "/opt/chef-repo/cookbooks/${CookbookName}"
-              command: !Sub "export HOME=/root && /opt/chefdk/embedded/bin/berks vendor /opt/chef-repo/cookbooks/"
+              cwd: !Sub "/etc/chef/cookbooks/${CookbookName}"
+              command: !Sub "export HOME=/root && /opt/chefdk/embedded/bin/berks vendor /etc/chef/cookbooks/"
           files:
-            "/opt/chef-repo/encrypted_data_bag_secret":
-              content: !Sub ${DataBagSecret}
-            "/opt/chef-repo/client.rb":
+            "/etc/chef/encrypted_data_bag_secret":
+              content: !Sub ${ChefDataBagSecret}
+            "/etc/chef/client.rb":
               content: !Sub |
                 node_name 'ec2_node'
-                checksum_path '/opt/chef-repo/checksums'
-                file_cache_path '/opt/chef-repo/cache'
-                file_backup_path '/opt/chef-repo/backup'
-                cookbook_path '/opt/chef-repo/cookbooks'
-                data_bag_path '/opt/chef-repo/data_bags'
-                environment_path '/opt/chef-repo/environments'
-                role_path '/opt/chef-repo/roles'
+                checksum_path '/etc/chef/checksums'
+                file_cache_path '/etc/chef/cache'
+                file_backup_path '/etc/chef/backup'
+                cookbook_path '/etc/chef/cookbooks'
+                data_bag_path '/etc/chef/data_bags'
+                environment_path '/etc/chef/environments'
+                role_path '/etc/chef/roles'
                 chef_server_url 'http://127.0.0.1:8889'
-                encrypted_data_bag_secret '/opt/chef-repo/data_bags/encrypted_data_bag_secret'
+                encrypted_data_bag_secret '/etc/chef/data_bags/encrypted_data_bag_secret'
                 log_level :info
                 log_location '/var/log/chef-client.log'
                 verify_api_cert false
-            "/opt/chef-repo/environments/aws.json":
+            "/etc/chef/environments/aws.json":
               content: !Sub |
                {
                    "name": "aws",
@@ -443,7 +445,7 @@ Resources:
         run_chef_client:
           commands:
             01_run_chef:
-              command: !Sub "/opt/chefdk/bin/chef-client -z -o 'recipe[${CookbookName}]' --environment 'aws' --config /opt/chef-repo/client.rb --log_level info --force-formatter --chef-zero-port 8889"
+              command: !Sub "/opt/chefdk/bin/chef-client -z --chef-license accept -o 'recipe[${CookbookName}]' --environment 'aws' --config /etc/chef/client.rb --log_level info --force-formatter --chef-zero-port 8889"
         warm_ebs:
           commands:
             01_warm_ebs:

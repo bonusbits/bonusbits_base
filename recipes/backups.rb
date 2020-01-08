@@ -15,7 +15,7 @@ when 'linux'
   month = node['bonusbits_base']['backups']['month']
   weekday = node['bonusbits_base']['backups']['weekday']
 
-  cron 'Create Backup Cron Job' do
+  cron 'Backups' do
     minute minutes
     hour hours
     day days
@@ -24,4 +24,13 @@ when 'linux'
     user 'root'
     command node['bonusbits_base']['backups']['cron_command']
   end
+end
+
+# Deploy Logrotate Config
+template '/etc/logrotate.d/backups' do
+  mode '0755'
+  owner 'root'
+  group 'root'
+  source 'backups/logrotate.erb'
+  only_if { node['bonusbits_base']['backups']['configure_log_rotate'] }
 end

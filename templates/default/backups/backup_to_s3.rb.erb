@@ -124,7 +124,7 @@ def run_command(shell_command, sensitive = false)
   successful
 end
 
-def run_command_return_strout(shell_command, sensitive = false)
+def run_command_strout(shell_command, sensitive = false)
   # Set sensitive to true if you don't want outputs that may have secrets
   # Run Shell Command and Capture StrOut, StrErr, and Status
   # Return StrOut
@@ -146,12 +146,12 @@ def check_space
   @options['backup_paths'].each do |path|
     @logger.info "Adding Source Size (#{path})"
     if path == '/'
-      source_size_mb += run_command_return_strout("df -km --output=avail '#{path}' | tail -n1").strip.to_i
+      source_size_mb += run_command_strout("df -km --output=avail '#{path}' | tail -n1").strip.to_i
     else
-      source_size_mb += run_command_return_strout("du -sm '#{path}' | awk '{print $1}'").strip.to_i
+      source_size_mb += run_command_strout("du -sm '#{path}' | awk '{print $1}'").strip.to_i
     end
   end
-  target_free_space_mb = run_command_return_strout('df -m / | awk \'{print $4}\' | grep -vE \'^Available\'').strip.to_i
+  target_free_space_mb = run_command_strout('df -m / | awk \'{print $4}\' | grep -vE \'^Available\'').strip.to_i
   @logger.info "Source Size in MB (#{source_size_mb})"
   @logger.debug "Source Size x2 for Gzip Space in MB (#{source_size_mb * 2})"
   @logger.info "Target Free Space in MB (#{target_free_space_mb})"

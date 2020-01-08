@@ -31,7 +31,7 @@ default['bonusbits_base']['proxy'].tap do |proxy|
 
   proxy_url = node['bonusbits_base']['proxy']['url']
   no_proxy = node['bonusbits_base']['proxy']['no_proxy']
-  proxy['variables'] = <<-EOH
+  proxy['variables'] = <<-URLS
     ftp_proxy=#{proxy_url}
     http_proxy=#{proxy_url}
     https_proxy=#{proxy_url}
@@ -40,7 +40,7 @@ default['bonusbits_base']['proxy'].tap do |proxy|
     HTTPS_PROXY=#{proxy_url}
     HTTP_PROXY=#{proxy_url}
     NO_PROXY=#{no_proxy}
-  EOH
+  URLS
 end
 
 # Debug
@@ -50,6 +50,7 @@ message_list = [
   "Configure                   (#{node['bonusbits_base']['proxy']['configure']})",
   "Host Address                (#{node['bonusbits_base']['proxy']['host']})",
   "Host Port                   (#{node['bonusbits_base']['proxy']['port']})",
+  "URL                         (#{node['bonusbits_base']['proxy']['url']})",
   "Use SSL                     (#{node['bonusbits_base']['proxy']['use_ssl']})"
 ]
 message_list.each do |message|

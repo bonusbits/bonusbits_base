@@ -3,11 +3,11 @@ when 'linux'
   scripts_local_path = '/opt/aws-scripts-mon'
   case node['platform']
   when 'amazon'
-    package_list = %w(perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https zip unzip)
+    package_list = %w[perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https zip unzip]
   when 'centos', 'redhat' # ~FC024
-    package_list = %w(perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA zip unzip)
+    package_list = %w[perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA zip unzip]
   when 'ubuntu', 'debian'
-    package_list = %w(unzip libwww-perl libdatetime-perl)
+    package_list = %w[unzip libwww-perl libdatetime-perl]
   else
     return
   end
@@ -39,7 +39,7 @@ when 'linux'
     not_if { ::File.directory?('/opt/aws-scripts-mon') }
   end
 
-  if node['bonusbits_base']['deployment_type'] == 'ec2'
+  if ec2?
     cron_command = node['bonusbits_base']['cloudwatch']['cron_command']
     cron 'Create Cloudwatch Monitoring Cron' do
       minute '*/5'

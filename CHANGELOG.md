@@ -1,5 +1,52 @@
 ## CHANGE LOG
 
+## x.x.x - TODO List - Levon Becker
+* Finish Build CircleCI Task
+* Finish Deploy CircleCI Task
+* Finish Rake docker/build task
+* Finish Rake Kubernetes task
+* Finish Rake Deploy task
+* Finish Rake CloudFormation task
+* Finish Kubernetes configs add to CI testing?
+* Improve EC2 discovery (If on EC2 instance or not)
+* Add / Test Ubuntu 16.04 LTS / 18.04 LTS
+* Get jUnit test results working for rubocop rake task
+* Replace attributes with helper method calls
+* Added rake task for building Docker image that then can be used to deploy to Kubernetes Cluster locally
+
+## 3.0.0 - 01/07/2019 - Levon Becker
+* Updated to ChefDK 4.5.0 - Chef Client 15.4.45 - Ruby 2.6.5
+    * metadata.rb
+    * Readme
+    * Dockerfile
+    * circle.yml
+    * kitchen.yml
+* Version Locked to latest Amazon Linux to v1 (el6) for Kitchen, CloudFormation and Dockerfile
+* Refactored CloudFormation root keys to be alphabetical
+* Added YAML anchors to the kitchen config
+* Added environment variables fetch default examples in the kitchen config
+* Updated Berksfile.lock
+* Commented out test/* in chefignore
+* Removed support suse drafts
+* Merged bonusbits_library cookbook to this cookbook
+* Moved logic from default attributes to discovery and helpers libraries
+* Improved the shell library sensitive output control
+* Moved .circle.yml to .circleci/config.yml
+* Added Circleci Workflow
+* Split Rakefile tasks into separate files under tasks directory
+* Added Kubernetes deployment and service configurations
+* Updated Inspec attributes
+* Removed draft Windows support... not doing this any time soon, so drying up logic and sticking with Amazon Linux and Ubuntu
+* Added Indicator library and resource for creating indicator files
+* Added ec2_status attribute, recipe, library and resource for checking AWS EC2 Instance status
+* Added helpers library to DRY up cookbook code
+* Added Amazon Linux 2 as default in Kitchen, CloudFormation and Dockerfile
+* Added option to select between Amazon Linux 1 or 2 in Kitchen, CloudFormation and Dockerfile
+* Added logic to use lolcat gem if Amazon Linux 2 and package if v1
+* Updated Java install / Inspec for Amazon Linux 1 & 2
+* Removed Gemfile since not using bundler in CI anymore
+* Switch boolean inputs in kitchen config for inspec profile to no have quotes since looks like they've finally fixed that issue of strings coming through to the inspec control inputs
+
 ## 2.3.0 - 10/28/2017 - Levon Becker
 * Added OpenJDK Java Install Option for Linux
 * Switched boolean inside_aws to ec2_deployment. Fits the logic better.

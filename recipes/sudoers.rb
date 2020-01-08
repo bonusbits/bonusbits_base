@@ -4,6 +4,8 @@ when 'linux'
   # Add /usr/local/bin to sudoers Secure Path
   ruby_block 'Add /usr/local/bin to sudoers Secure Path' do
     block do
+      # FROM: Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
+      # TO: Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
       bash_command = 'sed -i "s/secure_path = \/sbin:\/bin:\/usr\/sbin:\/usr\/bin$/secure_path = \/sbin:\/bin:\/usr\/sbin:\/usr\/bin:\/usr\/local\/bin/g" /etc/sudoers'
 
       # Run Bash Script and Capture StrOut, StrErr, and Status
@@ -21,8 +23,6 @@ when 'linux'
     # TODO: NOT WORKING
     not_if { ::File.readlines('/etc/sudoers').grep(%r{^secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin$}).any? }
   end
-when 'windows'
-  return
 else
   return
 end

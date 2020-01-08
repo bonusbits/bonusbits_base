@@ -1,0 +1,5 @@
+expose_port: 8081
+k8s_namespace: bonusbits
+k8s_replica_count: 2
+local_deploy: true
+pod_port: 8081

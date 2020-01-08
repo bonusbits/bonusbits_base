@@ -1,8 +1,8 @@
 # Package Lists
-amazon_packages = node['bonusbits_base']['packages']['amazon']['packages']
-debian_packages = node['bonusbits_base']['packages']['debian']['packages']
+amazon_linux1_packages = node['bonusbits_base']['packages']['amazon_linux1']['packages']
+amazon_linux2_packages = node['bonusbits_base']['packages']['amazon_linux2']['packages']
+ubuntu_packages = node['bonusbits_base']['packages']['ubuntu']['packages']
 redhat_packages = node['bonusbits_base']['packages']['redhat']['packages']
-suse_packages = node['bonusbits_base']['packages']['suse']['packages']
 
 if node['bonusbits_base']['packages']['update']
   # Update System Packages
@@ -23,13 +23,11 @@ end
 case node['platform']
 when 'debian', 'ubuntu'
   include_recipe 'apt'
-  package debian_packages
+  package ubuntu_packages
 when 'redhat', 'centos'
   package redhat_packages
 when 'amazon'
-  package amazon_packages
-when 'suse', 'opensuse'
-  package suse_packages
+  package amazon_linux2? ? amazon_linux2_packages : amazon_linux1_packages
 else
   return
 end

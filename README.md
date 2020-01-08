@@ -1,35 +1,37 @@
 # Bonus Bits Base Cookbook
-[![Project Release](https://img.shields.io/badge/release-v2.3.0-blue.svg)](https://github.com/bonusbits/bonusbits_base)
+[![Project Release](https://img.shields.io/badge/release-v3.0.0-blue.svg)](https://github.com/bonusbits/bonusbits_base)
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
 [![Join the chat at https://gitter.im/bonusbits/bonusbits_base](https://badges.gitter.im/bonusbits/bonusbits_base.svg)](https://gitter.im/bonusbits/bonusbits_base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub issues](https://img.shields.io/github/issues/bonusbits/bonusbits_base.svg)](https://github.com/bonusbits/bonusbits_base/issues)
 
 # Purpose
-Chef Cookbook that will setup the basics for various flavors of Linux and Windows Servers.
+Chef Cookbook that will setup the basics for Amazon Linux or Ubuntu systems.
 Be sure to set appropriate overrides for what you do and don't want to be setup in your environment files.
 This is a great starting point for all your nodes. It's also a great example for writing wrapper cookbooks.
 
 The secondary purpose of this cookbook is to give various examples that can be replicated in other cookbooks. I did my best to include all the major coding and testing scenarios.
 
 # Supported Platforms
-At least temporarily I've focused only ona Amazon Linux. I have not tested all the other flavors since v2.0.0 release.
-I plan to work through the other distros over time.
-* Linux
-    * Amazon (EC2 Only)
-    * RHEL 6/7 (EC2 Only) **Not Fully Tested**
-    * CentOS 6/7 **Not Fully Tested**
-    * Ubuntu 14/16 **Not Fully Tested**
-* Windows (EC2 Only - WIP) **May Never Get Around to Winderz**
-    * 2012 R2
-    * 2016
+Primary Focus is on Amazon Linux then Ubuntu. RHEL and CentOS not tested but should work.
+* Amazon Linux v1 & v2
+    * Amazon Linux v2 is el7 and has systemd. The issue is systemd requires kernel access and is not fully functioning in a Docker container as of yet and can cause issues with standard configurations we are used to doing with say upstart (initd). I have it working with this cookbook, but when you start adding your app side of things it may be very problematic if deploying as a Docker image/container.
+* Ubuntu 16/18 **Not Fully Tested**
 
 # Successfully Tested Versions
 | Software | Version |
 | :--- | :--- |
-| Mac OSX | 10.12.4 |
-| Docker | 17.03.1-ce, build c6d412e |
-| Chef Development Kit | 1.6.1 |
-| Chef-client | 12.21.4 |
+| Chef Development Kit | 4.5.0 |
+| Chef Client | 15.4.45 |
+| Cookstyle | 5.9.3|
+| CircleCI | v2.1 |
+| Docker Desktop | 2.1.6.0 (edge) |
+| Docker | 19.03.5 |
+| Foodcritic | 16.1.1 |
+| Inspec | 4.18.0 |
+| Kubernetes | 1.15.5 |
+| Rubocop | 0.72.0 |
+| Test Kitchen | 2.3.3 |
+| MacOS | 10.15.1 (Catalina) |
 
 
 # Attributes
@@ -50,8 +52,7 @@ I plan to work through the other distros over time.
 | Default          | bonusbits_base:deployment_type                     | N/A                                                                                            | String  | Determine if deployment type is docker, lxc, lxd, kvm, vbox, ec2 or other using Ohai and Discovery Library   |
 | Default          | bonusbits_base:deployment_location                 | N/A                                                                                            | String  | Determine if deployment local is circleci, aws or local using Env var and Discovery Library   |
 | Default          | bonusbits_base:deployment_method                   | N/A                                                                                            | String  | Determine if deployment method is kitchen, cloudformation, dockerfile, dockerimage or unknown   |
-| Epel             | bonusbits_base:epel:configure                      | false                                                                                          | Boolean | Enable Setup of EPEL Repo   |
-| Epel             | bonusbits_base:epel:install_packages               | false                                                                                          | Boolean | Install Package list from EPEL Repo   |
+                                                       | Boolean | Install Package list from EPEL Repo   |
 | Gem Source       | bonusbits_base:gem_source:configure                | false                                                                                          | Boolean | Enable System and Chef Ruby Gem Source replacement with say an internal repo   |
 | Gem Source       | bonusbits_base:gem_source:source_url               | https://artifactory.localdomain.com/artifactory/api/rubygems/                                  | String  | Source Ruby Gem Repo URL to replace rubygems.org. This is a bogus example URL   |
 | Gem Source       | bonusbits_base:gem_source:source_url               | https://artifactory.localdomain.com/artifactory/api/rubygems/                                  | String  | Source Ruby Gem Repo URL to replace rubygems.org. This is a bogus example URL   |
@@ -61,11 +62,10 @@ I plan to work through the other distros over time.
 | Node Info        | bonusbits_base:node_info:configure                 | true                                                                                           | Boolean | Deploy a Bash/Batch Shell Script that can be used to quickly display information about the local system. Script deployed to standard system path locations: Linux **/usr/local/bin/nodeinfo** Windows **C:/Windows/System32/nodeinfo.cmd** |
 | Packages         | bonusbits_base:packages:install                    | true                                                                                           | Boolean | Install a set of basic packages |
 | Packages         | bonusbits_base:packages:update                     | true                                                                                           | Boolean | Update all but kernel packages on system |
-| Packages         | bonusbits_base:packages:amazon:packages            | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Amazon Linux Packages |
+| Packages         | bonusbits_base:packages:amazon_linux1:packages            | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Amazon Linux 1 Packages |
+| Packages         | bonusbits_base:packages:amazon_linux2:packages            | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Amazon Linux 2 Packages |
 | Packages         | bonusbits_base:packages:debian:packages            | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Debian Linux Packages |
 | Packages         | bonusbits_base:packages:redhat:packages            | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Redhat Linux Packages |
-| Packages         | bonusbits_base:packages:suse:packages              | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Suse Linux Packages |
-| Packages         | bonusbits_base:packages:windows:packages           | [List Here](https://github.com/bonusbits/bonusbits_base/blob/master/attributes/packages.rb)    | Array   | List of Windows Packages |
 | Proxy            | bonusbits_base:proxy:configure                     | false                                                                                          | Boolean | Configure proxy settings on system |
 | Proxy            | bonusbits_base:proxy:use_ssl                       | false                                                                                          | Boolean | Use SSL will set **https** for the Proxy URL attribute. Otherwise **http** used |
 | Proxy            | bonusbits_base:proxy:host                          | 10.0.2.2                                                                                       | String  | Proxy Host Address |
@@ -76,7 +76,6 @@ I plan to work through the other distros over time.
 | Security         | bonusbits_base:security:selinux:configure          | true                                                                                           | Boolean | Configure SeLinux  |
 | Security         | bonusbits_base:security:selinux:action             | disabled                                                                                       | String  | Set SeLinux Enforcement Action. Options: **enforcing**, **permissive** and **disabled**   |
 | Sudoers          | bonusbits_base:sudoers:configure                   | true                                                                                           | Boolean | Add /usr/local/bin to secure path for sudoers. This is for Amazon Linux in AWS.   |
-| Yum Cron         | bonusbits_base:yum_cron:configure                  | true                                                                                           | Boolean | Amazon Linux only. This installs and configures automatic yum security patches excluding kernel patches. This is for automatic day zero patching before the team has had time to re-deploy  |
 
 # Features
 All operations have attributes to disable/enable them. Here's what is out of the box.
@@ -85,23 +84,22 @@ All operations have attributes to disable/enable them. Here's what is out of the
 * Create Docker or AWS EC2 Instance
 * Install basic packages.
     * I put a few basic packages I like, but you can override the array.   
-* Install CloudWatch Logs Agent
-* Create Basic CloudWatch Logs Config
+* Install CloudWatch Logs Agent if in AWS
+* Create Basic CloudWatch Logs Config if in AWS
     * Disable if going to deploy your own from your wrapper
 * Create **nodeinfo** shell script to output system info
 * Disable SeLinux
 * Add /usr/local/bin to sudo secure path in sudoers for Amazon Linux
-* Setup Yum Cron automatic security patches on Amazon Linux
+* Add a custom Bonus Bits Message of the Day (motd)
+* Set chefdk Ruby and gems in BASH profile
 
 ### Optionals    
 * Proxy Setup
 * Gem Source Change
-* EPEL Repo setup
-* Install EPEL Packages
 * Deploy Internal CA Certificate from Data Bag Item
 
-# JSON Chef Config Files
-There are Chef environments, roles and data bag items JSON files under the test folder.
+# Chef Config Files
+There are Chef data bag items, environments, node and roles files under the test folder.
 These are called by the Test Kitchen configurations instead of entering all the attribute overrides inside the YAML.
 It cleans up the kitchen YAML, plus makes it easier to quickly understand how you'd setup these Chef configurations in your environment.
 Basically copy/paste, instead of converting YAML to JSON... I've done it for you!
@@ -115,6 +113,8 @@ test
 │       └── enterprise_ca.json
 ├── environments
 │   └── bonusbits_base.json
+└── node
+    └── client.rb
 └── roles
     └── base.json
 ```
@@ -135,13 +135,13 @@ I usually end up adding the customers CA cert chain as part of my base cookbook.
 
 ## Launcher
 Click this button to open AWS CloudFormation web console with the Template URL automatically entered.<br>
-[![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?&templateURL=https://s3.amazonaws.com/bonusbits-public/cloudformation-templates/cookbooks/bonusbits-base.yml)
+[![](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?&templateURL=https://s3.amazonaws.com/bonusbits-public/cloudformation-templates/cookbooks/bonusbits_base.yml)
 
 ## CloudFormation Tasks
 Public S3 Link:<br> 
-[https://s3.amazonaws.com/bonusbits-public/cloudformation-templates/cookbooks/bonusbits-base.yml](https://s3.amazonaws.com/bonusbits-public/cloudformation-templates/cookbooks/bonusbits-base.yml)
+[https://s3.amazonaws.com/bonusbits-public/cloudformation-templates/cookbooks/bonusbits_base.yml](https://s3.amazonaws.com/bonusbits-public/cloudformation-templates/cookbooks/bonusbits_base.yml)
 
-The [CloudFormation Template](https://github.com/bonusbits/bonusbits_base/blob/master/cloudformation/bonusbits-base.yml)  the following:
+The [CloudFormation Template](https://github.com/bonusbits/bonusbits_base/blob/master/cloudformation/bonusbits_base.yml)  the following:
 
 1. Create Autoscale Group for service check (hardware failure) DR not Scaling (No ELB/ALB)
 2. Adds the EC2 Instance to selected Security Groups

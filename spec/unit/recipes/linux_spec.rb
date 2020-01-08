@@ -10,7 +10,7 @@ describe 'bonusbits_base::linux' do
     end
 
     it 'should install vim-enhanced, mlocate and wget' do
-      expect(chef_run).to install_package(%w(vim-enhanced mlocate wget))
+      expect(chef_run).to install_package(%w[vim-enhanced mlocate wget])
     end
     it 'should deploy nodeinfo script' do
       expect(chef_run).to create_template('/usr/bin/nodeinfo')
@@ -24,7 +24,7 @@ describe 'bonusbits_base::linux' do
     end
 
     it 'should install vim-enhanced, mlocate and wget' do
-      expect(chef_run).to install_package(%w(vim-enhanced mlocate wget))
+      expect(chef_run).to install_package(%w[vim-enhanced mlocate wget])
     end
     it 'should deploy nodeinfo script' do
       expect(chef_run).to create_template('/usr/bin/nodeinfo')
@@ -38,7 +38,7 @@ describe 'bonusbits_base::linux' do
     end
 
     it 'should install vim-enhanced, mlocate and wget' do
-      expect(chef_run).to install_package(%w(vim-enhanced mlocate wget))
+      expect(chef_run).to install_package(%w[vim-enhanced mlocate wget])
     end
     it 'should deploy nodeinfo script' do
       expect(chef_run).to create_template('/usr/bin/nodeinfo')
@@ -55,7 +55,7 @@ describe 'bonusbits_base::linux' do
       expect(chef_run).to include_recipe('apt')
     end
     it 'should install vim-enhanced, mlocate and wget' do
-      expect(chef_run).to install_package(%w(vim mlocate wget))
+      expect(chef_run).to install_package(%w[vim mlocate wget])
     end
     it 'should deploy nodeinfo script' do
       expect(chef_run).to create_template('/usr/bin/nodeinfo')

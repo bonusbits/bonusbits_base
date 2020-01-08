@@ -2,15 +2,18 @@ default['bonusbits_base']['packages'].tap do |packages|
   packages['install'] = true
   packages['update'] = true
 
+  # procps = ps, top, vmstat, kill, free, slabtop, and skill
+  # util-linux = https://en.wikipedia.org/wiki/Util-linux ton of tools (i.e. fdisk, findfs, kill, last, lsblk, more, mount, su, and umount)
+  # net-tools = arp, netstat, ifconfig, route, etc.
+
   # Packages Lists
-  packages['amazon']['packages'] = %w(
+  packages['amazon_linux1']['packages'] = %w[
     aws-cli
     ca-certificates
     curl
     git
     gzip
     htop
-    mlocate
     net-tools
     openssh-clients
     openssh-server
@@ -21,15 +24,33 @@ default['bonusbits_base']['packages'].tap do |packages|
     util-linux
     vim-enhanced
     which
-  )
+  ]
 
-  packages['debian']['packages'] = %w(
+  packages['amazon_linux2']['packages'] = %w[
     awscli
+    ca-certificates
     curl
     git
     gzip
     htop
-    mlocate
+    net-tools
+    openssh-clients
+    openssh-server
+    openssl
+    procps-ng
+    sudo
+    util-linux
+    vim-enhanced
+    which
+  ]
+
+  packages['ubuntu']['packages'] = %w[
+    awscli
+    bash-completion
+    curl
+    git
+    gzip
+    htop
     net-tools
     openssl
     procps
@@ -37,15 +58,15 @@ default['bonusbits_base']['packages'].tap do |packages|
     upstart
     util-linux
     vim
+    wget
     which
-  )
+  ]
 
-  packages['redhat']['packages'] = %w(
+  packages['redhat']['packages'] = %w[
     ca-certificates
     curl
     git
     gzip
-    mlocate
     net-tools
     openssh-clients
     openssh-server
@@ -55,31 +76,9 @@ default['bonusbits_base']['packages'].tap do |packages|
     upstart
     util-linux-ng
     vim-enhanced
+    wget
     which
-  )
-
-  packages['suse']['packages'] = %w(
-    awscli
-    curl
-    git
-    gzip
-    htop
-    mlocate
-    net-tools
-    openssl
-    procps
-    sudo
-    util-linux
-    vim
-    which
-  )
-
-  packages['windows']['packages'] = %w(
-    aws-cli
-    powershell
-    sysinternals
-    git
-  )
+  ]
 end
 
 # Debug

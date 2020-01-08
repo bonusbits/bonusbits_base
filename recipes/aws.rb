@@ -1,41 +1,34 @@
 ENV['AWS_REGION'] = node['bonusbits_base']['aws']['region']
 
 # Deploy AWS Profile
-case node['os']
-when 'linux'
-  # Run Profile Script
-  ruby_block 'source_aws_profile_script' do
-    block do
-      shell_command = 'source /etc/profile.d/aws.sh'
-      successful = BonusBits::Shell.run_command(shell_command)
-      raise 'ERROR: Failed to Source AWS Profile Script!' unless successful
-    end
-    action :nothing
-    not_if do
-      ENV['AWS_REGION'] == node['bonusbits_base']['aws']['region']
-    end
+# Run Profile Script
+ruby_block 'source_aws_profile_script' do
+  block do
+    shell_command = 'source /etc/profile.d/aws.sh'
+    successful = BonusBits::Shell.run_command(shell_command)
+    raise 'ERROR: Failed to Source AWS Profile Script!' unless successful
   end
+  action :nothing
+  not_if do
+    ENV['AWS_REGION'] == node['bonusbits_base']['aws']['region']
+  end
+end
 
-  # Deploy Profile Script
-  template '/etc/profile.d/aws.sh' do
-    source 'aws/aws_profile.sh.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
-    only_if { node['bonusbits_base']['deployment_type'] == 'ec2' }
-    notifies :run, 'ruby_block[source_aws_profile_script]', :immediately
-  end
-when 'windows'
-  return
-else
-  return
+# Deploy Profile Script
+template '/etc/profile.d/aws.sh' do
+  source 'aws/aws_profile.sh.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  only_if { ec2? }
+  notifies :run, 'ruby_block[source_aws_profile_script]', :immediately
 end
 
 # Deploy AWS Tools to Non Amazon Linux
 if node['bonusbits_base']['aws']['install_tools']
   case node['platform']
   when 'redhat'
-    package %w(python python-setuptools)
+    package %w[python python-setuptools]
 
     # Install Latest Pip (~> 9.)
     ruby_block 'Install Pip' do
@@ -47,7 +40,7 @@ if node['bonusbits_base']['aws']['install_tools']
       action :run
       not_if do
         shell_command = 'pip --version'
-        out = BonusBits::Shell.run_command_return_strout(shell_command)
+        out = BonusBits::Shell.run_command_strout(shell_command)
         out =~ /^pip 9\./
       end
     end

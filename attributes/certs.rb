@@ -1,6 +1,8 @@
-default['bonusbits_base']['certs']['configure'] = false
-default['bonusbits_base']['certs']['data_bag'] = 'bonusbits_base'
-default['bonusbits_base']['certs']['data_bag_item'] = 'internal_ca'
+default['bonusbits_base']['certs'].tap do |certs|
+  certs['configure'] = false
+  certs['data_bag'] = 'bonusbits_base'
+  certs['data_bag_item'] = 'internal_ca'
+end
 
 message_list = [
   '',
