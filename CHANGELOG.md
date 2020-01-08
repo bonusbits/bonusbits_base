@@ -14,7 +14,7 @@
 * Replace attributes with helper method calls
 * Added rake task for building Docker image that then can be used to deploy to Kubernetes Cluster locally
 
-## 3.0.0 - 01/07/2019 - Levon Becker
+## 3.0.0 - 01/07/2020 - Levon Becker
 * Updated to ChefDK 4.5.0 - Chef Client 15.4.45 - Ruby 2.6.5
     * metadata.rb
     * Readme
