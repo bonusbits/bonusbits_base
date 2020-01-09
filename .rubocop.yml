@@ -11,6 +11,7 @@ AllCops:
     - '.kitchen/**/*'
     - '*.lock'
     - 'vendor/**/*'
+    - 'tmp/**/*'
 
 CaseIndentation:
   IndentOneStep: false
