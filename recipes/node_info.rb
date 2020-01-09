@@ -7,16 +7,10 @@ template '/usr/local/bin/nodeinfo' do
 end
 
 # Node Attributes JSON
-node_bonusbits_base = node['bonusbits_base'].to_hash
-
 file 'node attributes to json' do
   path '/etc/chef/.chef-attributes.json'
   backup false
-  content(
-    Chef::JSONCompat.to_json_pretty(
-      'bonusbits_base' => node_bonusbits_base
-    )
-  )
+  content(Chef::JSONCompat.to_json_pretty(node.to_hash))
   mode '0775'
   sensitive true
 end

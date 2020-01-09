@@ -14,6 +14,9 @@
 * Replace attributes with helper method calls
 * Added rake task for building Docker image that then can be used to deploy to Kubernetes Cluster locally
 
+## 3.0.1 - 01/09/2020 - Levon Becker
+* Changed node attributes json to cover all node hash so includes child cookbooks such as, bonusbits_mediawiki attributes that can be used for inspec tests.
+    
 ## 3.0.0 - 01/07/2020 - Levon Becker
 * Updated to ChefDK 4.5.0 - Chef Client 15.4.45 - Ruby 2.6.5
     * metadata.rb
