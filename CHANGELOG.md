@@ -13,6 +13,7 @@
 * Get jUnit test results working for rubocop rake task
 * Replace attributes with helper method calls
 * Added rake task for building Docker image that then can be used to deploy to Kubernetes Cluster locally
+* Create CircleCI Orb for common workflow using Rake tasks
 
 ## 3.0.1 - 01/09/2020 - Levon Becker
 * Changed node attributes json to cover all node hash so includes child cookbooks such as, bonusbits_mediawiki attributes that can be used for inspec tests.
