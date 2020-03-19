@@ -1,0 +1,2 @@
+project_name: bonusbits_base
+tf_var_file: terraform/environments/complete_vpc/dev.tfvars

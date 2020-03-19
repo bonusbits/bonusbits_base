@@ -103,7 +103,7 @@ jobs:
 workflows:
   version: 2
   # Put in one because not paying for parallel jobs
-  style_and_integration:
+  test_build_deploy:
     jobs:
     - style_tests
     - integration_tests:

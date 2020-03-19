@@ -4,13 +4,20 @@ namespace :deploy do
 
   desc 'Deploy local'
   task :local do
-    k8s_deploy
-    sh "docker build -f Dockerfile -t #{docker_repo}/#{docker_name}:#{docker_tag} ."
+    Rake::Task["docker:build_image"].execute
+    Rake::Task["kubernetes:create_namespace"].execute
+    Rake::Task["kubernetes:set_memory_limit"].execute
+    # TODO: Rake::Task["kubernetes:deploy"].execute
   end
-  desc 'Deploy to Dev'
-  task :dev do
-    # cloudformation:s3_upload
-    sh 'aws-set-bbdev-public && cfnl-set-path $HOME/.cfnl/uswest2/home/bonusbits/dev/base'
-    sh '/usr/local/bin/cfnl -s -f $HOME/.cfnl/uswest2/home/bonusbits/dev/base/base.yml'
+
+  desc 'Deploy to AWS using CloudFormation'
+  task :cf_env do
+    # TODO: Rake::Task["cloudformation:s3_upload"].execute
+    # TODO: Rake::Task["cloudformation:launch"].execute
+  end
+
+  desc 'Deploy to AWS using Terraform'
+  task :tf_env do
+    Rake::Task["terraform:apply_var_file"].execute
   end
 end

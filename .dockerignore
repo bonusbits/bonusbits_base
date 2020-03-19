@@ -18,3 +18,6 @@ vendor/*
 .localized
 /test/integration/inspec/results/
 /tmp/
+.terraform/**
+terraform/**
+cloudformation/**

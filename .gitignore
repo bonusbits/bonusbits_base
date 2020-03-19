@@ -62,3 +62,6 @@ $RECYCLE.BIN/
 .vagrant
 VagrantConfig.rb
 vagrant-rsync-auto.log
+
+# Terraform
+.terraform/**

@@ -9,4 +9,10 @@ namespace :cloudformation do
   task :s3_upload do
     sh 'aws s3 cp FILE s3://bonusbits-public/cloudformation-templates/cookbooks/bonusbits_base --profile bonusbits'
   end
+  desc 'Deploy local'
+  task :launch do
+    sh 'aws-set-bbdev-public && cfnl-set-path $HOME/.cfnl/uswest2/home/bonusbits/dev/base'
+    sh '/usr/local/bin/cfnl -s -f $HOME/.cfnl/uswest2/home/bonusbits/dev/base/base.yml'
+  end
+
 end

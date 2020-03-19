@@ -92,3 +92,12 @@ Vagrantfile
 # Travis #
 ##########
 .travis.yml
+
+# CloudFormation #
+##########
+cloudformation/**
+
+# Terraform #
+##########
+terraform/**
+.terraform/**
