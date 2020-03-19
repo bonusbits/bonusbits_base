@@ -262,9 +262,9 @@ verifier:
     chef_dk_version: '4.5.0'
   inspec_tests:
     - name: bonusbits_base
-      git: https://github.com/bonusbits/inspec_bonusbits_base.git
+      git: https://github.com/bonusbits/bonusbits_base_inspec.git
       release: 2.1.0
-    #- path: ../inspec_bonusbits_base
+    #- path: ../bonusbits_base_inspec
   name: inspec
   reporter:
     - cli

@@ -1,5 +1,5 @@
 # Bonus Bits Base Cookbook
-[![Project Release](https://img.shields.io/badge/release-v3.0.1-blue.svg)](https://github.com/bonusbits/bonusbits_base)
+[![Project Release](https://img.shields.io/badge/release-v3.0.2-blue.svg)](https://github.com/bonusbits/bonusbits_base)
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
 [![Join the chat at https://gitter.im/bonusbits/bonusbits_base](https://badges.gitter.im/bonusbits/bonusbits_base.svg)](https://gitter.im/bonusbits/bonusbits_base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub issues](https://img.shields.io/github/issues/bonusbits/bonusbits_base.svg)](https://github.com/bonusbits/bonusbits_base/issues)
@@ -287,23 +287,6 @@ Chef Recipes:               ([bonusbits_base, bonusbits_base::default])
 ---------------------------------------------------------------
 
 ```
- 
-```---------------------------------------------------------------
-Node Information
----------------------------------------------------------------
-IP Address:           (10.0.4.167)
-Hostname:             (WIN-SSKQF9C3VCF)
-FQDN:                 (WIN-SSKQF9C3VCF)
-Platform:             (windows)
-Platform Version:     (6.3.9600)
-CPU Count:            (1)
-Memory:               (3839MB)
-Detected Environment: (dev)
-Chef Environment:     (bonusbits_base)
-Chef Roles:           (["base"])
-Chef Recipes:         (["bonusbits_base", "bonusbits_base::default"])
----------------------------------------------------------------
-```
 
 # Cookbook Dependencies
 ![](images/cookbook_dependencies.png)
@@ -315,19 +298,17 @@ Chef Recipes:         (["bonusbits_base", "bonusbits_base::default"])
 * Integration
     * InSpec Profiles
     * [inspec_bootstrap](https://github.com/bonusbits/inspec_bootstrap.git)
-    * [inspec_bonusbits_base](https://github.com/bonusbits/inspec_bonusbits_base.git)
+    * [bonusbits_base_inspec](https://github.com/bonusbits/bonusbits_base_inspec.git)
     * Ran from Rakefile tasks by CircleCI (.kitchen.dokken.yml)
 
 # Resources
 
 ## Setup DevOps Workstation
-
 * [Setup Mac DevOps Workstation](http://www.bonusbits.com/wiki/Reference:Mac_OS_DevOps_Workstation_Setup_Check_List)
 * [Setup Ubuntu DevOps Workstation](http://www.bonusbits.com/wiki/Reference:Ubuntu_DevOps_Workstation_Setup_Check_List)
 * [Setup Windows DevOps Workstation](http://www.bonusbits.com/wiki/Reference:Windows_DevOps_Workstation_Setup_Check_List)
 
 ## Test Kitchen
-
 * [Test Kitchen Official Web Site](http://kitchen.ci/)
 * [Test Kitchen Github](https://github.com/test-kitchen/test-kitchen)
 * [Test Kitchen Chef Docs](https://docs.chef.io/kitchen.html)
