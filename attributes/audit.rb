@@ -13,12 +13,8 @@ default['bonusbits_base']['audit'].tap do |audit|
   default['audit']['collector'] = 'chef-visibility'
   default['audit']['profiles'] =  [
     {
-      name: 'bootstrap',
-      git: 'https://github.com/bonusbits/inspec_bootstrap.git'
-    },
-    {
       name: 'bonusbits_base',
-      git: 'https://github.com/bonusbits/inspec_bonusbits_base.git'
+      git: 'https://github.com/bonusbits/bonusbits_base_inspec.git'
     }
   ]
 end

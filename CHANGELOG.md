@@ -1,19 +1,8 @@
 ## CHANGE LOG
 
-## x.x.x - TODO List - Levon Becker
-* Finish Build CircleCI Task
-* Finish Deploy CircleCI Task
-* Finish Rake docker/build task
-* Finish Rake Kubernetes task
-* Finish Rake Deploy task
-* Finish Rake CloudFormation task
-* Finish Kubernetes configs add to CI testing?
-* Improve EC2 discovery (If on EC2 instance or not)
-* Add / Test Ubuntu 16.04 LTS / 18.04 LTS
-* Get jUnit test results working for rubocop rake task
-* Replace attributes with helper method calls
-* Added rake task for building Docker image that then can be used to deploy to Kubernetes Cluster locally
-* Create CircleCI Orb for common workflow using Rake tasks
+## 3.0.2 - 03/19/2020 - Levon Becker
+* Renamed inspec_bonusbits_base repo to bonusbits_base_inspec in github. So, needed to updated audit and kitchen config
+* Moved todo list to TODO.md
 
 ## 3.0.1 - 01/09/2020 - Levon Becker
 * Changed node attributes json to cover all node hash so includes child cookbooks such as, bonusbits_mediawiki attributes that can be used for inspec tests.
@@ -155,7 +144,7 @@
 * Bumped Chef Client Version to 12.19.36
 * Added CloudWatch Logs configuration
 * Switched from ServerSpec to InSpec
-* Moved Inspec tests to profile repo so can be used by other cookbooks to check settings by this cookbook are correct [HERE](https://github.com/bonusbits/inspec_bonusbits_base)
+* Moved Inspec tests to profile repo so can be used by other cookbooks to check settings by this cookbook are correct [HERE](https://github.com/bonusbits/bonusbits_base_inspec)
 * Updated Gemfile
 * Removed Coverage badges
 * Removed TravisCI sticking with CircleCi
