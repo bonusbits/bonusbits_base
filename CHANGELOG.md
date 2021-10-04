@@ -1,5 +1,12 @@
 ## CHANGE LOG
 
+## 3.0.3 - 10/04/2020 - Levon Becker
+* Improved kitchen config
+  * Removed env var defaults from kitchen config. If at a place where that makes since then can add, otherwise it's just confusing when you're missing an env var and it bombs with an odd error. This way it will be in your face that it's looking for an env var that is missing.
+  * Updated Amazon Linux 1/2 AMI to latest
+  * Updated Ubuntu 16/18 AMI to latest
+  * Added Ubuntu 20.04 AMI
+
 ## 3.0.2 - 03/19/2020 - Levon Becker
 * Renamed inspec_bonusbits_base repo to bonusbits_base_inspec in github. So, needed to updated audit and kitchen config
 * Moved todo list to TODO.md

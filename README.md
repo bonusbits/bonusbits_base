@@ -1,5 +1,5 @@
 # Bonus Bits Base Cookbook
-[![Project Release](https://img.shields.io/badge/release-v3.0.2-blue.svg)](https://github.com/bonusbits/bonusbits_base)
+[![Project Release](https://img.shields.io/badge/release-v3.0.3-blue.svg)](https://github.com/bonusbits/bonusbits_base)
 [![Circle CI](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master.svg?style=shield)](https://circleci.com/gh/bonusbits/bonusbits_base/tree/master)
 [![Join the chat at https://gitter.im/bonusbits/bonusbits_base](https://badges.gitter.im/bonusbits/bonusbits_base.svg)](https://gitter.im/bonusbits/bonusbits_base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub issues](https://img.shields.io/github/issues/bonusbits/bonusbits_base.svg)](https://github.com/bonusbits/bonusbits_base/issues)
@@ -107,12 +107,12 @@ Basically copy/paste, instead of converting YAML to JSON... I've done it for you
 ```
 test
 ├── data_bags
-│   ├── encrypted_data_bag_secret
-│   └── bonusbits_base
-│       ├── credentials.json
-│       └── enterprise_ca.json
+│         ├── encrypted_data_bag_secret
+│         └── bonusbits_base
+│             ├── credentials.json
+│             └── enterprise_ca.json
 ├── environments
-│   └── bonusbits_base.json
+│         └── bonusbits_base.json
 └── node
     └── client.rb
 └── roles
