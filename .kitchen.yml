@@ -9,104 +9,184 @@ platforms:
   # AWS AMI/EC2 Platforms
   - name: amazon-linux1-ami
     driver:
-      associate_public_ip: <%= ENV.fetch('AWS_PUBLIC_IP', 'false') %>
-      aws_ssh_key_id: <%= ENV.fetch('AWS_SSH_KEY_ID', 'bonusbits_dev_key') %>
-      iam_profile_name: <%= ENV.fetch('AWS_IAM_INSTANCE_PROFILE_LNX', 'Linux-Instance_Role') %>
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
       image_search:
         owner-id: 137112412989
-        name: amzn-ami-hvm-2018.03.0.20190826-x86_64-gp2
+        name: amzn-ami-hvm-2018.03.0.20210721.0-x86_64-gp2
       instance_initiated_shutdown_behavior: terminate
-      instance_type: t3.micro
+      instance_type: t3.small
       name: ec2
-      region: <%= ENV.fetch('AWS_REGION', 'us-west-2') %>
+      region: <%= ENV['AWS_REGION'] %>
       security_group_ids:
-        - <%= ENV.fetch('AWS_SECURITY_GROUP_lnx_1', 'sg-00000000') %>
-        - <%= ENV.fetch('AWS_SECURITY_GROUP_lnx_2', 'sg-00000000') %>
-      subnet_id: <%= ENV.fetch('AWS_SUBNET_ID', 'subnet-00000000') %>
+        - <%= ENV['AWS_SECURITY_GROUP_1'] %>
+        <% if ENV['AWS_SECURITY_GROUP_2'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_2'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_3'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_3'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_4'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_4'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_5'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_5'] %>
+        <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET_ID'] %>
       tags:
         Created-By: Test Kitchen
         OS: Amazon v1
         Owner: *aws_tag_owner
       # user_data: *bootstrap_lnx
-      vpc_id: <%= ENV.fetch('AWS_VPC_ID', 'vpc-00000000') %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
     transport:
       username: ec2-user
-      ssh_key: <%= ENV.fetch('AWS_SSH_KEY_PATH', ENV['HOME'] + "/.ssh/bonusbits_dev_key.pem") %>
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
   - name: amazon-linux2-ami
     driver:
-      associate_public_ip: <%= ENV.fetch('AWS_PUBLIC_IP', 'false') %>
-      aws_ssh_key_id: <%= ENV.fetch('AWS_SSH_KEY_ID', 'bonusbits_dev_key') %>
-      iam_profile_name: <%= ENV.fetch('AWS_IAM_INSTANCE_PROFILE_LNX', 'Linux-Instance_Role') %>
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
       image_search:
         owner-id: 137112412989
-        name: amzn2-ami-hvm-2.0.20190823.1-x86_64-gp2
+        name: amzn2-ami-hvm-2.0.20210813.1-x86_64-gp2
       instance_initiated_shutdown_behavior: terminate
-      instance_type: t3.micro
+      instance_type: t3.small
       name: ec2
-      region: <%= ENV.fetch('AWS_REGION', 'us-west-2') %>
+      region: <%= ENV['AWS_REGION'] %>
       security_group_ids:
-        - <%= ENV.fetch('AWS_SECURITY_GROUP_lnx_1', 'sg-00000000') %>
-        - <%= ENV.fetch('AWS_SECURITY_GROUP_lnx_2', 'sg-00000000') %>
-      subnet_id: <%= ENV.fetch('AWS_SUBNET_ID', 'subnet-00000000') %>
+        - <%= ENV['AWS_SECURITY_GROUP_1'] %>
+        <% if ENV['AWS_SECURITY_GROUP_2'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_2'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_3'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_3'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_4'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_4'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_5'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_5'] %>
+        <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET_ID'] %>
       tags:
         Created-By: Test Kitchen
         OS: Amazon v2
         Owner: *aws_tag_owner
       # user_data: *bootstrap_lnx
-      vpc_id: <%= ENV.fetch('AWS_VPC_ID', 'vpc-00000000') %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
     transport:
       username: ec2-user
-      ssh_key: <%= ENV.fetch('AWS_SSH_KEY_PATH', ENV['HOME'] + "/.ssh/bonusbits_dev_key.pem") %>
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
   - name: ubuntu-1604-ami
     driver:
-      associate_public_ip: <%= ENV.fetch('AWS_PUBLIC_IP', 'false') %>
-      aws_ssh_key_id: <%= ENV.fetch('AWS_SSH_KEY_ID', 'bonusbits_dev_key') %>
-      iam_profile_name: <%= ENV.fetch('AWS_IAM_INSTANCE_PROFILE_LNX', 'Linux-Instance_Role') %>
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
       image_search:
         owner-id: 099720109477
-        name: ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190913
+        name: ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20210928
       instance_initiated_shutdown_behavior: terminate
       instance_type: t3.micro
       name: ec2
-      region: <%= ENV.fetch('AWS_REGION', 'us-west-2') %>
+      region: <%= ENV['AWS_REGION'] %>
       security_group_ids:
-        - <%= ENV.fetch('AWS_SECURITY_GROUP_lnx_1', 'sg-00000000') %>
-        - <%= ENV.fetch('AWS_SECURITY_GROUP_lnx_2', 'sg-00000000') %>
-      subnet_id: <%= ENV.fetch('AWS_SUBNET_ID', 'subnet-00000000') %>
+        - <%= ENV['AWS_SECURITY_GROUP_1'] %>
+        <% if ENV['AWS_SECURITY_GROUP_2'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_2'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_3'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_3'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_4'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_4'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_5'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_5'] %>
+        <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET_ID'] %>
       tags:
         Created-By: Test Kitchen
         OS: Ubuntu 16.04 LTS
         Owner: *aws_tag_owner
       # user_data: *bootstrap_lnx
-      vpc_id: <%= ENV.fetch('AWS_VPC_ID', 'vpc-00000000') %>
+      vpc_id: ENV['AWS_VPC_ID'] %>
     transport:
       username: ubuntu
-      ssh_key: <%= ENV.fetch('AWS_SSH_KEY_PATH', ENV['HOME'] + "/.ssh/bonusbits_dev_key.pem") %>
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
   - name: ubuntu-1804-ami
     driver:
-      associate_public_ip: <%= ENV.fetch('AWS_PUBLIC_IP', 'false') %>
-      aws_ssh_key_id: <%= ENV.fetch('AWS_SSH_KEY_ID', 'bonusbits_dev_key') %>
-      iam_profile_name: <%= ENV.fetch('AWS_IAM_INSTANCE_PROFILE_LNX', 'Linux-Instance_Role') %>
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
       image_search:
         owner-id: 099720109477
-        name: ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20191002
+        name: ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20210907
       instance_initiated_shutdown_behavior: terminate
       instance_type: t3.micro
       name: ec2
-      region: <%= ENV.fetch('AWS_REGION', 'us-west-2') %>
+      region: <%= ENV['AWS_REGION'] %>
       security_group_ids:
-        - <%= ENV.fetch('AWS_SECURITY_GROUP_lnx_1', 'sg-00000000') %>
-        - <%= ENV.fetch('AWS_SECURITY_GROUP_lnx_2', 'sg-00000000') %>
-      subnet_id: <%= ENV.fetch('AWS_SUBNET_ID', 'subnet-00000000') %>
+        - <%= ENV['AWS_SECURITY_GROUP_1'] %>
+        <% if ENV['AWS_SECURITY_GROUP_2'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_2'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_3'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_3'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_4'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_4'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_5'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_5'] %>
+        <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET_ID'] %>
       tags:
         Created-By: Test Kitchen
         OS: Ubuntu 18.04 LTS
         Owner: *aws_tag_owner
       # user_data: *bootstrap_lnx
-      vpc_id: <%= ENV.fetch('AWS_VPC_ID', 'vpc-00000000') %>
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
     transport:
       username: ubuntu
-      ssh_key: <%= ENV.fetch('AWS_SSH_KEY_PATH', ENV['HOME'] + "/.ssh/bonusbits_dev_key.pem") %>
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
+  - name: ubuntu-2004-ami
+    driver:
+      associate_public_ip: <%= ENV['AWS_PUBLIC_IP'] %>
+      aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+      iam_profile_name: <%= ENV['AWS_IAM_INSTANCE_PROFILE_1'] %>
+      image_search:
+        owner-id: 099720109477
+        name: ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20211001
+      instance_initiated_shutdown_behavior: terminate
+      instance_type: t3.micro
+      name: ec2
+      region: <%= ENV['AWS_REGION'] %>
+      security_group_ids:
+        - <%= ENV['AWS_SECURITY_GROUP_1'] %>
+        <% if ENV['AWS_SECURITY_GROUP_2'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_2'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_3'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_3'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_4'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_4'] %>
+        <% end %>
+        <% if ENV['AWS_SECURITY_GROUP_5'] %>
+        - <%= ENV['AWS_SECURITY_GROUP_5'] %>
+        <% end %>
+      subnet_id: <%= ENV['AWS_SUBNET_ID'] %>
+      tags:
+        Created-By: Test Kitchen
+        OS: Ubuntu 18.04 LTS
+        Owner: *aws_tag_owner
+      # user_data: *bootstrap_lnx
+      vpc_id: <%= ENV['AWS_VPC_ID'] %>
+    transport:
+      username: ubuntu
+      ssh_key: <%= ENV['AWS_SSH_KEY_PATH'] %>
 
   # Docker Platforms
   - name: amazon-linux1-docker

@@ -4,10 +4,10 @@ DEPENDENCIES
     metadata: true
 
 GRAPH
-  apt (7.2.0)
-  audit (9.0.1)
+  apt (7.4.0)
+  audit (9.5.0)
   bonusbits_base (3.0.2)
     apt (>= 0.0.0)
     audit (>= 0.0.0)
     selinux (>= 0.0.0)
-  selinux (3.0.1)
+  selinux (6.0.0)
